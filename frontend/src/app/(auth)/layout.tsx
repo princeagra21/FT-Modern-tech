@@ -1,35 +1,33 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Cookies from "js-cookie";
+// import { useRouter } from "next/navigation";  //test-com 
+// import Cookies from "js-cookie";  //test-com 
 import { useTheme } from "@/components/providers/ThemeProvider";
-import LoginForm from "@/components/auth/loginform";
 import LoginAnimation from "@/components/auth/loginanimation";
 
 const Authlayout = ({children}:{children:React.ReactNode}) => {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);   //test-com 
   const { theme } = useTheme();
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    const checkUserlogin = () => {
-      const userToken = Cookies.get("utoken");
-      const adminToken = Cookies.get("atoken");
-      const superAdminToken = Cookies.get("stoken");
+  // useEffect(() => {    //test-com 
+  //   const checkUserlogin = () => {
+  //     const userToken = Cookies.get("utoken");
+  //     const adminToken = Cookies.get("atoken");
+  //     const superAdminToken = Cookies.get("stoken");
 
-      if (userToken) {
-        router.push("/user/dashboard");
-      } else if (adminToken) {
-        router.push("/admin/dashboard");
-      } else if (superAdminToken) {
-        router.push("/superadmin/dashboard");
-      }
-    };
+  //     if (userToken) {
+  //       router.push("/user/dashboard");
+  //     } else if (adminToken) {
+  //       router.push("/admin/dashboard");
+  //     } else if (superAdminToken) {
+  //       router.push("/superadmin/dashboard");
+  //     }
+  //   };
 
-    checkUserlogin();
-  }, []);
+  //   checkUserlogin();
+  // }, []);
 
   return (
     <div className="min-h-dvh flex flex-col bg-white text-slate-900 dark:bg-neutral-950 dark:text-neutral-100">
@@ -68,14 +66,13 @@ const Authlayout = ({children}:{children:React.ReactNode}) => {
 
       {/* Main content area */}
       <main className="flex-1">
-        <div className="mx-auto items-center justify-center gap-10  max-w-7xl px-4 md:px-6 py-6 lg:py-8 grid gap-6 lg:grid-cols-12 min-h-full">
+        <div className="mx-auto items-center justify-center   max-w-7xl  py-6 lg:py-8 grid gap-6 lg:grid-cols-12 min-h-full">
           {/* 7/5 split on large screens, hide 7 part on small screens */}
           <section className="hidden lg:block lg:col-span-7">
             <LoginAnimation />
           </section>
 
-          <aside className="col-span-12 lg:col-span-5 items-center justify-center">
-            {/* <LoginForm /> */}
+          <aside className="col-span-5 items-center">
             {children}
           </aside>
         </div>

@@ -1,7 +1,18 @@
-import React from 'react'
+"use client";
 
-export default function Register() {
+import React from "react";
+import RegisterForm from "@/components/auth/registerform";
+
+const LoginPage = () => {
   return (
-    <div>Register</div>
-  )
-}
+    <div>
+      <RegisterForm />
+    </div>
+  );
+};
+
+export default LoginPage;
+
+
+
+
