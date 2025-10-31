@@ -107,7 +107,7 @@
   :is(input, select, textarea, button):focus {
     outline-color: var(--primary) !important;
     border-color: var(--primary) !important;
-    box-shadow: 0 0 0 2px var(--accent) !important;
+    /* box-shadow: 0px 0px 1px var(--primary) !important; */
   }
 
   /* ============================

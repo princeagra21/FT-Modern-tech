@@ -106,7 +106,7 @@ function LoginForm() {
                 name="identifier"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground mb-3">Email</FormLabel>
+                    <FormLabel className="mb-3">Email</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -114,7 +114,7 @@ function LoginForm() {
                         placeholder="Enter your email"
                         disabled={isLoading}
                         autoComplete="email"
-                        className="p-3 border-border focus:ring-primary focus:border-primary"
+                        className="p-3 "
                       />
                     </FormControl>
                     <FormMessage />
@@ -128,7 +128,7 @@ function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground mb-3">Password</FormLabel>
+                    <FormLabel className="mb-3">Password</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -137,7 +137,7 @@ function LoginForm() {
                           placeholder="Enter your password"
                           disabled={isLoading}
                           autoComplete="current-password"
-                          className="p-3 border-border focus:ring-primary focus:border-primary"
+                          className="p-3"
                         />
                         <Button
                           type="button"
