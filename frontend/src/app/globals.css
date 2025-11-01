@@ -148,7 +148,7 @@
     /* ============================
       UTILITY CLASSES
       ============================ */
-    .bg-primary {
+    /* .bg-primary {
       background-color: var(--primary) !important;
     }
     .bg-secondary {
@@ -165,9 +165,9 @@
     }
     .bg-error {
       background-color: var(--error) !important;
-    }
+    } */
 
-    .text-primary {
+    /* .text-primary {
       color: var(--primary) !important;
     }
     .text-secondary {
@@ -184,8 +184,8 @@
     }
     .text-error {
       color: var(--error) !important;
-    }
-
+    } */
+/* 
     .border-primary {
       border-color: var(--primary) !important;
     }
@@ -203,7 +203,7 @@
     }
     .border-error {
       border-color: var(--error) !important;
-    }
+    } */
 
     /* Gradient Utilities */
     .gradient-primary {

@@ -8,7 +8,6 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { motion } from "framer-motion";
 
 const KpiStats = () => {
-  // Data - KPIs
   const KPIS = [
     { title: "All Admins", value: 276, icon: AdminPanelSettingsOutlinedIcon },
     { title: "Total Vehicles", value: 3577, icon: DirectionsCarOutlinedIcon },
@@ -31,20 +30,21 @@ const KpiStats = () => {
       <motion.div
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="group rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800"
+        className="group rounded-2xl border border-border bg-background p-4 shadow-sm hover:shadow-md"
       >
         <div className="flex items-center justify-between">
-          <span className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+          <span className="text-xs uppercase tracking-wider text-muted">
             {title}
           </span>
-          <Icon className="h-5 w-5 text-neutral-400 group-hover:text-neutral-900 dark:text-neutral-500 dark:group-hover:text-neutral-100" />
+          <Icon className="h-5 w-5 text-muted group-hover:text-foreground" />
         </div>
-        <div className="mt-3 text-2xl font-semibold tracking-tight dark:text-neutral-100">
+        <div className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
           {Intl.NumberFormat().format(value)}
         </div>
       </motion.div>
     );
   };
+
   const KpiCard = React.memo(KpiCardBase);
 
   return (

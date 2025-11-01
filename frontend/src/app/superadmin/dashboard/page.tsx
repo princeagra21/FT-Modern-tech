@@ -39,7 +39,7 @@ export default function FleetStackDashboard() {
 
   // Render
   return (
-    <main className="min-h-screen bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-7xl px-6 pb-14 pt-8">
         {/* License Banner */}
         <SubscriptionBanner />
@@ -47,11 +47,11 @@ export default function FleetStackDashboard() {
         {/* Quick Actions */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <button className="rounded-xl border border-neutral-300 px-3 py-2 text-xs text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800">
+            <button className="rounded-xl border border-foreground px-3 py-2 text-xs text-neutral-700 hover:bg-neutral-100 ">
               + Create Admin
             </button>
           </div>
-          <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="flex items-center gap-2 text-xs text-muted">
             <span className="hidden sm:inline">Last sync:</span>
             <span>{secondsSinceSync}s ago</span>
             <button
