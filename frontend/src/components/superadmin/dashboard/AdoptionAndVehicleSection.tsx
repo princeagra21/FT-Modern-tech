@@ -55,7 +55,7 @@ const AdoptionAndVehicleSection = () => {
   );
 
   const showToast = (message: string, tone = "neutral") => {
-    setToast({ open: true, message, tone });
+    setToast({ open: true, message, tone: tone as "neutral" | "success" | "warning" | "error" });
     setTimeout(() => setToast((t) => ({ ...t, open: false })), 1500);
   };
 
