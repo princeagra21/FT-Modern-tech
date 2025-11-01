@@ -47,7 +47,7 @@ export default function FleetStackDashboard() {
         {/* Quick Actions */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <button className="rounded-xl border border-foreground px-3 py-2 text-xs text-neutral-700 hover:bg-neutral-100 ">
+            <button className="rounded-xl border border-border px-3 py-2 text-xs text-muted  hover:bg-neutral-100 ">
               + Create Admin
             </button>
           </div>

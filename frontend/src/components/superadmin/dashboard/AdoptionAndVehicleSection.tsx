@@ -153,11 +153,11 @@ const AdoptionAndVehicleSection = () => {
                   if (result === "copied") showToast("Copied to clipboard", "success");
                   else showToast("Manual copy: opened modal", "warning");
                 }}
-                className="rounded-xl border border-border p-1 text-muted hover:bg-muted"
+                className="rounded-xl border border-border p-1 text-muted hover:bg-foreground/5"
               >
                 <ContentCopyOutlinedIcon fontSize="small" />
               </button>
-              <button className="rounded-xl border border-border p-1 text-muted hover:bg-muted">
+              <button className="rounded-xl border border-border p-1 text-muted hover:bg-foreground/5">
                 <TuneOutlinedIcon fontSize="small" />
               </button>
             </div>

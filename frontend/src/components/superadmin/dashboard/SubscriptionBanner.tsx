@@ -15,7 +15,7 @@ const SubscriptionBanner = () => {
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
-          className="mb-6 rounded-2xl  border border-border bg-background p-4 shadow-sm "
+          className="mb-6 rounded-2xl  border border-border dark:bg-foreground/5 p-4 shadow-sm"
         >
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-4">
