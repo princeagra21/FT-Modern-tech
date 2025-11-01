@@ -7,7 +7,7 @@ import {
   Photo,
   Todo,
   LoginResponse,
-} from '@/types/api';
+} from '@/lib/types/api';
 
 
 //auth API

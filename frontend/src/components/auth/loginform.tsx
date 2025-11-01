@@ -32,6 +32,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { loginSchema, LoginFormData } from '@/lib/validations/auth';
+import { api } from '@/services/api';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
