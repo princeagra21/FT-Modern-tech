@@ -8,6 +8,28 @@ import AdoptionAndVehicleSection from "@/components/superadmin/dashboard/Adoptio
 import RecentActivities from "@/components/superadmin/dashboard/RecentActivities";
 import NotificationsAndActivitySection from "@/components/superadmin/dashboard/NotificationsAndActivitySection";
 
+
+const Lastsync =()=>{
+   const [secondsSinceSync, setSecondsSinceSync] = useState(0);
+     useEffect(() => {
+    const id = setInterval(() => setSecondsSinceSync((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+     <div className="flex items-center gap-2 text-xs text-muted">
+            <span className="hidden sm:inline">Last sync:</span>
+            <span>{secondsSinceSync}s ago</span>
+            <button
+              className="rounded-lg p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              aria-label="Refresh"
+            >
+              <RefreshOutlinedIcon fontSize="small" />
+            </button>
+      </div>
+  )
+}
+
 export default function FleetStackDashboard() {
   // State
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -31,11 +53,8 @@ export default function FleetStackDashboard() {
   }, []);
 
   // Last sync ticker
-  const [secondsSinceSync, setSecondsSinceSync] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setSecondsSinceSync((s) => s + 1), 1000);
-    return () => clearInterval(id);
-  }, []);
+ 
+
 
   // Render
   return (
@@ -51,16 +70,7 @@ export default function FleetStackDashboard() {
               + Create Admin
             </button>
           </div>
-          <div className="flex items-center gap-2 text-xs text-muted">
-            <span className="hidden sm:inline">Last sync:</span>
-            <span>{secondsSinceSync}s ago</span>
-            <button
-              className="rounded-lg p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-              aria-label="Refresh"
-            >
-              <RefreshOutlinedIcon fontSize="small" />
-            </button>
-          </div>
+          <Lastsync/>
         </div>
 
         {/* KPI Row */}

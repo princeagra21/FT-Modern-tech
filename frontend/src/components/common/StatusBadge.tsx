@@ -6,7 +6,6 @@ interface StatusBadgeProps {
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   const getClasses = () => {
-    console.log("Status:", status.toLowerCase());
     switch (status.toLowerCase()) {
       case "active":
       case "completed":
