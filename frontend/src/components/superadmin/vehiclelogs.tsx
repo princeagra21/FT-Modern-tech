@@ -138,130 +138,268 @@ export default function VehicleLogsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl p-4 md:p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight dark:text-neutral-100">Vehicle Logs</h1>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Generate and filter vehicle GPS logs</p>
-          </div>
-          <div className="flex flex-col  gap-3">
-                        <label className="text-sm font-medium mb-2 block dark:text-neutral-100">Date & Time Range</label>
-            <MultiDateTimeRangePicker
-              value={dateRange}
-              onChange={setDateRange}
-              presets={presets}
-            />
-          </div>
-        </div>
-
-        {/* Search and DateTime Range in one row */}
-        <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-end">
-          <div className="flex-1">
-            <label className="text-sm font-medium mb-2 block dark:text-neutral-100">Search</label>
-            <div className="relative">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-300" style={{ fontSize: 18 }} />
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by IMEI, coordinates, attributes..."
-                className="pl-10 dark:text-neutral-100 dark:placeholder-neutral-400"
-              />
-            </div>
-          </div>
-          <div className="lg:flex-1 flex gap-2">
-            <Button onClick={handleExport} variant="outline" className="gap-2 flex-1">
-              <FileDownloadIcon style={{ fontSize: 16 }} />
-              Export CSV ({filtered.length})
-            </Button>
-            <Button onClick={handleEmail} variant="outline" className="gap-2 flex-1">
-              <EmailIcon style={{ fontSize: 16 }} />
-              Email
-            </Button>
-          </div>
-        </div>
-
-        {/* Results counter */}
-        <div className="mt-3 text-sm text-neutral-600 dark:text-neutral-200">
-          Showing {filtered.length} result{filtered.length !== 1 ? 's' : ''}
-        </div>
+   <div className="mx-auto max-w-7xl p-4 md:p-6">
+  {/* Header */}
+  <div className="mb-6">
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Vehicle Logs</h1>
+        <p className="mt-1 text-sm text-muted">Generate and filter vehicle GPS logs</p>
       </div>
-
-      {/* Table */}
-            <div className="overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
-        <div className="overflow-x-auto">
-          <table className="w-full table-fixed text-xs">
-            <thead>
-              <tr className="border-b dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-[10px] font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider">
-                <th className="sticky left-0 z-20 w-12 bg-neutral-50 dark:bg-neutral-900 px-2 py-2 text-left">Sr</th>
-                <th className="w-32 px-2 py-2 text-left">IMEI</th>
-                <th className="w-16 px-2 py-2 text-left">Speed</th>
-                <th className="w-24 px-2 py-2 text-left">Lat</th>
-                <th className="w-24 px-2 py-2 text-left">Lon</th>
-                <th className="w-32 px-2 py-2 text-left">Date</th>
-                <th className="w-auto min-w-96 px-2 py-2 text-left">Attributes</th>
-                <th className="sticky right-0 z-20 w-28 bg-neutral-50 dark:bg-neutral-900 px-2 py-2 text-right">Actions</th>
-              </tr>
-            </thead>
-                        <tbody>
-              {slice.length === 0 ? (
-                <tr><td colSpan={9} className="py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">No logs found</td></tr>
-              ) : (
-                slice.map((row, idx) => <Row key={idx} row={row} idx={idx + (safePage - 1) * PAGE_SIZE} />)
-              )}
-            </tbody>
-          </table>
-          {filtered.length === 0 && (
-            <div className="p-6 text-center text-sm text-neutral-500 dark:text-neutral-400">No results. Adjust your date range or search.</div>
-          )}
-        </div>
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t dark:border-neutral-700 p-3 text-xs text-neutral-600 dark:text-neutral-200">
-          <div>Showing {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(filtered.length, safePage * PAGE_SIZE)} of {filtered.length}</div>
-          <div className="flex items-center gap-2">
-            <button disabled={safePage <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className={cls("rounded border px-2 py-1", safePage <= 1 ? "text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-neutral-700" : "border-neutral-300 dark:border-neutral-600 dark:text-neutral-100")}>Prev</button>
-            <div>Page {safePage} / {pages}</div>
-            <button disabled={safePage >= pages} onClick={() => setPage((p) => Math.min(pages, p + 1))} className={cls("rounded border px-2 py-1", safePage >= pages ? "text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-neutral-700" : "border-neutral-300 dark:border-neutral-600 dark:text-neutral-100")}>Next</button>
-          </div>
-        </div>
+      <div className="flex flex-col gap-3">
+        <label className="text-sm font-medium mb-2 block text-foreground">Date & Time Range</label>
+        <MultiDateTimeRangePicker value={dateRange} onChange={setDateRange} presets={presets} />
       </div>
     </div>
+
+    {/* Search and DateTime Range in one row */}
+    <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-end">
+      <div className="flex-1">
+        <label className="text-sm font-medium mb-2 block text-foreground">Search</label>
+        <div className="relative ">
+          <SearchIcon
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            style={{ fontSize: 18 }}
+          />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by IMEI, coordinates, attributes..."
+            className="pl-10 text-muted dark:bg-foreground/5"
+          />
+        </div>
+      </div>
+      <div className="lg:flex-1 flex gap-2">
+        <Button onClick={handleExport} variant="outline" className="gap-2 flex-1 dark:bg-foreground/5">
+          <FileDownloadIcon style={{ fontSize: 16 }} />
+          Export CSV ({filtered.length})
+        </Button>
+        <Button onClick={handleEmail} variant="outline" className="gap-2 flex-1 dark:bg-foreground/5">
+          <EmailIcon style={{ fontSize: 16 }} />
+          Email
+        </Button>
+      </div>
+    </div>
+
+    {/* Results counter */}
+    <div className="mt-3 text-sm text-muted">
+      Showing {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+    </div>
+  </div>
+
+  {/* Table */}
+  <div className="overflow-hidden rounded-xl border border-border bg-background shadow-sm">
+    <div className="overflow-x-auto">
+      <table className="w-full table-fixed text-xs">
+        <thead>
+          <tr className="border-b border-border  text-[10px] font-medium text-muted uppercase tracking-wider">
+            <th className="sticky left-0 z-20 w-12  px-2 py-2 text-left">Sr</th>
+            <th className="w-32 px-2 py-2 text-left">IMEI</th>
+            <th className="w-16 px-2 py-2 text-left">Speed</th>
+            <th className="w-24 px-2 py-2 text-left">Lat</th>
+            <th className="w-24 px-2 py-2 text-left">Lon</th>
+            <th className="w-32 px-2 py-2 text-left">Date</th>
+            <th className="w-auto min-w-96 px-2 py-2 text-left">Attributes</th>
+            <th className="sticky right-0 z-20 w-28 px-2 py-2 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="dark:bg-foreground/5">
+          {slice.length === 0 ? (
+            <tr>
+              <td colSpan={9} className="py-8 text-center text-sm text-muted">
+                No logs found
+              </td>
+            </tr>
+          ) : (
+            slice.map((row, idx) => (
+              <Row key={idx} row={row} idx={idx + (safePage - 1) * PAGE_SIZE} />
+            ))
+          )}
+        </tbody>
+      </table>
+      {filtered.length === 0 && (
+        <div className="p-6 text-center text-sm text-muted dark:bg-foreground/5">
+          No results. Adjust your date range or search.
+        </div>
+      )}
+    </div>
+
+    {/* Footer */}
+    <div className="flex items-center justify-between border-t border-border p-3 text-xs text-muted dark:bg-foreground/5">
+      <div>
+        Showing {(safePage - 1) * PAGE_SIZE + 1}–
+        {Math.min(filtered.length, safePage * PAGE_SIZE)} of {filtered.length}
+      </div>
+      <div className="flex items-center gap-2">
+        <button
+          disabled={safePage <= 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          className={cls(
+            "rounded border px-2 py-1",
+            safePage <= 1
+              ? "text-muted border-border"
+              : "border-border text-foreground"
+          )}
+        >
+          Prev
+        </button>
+        <div>
+          Page {safePage} / {pages}
+        </div>
+        <button
+          disabled={safePage >= pages}
+          onClick={() => setPage((p) => Math.min(pages, p + 1))}
+          className={cls(
+            "rounded border px-2 py-1",
+            safePage >= pages
+              ? "text-muted border-border"
+              : "border-border text-foreground"
+          )}
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
   );
 }
 
 function Row({ row, idx }: { row: LogRow; idx: number }) {
   const [open, setOpen] = useState<boolean>(false);
-  const attr: Attribute | null = isAttr(row.attribute) ? row.attribute : (() => { try { return JSON.parse(String(row.attribute)); } catch { return null; } })();
+  const attr: Attribute | null = isAttr(row.attribute)
+    ? row.attribute
+    : (() => {
+        try {
+          return JSON.parse(String(row.attribute));
+        } catch {
+          return null;
+        }
+      })();
   const coord = `${toFixed(row.latitude, 6)},${toFixed(row.longitude, 6)}`;
   const mapHref = `https://maps.google.com/?q=${row.latitude},${row.longitude}`;
 
   return (
     <>
-      <tr className="border-b dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-        <td className="px-2 py-2 align-top text-neutral-700 dark:text-neutral-300 sticky left-0 bg-white dark:bg-neutral-800 text-xs">{row.srno}</td>
-        <td className="px-2 py-2 align-top font-mono bg-white dark:bg-neutral-800 dark:text-neutral-300 text-[11px]">{row.imei}</td>
-        <td className="px-2 py-2 align-top dark:text-neutral-300 text-xs"><span className="inline-flex items-center gap-0.5"><SpeedIcon style={{ fontSize: 12 }} />{row.speed}</span></td>
-       <td className="px-2 py-2 align-top font-mono dark:text-neutral-300 text-[11px]">{toFixed(row.latitude, 6)}</td>
-        <td className="px-2 py-2 align-top font-mono dark:text-neutral-300 text-[11px]">{toFixed(row.longitude, 6)}</td>
-        <td className="px-2 py-2 align-top font-mono text-[10px] dark:text-neutral-300">{fmt(row.date)}</td>
+      <tr className="border-b border-border hover:bg-muted/50">
+        <td className="px-2 py-2 align-top sticky left-0 bg-background text-foreground text-xs">
+          {row.srno}
+        </td>
+        <td className="px-2 py-2 align-top font-mono bg-background text-foreground text-[11px]">
+          {row.imei}
+        </td>
+        <td className="px-2 py-2 align-top text-foreground text-xs">
+          <span className="inline-flex items-center gap-0.5">
+            <SpeedIcon style={{ fontSize: 12 }} />
+            {row.speed}
+          </span>
+        </td>
+        <td className="px-2 py-2 align-top font-mono text-foreground text-[11px]">
+          {toFixed(row.latitude, 6)}
+        </td>
+        <td className="px-2 py-2 align-top font-mono text-foreground text-[11px]">
+          {toFixed(row.longitude, 6)}
+        </td>
+        <td className="px-2 py-2 align-top font-mono text-[10px] text-muted">
+          {fmt(row.date)}
+        </td>
         <td className="px-2 py-2 align-top">
           {attr ? (
-            <div className="flex flex-wrap gap-0.5 text-[10px] text-neutral-700 dark:text-neutral-300">
-              <Badge variant={attr.ignition ? "default" : "secondary"} className={`text-[9px] px-1.5 py-0 h-4 ${attr.ignition ? "bg-black dark:bg-white text-white dark:text-black" : ""}`}>ign: <span className="ml-0.5 font-medium">{attr.ignition ? "on" : "off"}</span></Badge>
-              <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">hb: <span className="ml-0.5 font-medium">{String(attr.heartbeat)}</span></Badge>
-              {attr.batteryLevel !== undefined && <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">bat: <span className="ml-0.5 font-medium">{attr.batteryLevel}%</span></Badge>}
-              {attr.rssi !== undefined && <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">rssi: <span className="ml-0.5 font-medium">{attr.rssi}</span></Badge>}
-              {attr.distance !== undefined && <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">dist: <span className="ml-0.5 font-medium">{(attr.distance as any)?.toFixed ? (attr.distance as any).toFixed(1) : String(attr.distance)}</span></Badge>}
-              {attr.totalDistance !== undefined && <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">total: <span className="ml-0.5 font-medium">{(attr.totalDistance / 1000).toFixed(0)}km</span></Badge>}
-              {attr.motion !== undefined && <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">mot: <span className="ml-0.5 font-medium">{String(attr.motion)}</span></Badge>}
-              {attr.hours !== undefined && <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">hrs: <span className="ml-0.5 font-medium">{String(attr.hours)}</span></Badge>}
+            <div className="flex flex-wrap gap-0.5 text-[10px] text-foreground">
+              <Badge
+                variant={attr.ignition ? "default" : "secondary"}
+                className={`text-[9px] px-1.5 py-0 h-4 ${
+                  attr.ignition
+                    ? "bg-foreground text-background"
+                    : ""
+                }`}
+              >
+                ign:
+                <span className="ml-0.5 font-medium">
+                  {attr.ignition ? "on" : "off"}
+                </span>
+              </Badge>
+              <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">
+                hb:{" "}
+                <span className="ml-0.5 font-medium">
+                  {String(attr.heartbeat)}
+                </span>
+              </Badge>
+              {attr.batteryLevel !== undefined && (
+                <Badge
+                  variant="secondary"
+                  className="text-[9px] px-1.5 py-0 h-4"
+                >
+                  bat:{" "}
+                  <span className="ml-0.5 font-medium">
+                    {attr.batteryLevel}%
+                  </span>
+                </Badge>
+              )}
+              {attr.rssi !== undefined && (
+                <Badge
+                  variant="secondary"
+                  className="text-[9px] px-1.5 py-0 h-4"
+                >
+                  rssi:{" "}
+                  <span className="ml-0.5 font-medium">{attr.rssi}</span>
+                </Badge>
+              )}
+              {attr.distance !== undefined && (
+                <Badge
+                  variant="secondary"
+                  className="text-[9px] px-1.5 py-0 h-4"
+                >
+                  dist:{" "}
+                  <span className="ml-0.5 font-medium">
+                    {(attr.distance as any)?.toFixed
+                      ? (attr.distance as any).toFixed(1)
+                      : String(attr.distance)}
+                  </span>
+                </Badge>
+              )}
+              {attr.totalDistance !== undefined && (
+                <Badge
+                  variant="secondary"
+                  className="text-[9px] px-1.5 py-0 h-4"
+                >
+                  total:{" "}
+                  <span className="ml-0.5 font-medium">
+                    {(attr.totalDistance / 1000).toFixed(0)}km
+                  </span>
+                </Badge>
+              )}
+              {attr.motion !== undefined && (
+                <Badge
+                  variant="secondary"
+                  className="text-[9px] px-1.5 py-0 h-4"
+                >
+                  mot:{" "}
+                  <span className="ml-0.5 font-medium">
+                    {String(attr.motion)}
+                  </span>
+                </Badge>
+              )}
+              {attr.hours !== undefined && (
+                <Badge
+                  variant="secondary"
+                  className="text-[9px] px-1.5 py-0 h-4"
+                >
+                  hrs:{" "}
+                  <span className="ml-0.5 font-medium">
+                    {String(attr.hours)}
+                  </span>
+                </Badge>
+              )}
             </div>
           ) : (
-            <span className="text-[10px] text-neutral-500 dark:text-neutral-400">Invalid JSON</span>
+            <span className="text-[10px] text-muted">
+              Invalid JSON
+            </span>
           )}
         </td>
-        <td className="px-2 py-2 align-top text-right sticky right-0 bg-white dark:bg-neutral-800">
+        <td className="px-2 py-2 align-top text-right sticky right-0 bg-background">
           <div className="inline-flex items-center gap-0.5">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -269,26 +407,58 @@ function Row({ row, idx }: { row: LogRow; idx: number }) {
                   <ContentCopyIcon style={{ fontSize: 12 }} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40 dark:bg-neutral-800 dark:border-neutral-700 text-xs">
-                <DropdownMenuItem onClick={() => copy(row.imei)} className="text-xs">Copy IMEI</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => copy(coord)} className="text-xs">Copy Lat,Lng</DropdownMenuItem>
+              <DropdownMenuContent
+                align="end"
+                className="w-40 bg-background border-border text-xs"
+              >
+                <DropdownMenuItem onClick={() => copy(row.imei)} className="text-xs">
+                  Copy IMEI
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => copy(coord)} className="text-xs">
+                  Copy Lat,Lng
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => copy(JSON.stringify(row))} className="text-xs">Copy JSON</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => copy(JSON.stringify(row))}
+                  className="text-xs"
+                >
+                  Copy JSON
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button asChild variant="outline" size="icon" title="Open in Maps" className="h-6 w-6">
-              <a href={mapHref} target="_blank" rel="noreferrer"><MapIcon style={{ fontSize: 12 }} /></a>
+              <a href={mapHref} target="_blank" rel="noreferrer">
+                <MapIcon style={{ fontSize: 12 }} />
+              </a>
             </Button>
-            <Button variant="outline" size="icon" title="Details" onClick={() => setOpen((v) => !v)} className="h-6 w-6">{open ? <ExpandLessIcon style={{ fontSize: 12 }} /> : <ExpandMoreIcon style={{ fontSize: 12 }} />}</Button>
+            <Button
+              variant="outline"
+              size="icon"
+              title="Details"
+              onClick={() => setOpen((v) => !v)}
+              className="h-6 w-6"
+            >
+              {open ? (
+                <ExpandLessIcon style={{ fontSize: 12 }} />
+              ) : (
+                <ExpandMoreIcon style={{ fontSize: 12 }} />
+              )}
+            </Button>
           </div>
         </td>
       </tr>
       {open && (
-        <tr className="border-b dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900/50">
+        <tr className="border-b border-border bg-muted/40">
           <td colSpan={8} className="px-2 pb-3 pt-1">
-            <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800 p-2">
-              <div className="text-[10px] text-neutral-600 dark:text-neutral-400 font-medium mb-1">Raw Attribute JSON</div>
-              <pre className="max-h-48 overflow-auto rounded border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-900 p-2 text-[10px] dark:text-neutral-200 font-mono leading-relaxed">{typeof row.attribute === "string" ? row.attribute : JSON.stringify(row.attribute, null, 2)}</pre>
+            <div className="rounded-lg border border-border bg-background p-2">
+              <div className="text-[10px] text-muted font-medium mb-1">
+                Raw Attribute JSON
+              </div>
+              <pre className="max-h-48 overflow-auto rounded border border-border bg-muted p-2 text-[10px] text-foreground font-mono leading-relaxed">
+                {typeof row.attribute === "string"
+                  ? row.attribute
+                  : JSON.stringify(row.attribute, null, 2)}
+              </pre>
             </div>
           </td>
         </tr>

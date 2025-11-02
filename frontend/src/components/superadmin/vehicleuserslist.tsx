@@ -15,7 +15,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// ---------- Types ----------
 type Profile = {
   name: string;
   mobilePrefix?: string;
@@ -23,11 +22,10 @@ type Profile = {
   email: string;
   username: string;
   profileUrl?: string;
-  lastLogin?: string; // ISO
-  isEmailVerified?: boolean; // accepts isemailverified too when mapping
+  lastLogin?: string;
+  isEmailVerified?: boolean;
 };
 
-// ---------- Demo Data (edit freely) ----------
 const PROFILES: Profile[] = [
   {
     name: "Akash Kumar",
@@ -91,7 +89,6 @@ const PROFILES: Profile[] = [
   },
 ];
 
-// ---------- Helpers ----------
 function initials(name: string) {
   return name
     .split(" ")
@@ -113,69 +110,82 @@ function timeAgo(iso?: string) {
   return `${d}d ago`;
 }
 
-// ---------- Card Component ----------
 function ProfileCard({ p, onLogin }: { p: Profile; onLogin: (u: string) => void }) {
   const VerifiedBadge = p.isEmailVerified ? (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-black text-white cursor-help dark:bg-white dark:text-black">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-white cursor-help">
           <VerifiedIcon style={{ fontSize: 14 }} />
         </span>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="text-xs font-medium">Verified</p>
+        <p className="text-xs font-medium bg-foreground">Verified</p>
       </TooltipContent>
     </Tooltip>
   ) : (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="grid h-6 w-6 place-items-center rounded-full border border-black text-black cursor-help dark:border-white dark:text-white">
+        <span className="grid h-6 w-6 place-items-center rounded-full border border-foreground text-foreground cursor-help">
           <ReportGmailerrorredOutlinedIcon style={{ fontSize: 14 }} />
         </span>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="text-xs font-medium">Unverified</p>
+        <p className="text-xs font-medium bg-foreground">Unverified</p>
       </TooltipContent>
     </Tooltip>
   );
 
   return (
-    <div className="group flex flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800">
+    <div className="group flex flex-col rounded-2xl border border-border bg-card p-4 shadow-sm transition hover:shadow-md dark:bg-foreground/5">
       <div className="flex items-center gap-3">
-        <div className="relative h-12 w-12 overflow-hidden rounded-full border dark:border-neutral-600">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+        <div className="relative h-12 w-12 overflow-hidden rounded-full border border-border">
           {p.profileUrl ? (
             <img src={p.profileUrl} alt={p.name} className="h-full w-full object-cover" />
           ) : (
-            <div className="grid h-full w-full place-items-center text-sm font-semibold dark:text-neutral-100">{initials(p.name)}</div>
+            <div className="grid h-full w-full place-items-center text-sm font-semibold text-foreground">
+              {initials(p.name)}
+            </div>
           )}
         </div>
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <div className="truncate text-sm font-semibold dark:text-neutral-100">{p.name}</div>
+            <div className="truncate text-sm font-semibold text-foreground">{p.name}</div>
             {VerifiedBadge}
           </div>
-          <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted">
             <span className="inline-flex items-center gap-1">@{p.username}</span>
-            <span className="text-neutral-300 dark:text-neutral-600">•</span>
-            <span className="inline-flex items-center gap-1"><AccessTimeIcon style={{fontSize:12}}/>{timeAgo(p.lastLogin)}</span>
+            <span className="text-muted/50">•</span>
+            <span className="inline-flex items-center gap-1">
+              <AccessTimeIcon style={{ fontSize: 12 }} />
+              {timeAgo(p.lastLogin)}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="mt-3 grid gap-2 text-sm">
-        <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
-          <MailOutlineIcon fontSize="small"/>
-          <a className="truncate hover:underline" href={`mailto:${p.email}`}>{p.email}</a>
+        <div className="flex items-center gap-2 text-foreground">
+          <MailOutlineIcon fontSize="small" />
+          <a className="truncate hover:underline" href={`mailto:${p.email}`}>
+            {p.email}
+          </a>
         </div>
-        <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
-          <PhoneIphoneIcon fontSize="small"/>
-          <a className="hover:underline" href={`tel:${(p.mobilePrefix ?? "") + p.mobile}`}>{p.mobilePrefix ?? ""} {p.mobile}</a>
-        </div>       
+        <div className="flex items-center gap-2 text-foreground">
+          <PhoneIphoneIcon fontSize="small" />
+          <a
+            className="hover:underline"
+            href={`tel:${(p.mobilePrefix ?? "") + p.mobile}`}
+          >
+            {p.mobilePrefix ?? ""} {p.mobile}
+          </a>
+        </div>
       </div>
 
       <div className="mt-4 flex items-center justify-end">
-        <button onClick={() => onLogin(p.username)} className="inline-flex items-center gap-2 rounded-lg bg-black px-3 py-1.5 text-xs text-white transition hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90">
+        <button
+          onClick={() => onLogin(p.username)}
+          className="inline-flex items-center gap-2 rounded-lg bg-primary text-white px-3 py-1.5 text-xs transition hover:bg-primary/90"
+        >
           <LoginIcon style={{ fontSize: 16 }} />
           <span>Login</span>
         </button>
@@ -184,13 +194,10 @@ function ProfileCard({ p, onLogin }: { p: Profile; onLogin: (u: string) => void 
   );
 }
 
-// ---------- Grid Page ----------
 export default function VehicleUsersListItem() {
   const [query, setQuery] = useState("");
 
   const handleLogin = (username: string) => {
-    // Replace with your auth flow
-    // eslint-disable-next-line no-console
     console.log("Login clicked for:", username);
     alert(`Login: @${username}`);
   };
@@ -206,7 +213,6 @@ export default function VehicleUsersListItem() {
     );
   }, [query]);
 
-  // Minimal runtime tests
   if (typeof window !== "undefined") {
     try {
       console.assert(Array.isArray(PROFILES) && PROFILES.length >= 3, "Need at least 3 profiles for 3-up grid");
@@ -219,36 +225,39 @@ export default function VehicleUsersListItem() {
   return (
     <TooltipProvider>
       <div className="mx-auto max-w-6xl p-4 md:p-6">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight dark:text-neutral-100">List of Users</h1>
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Card-based directory (3 per row on desktop, clean black & white).</p>
-        </div>
-        {/* Search */}
-        <div className="flex w-full items-center gap-2 sm:w-80">
-          <div className="flex w-full items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 dark:border-neutral-600 dark:bg-neutral-800">
-            <SearchIcon style={{ fontSize: 16 }} className="dark:text-neutral-300" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search name, email, username, or mobile…"
-              className="h-6 w-full border-none bg-transparent text-sm outline-none dark:text-neutral-100 dark:placeholder-neutral-400"
-            />
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
+              List of Users
+            </h1>
+            <p className="mt-1 text-xs text-muted">
+              Card-based directory (3 per row on desktop, clean black & white).
+            </p>
+          </div>
+          <div className="flex w-full items-center gap-2 sm:w-80">
+            <div className="flex w-full items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 dark:bg-foreground/5">
+              <SearchIcon style={{ fontSize: 16 }} className="text-muted-foreground" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search name, email, username, or mobile…"
+                className="h-6 w-full border-none bg-transparent text-sm outline-none text-foreground placeholder:text-muted "
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((p) => (
-          <ProfileCard key={p.username} p={p} onLogin={handleLogin} />
-        ))}
-        {filtered.length === 0 && (
-          <div className="col-span-full rounded-xl border border-neutral-200 bg-white p-6 text-center text-sm text-neutral-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400">
-            No profiles match "{query}".
-          </div>
-        )}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((p) => (
+            <ProfileCard key={p.username} p={p} onLogin={handleLogin} />
+          ))}
+          {filtered.length === 0 && (
+            <div className="col-span-full rounded-xl border border-border bg-card p-6 text-center text-sm text-muted dark:bg-foreground/5">
+              No profiles match "{query}".
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </TooltipProvider>
   );
 }

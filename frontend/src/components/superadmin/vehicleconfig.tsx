@@ -2,16 +2,11 @@
 
 import React from "react";
 
-// ✅ Ultra‑simple, 100% working, no external UI deps (React + Tailwind only)
-// Now condensed with a responsive 2‑column layout to reduce height.
-
 export type VehicleSettings = {
-  /** Multiplier applied to raw speed sent by the device (e.g., 0.98, 1.0, 1.12) */
-  speedVariationKmh: number; // speed multiplier (×)
-  /** Multiplier applied to raw distance sent by the device (e.g., 0.95, 1.0, 1.08) */
-  distanceVariationM: number; // distance multiplier (×)
-  odometerKm: number; // km
-  engineHours: number; // hours
+  speedVariationKmh: number;
+  distanceVariationM: number;
+  odometerKm: number;
+  engineHours: number;
   ignitionSource: "motion" | "ignition";
 };
 
@@ -32,7 +27,7 @@ const DEFAULTS: VehicleSettings = {
 };
 
 const RANGES = {
-  speedVariationKmh: { min: 0, max: 10 }, // 0.00–10.00
+  speedVariationKmh: { min: 0, max: 10 },
   distanceVariationM: { min: 0, max: 10 },
   odometerKm: { min: 0, max: 10_000_000 },
   engineHours: { min: 0, max: 100_000 },
@@ -118,22 +113,35 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
   }
 
   return (
-    <div className={"w-full max-w-5xl mx-auto p-5" + (className ?? "")}>      
-      {/* Title (condensed) */}
+    <div className={"w-full max-w-5xl mx-auto p-5 bg-background text-foreground" + (className ?? "")}>
+      {/* Title */}
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-base font-semibold tracking-tight">Vehicle Setting Configuration</h2>
-          <p className="text-[12px] text-black/60">Condensed layout • 2 per row on desktop</p>
+          <p className="text-[12px] text-muted-foreground">Condensed layout • 2 per row on desktop</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={handleReset} disabled={loading} className="rounded-lg border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5">Reset</button>
-          <button onClick={handleSave} disabled={!dirty || !!loading} className={`rounded-lg px-3 py-1.5 text-sm text-white ${dirty ? "bg-black hover:bg-black/90" : "bg-black/40 cursor-not-allowed"}`}>Save</button>
+          <button
+            onClick={handleReset}
+            disabled={loading}
+            className="rounded-lg border border-border px-3 py-1.5 text-sm hover:bg-foreground/5"
+          >
+            Reset
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={!dirty || !!loading}
+            className={`rounded-lg px-3 py-1.5 text-sm text-primary-foreground ${
+              dirty ? "bg-primary hover:bg-primary/90" : "bg-foreground/5 cursor-not-allowed"
+            }`}
+          >
+            Save
+          </button>
         </div>
       </div>
 
-      {/* 2‑column responsive grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {/* Speed Multiplier */}
+      {/* 2-column grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ">
         <FieldCard title="Speed Multiplier (×)" hint="Multiply raw speed by this factor (e.g., 0.95, 1.00, 1.05).">
           <NumberField
             id="speedVariationKmh"
@@ -147,7 +155,6 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
           />
         </FieldCard>
 
-        {/* Distance Multiplier */}
         <FieldCard title="Distance Multiplier (×)" hint="Multiply raw distance by this factor (e.g., 0.98, 1.00, 1.10).">
           <NumberField
             id="distanceVariationM"
@@ -161,7 +168,6 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
           />
         </FieldCard>
 
-        {/* Odometer */}
         <FieldCard title="Set Odometer" hint="Override odometer baseline (km).">
           <NumberField
             id="odometerKm"
@@ -175,7 +181,6 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
           />
         </FieldCard>
 
-        {/* Engine Hours */}
         <FieldCard title="Set Engine Hours" hint="Total engine runtime hours.">
           <NumberField
             id="engineHours"
@@ -189,11 +194,10 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
           />
         </FieldCard>
 
-        {/* Ignition Source (spans 2 columns on desktop) */}
-        <div className="md:col-span-2 rounded-xl border border-black/15 bg-white p-3">
-          <div className="mb-2">
+        <div className="md:col-span-2 rounded-xl border border-border bg-card p-3 dark:bg-foreground/5">
+          <div className="mb-2 ">
             <div className="text-sm font-medium">Ignition Source</div>
-            <div className="text-[12px] text-black/60">Choose how engine ON/OFF is derived.</div>
+            <div className="text-[12px] text-muted-foreground">Choose how engine ON/OFF is derived.</div>
           </div>
           <div className="flex flex-wrap gap-6 text-sm">
             <label className="inline-flex items-center gap-2">
@@ -214,26 +218,24 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
                 checked={values.ignitionSource === "motion"}
                 onChange={(e) => update("ignitionSource", (e.target.value as any))}
               />
-              <span>Motion‑Based</span>
+              <span>Motion-Based</span>
             </label>
           </div>
         </div>
-
-  
       </div>
     </div>
   );
 }
 
 /* ------------------------------
-   Subcomponents (local, minimal)
+   Subcomponents
 ------------------------------ */
 function FieldCard({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-black/15 bg-white p-3">
+    <div className="rounded-xl border border-border bg-card p-3 dark:bg-foreground/5">
       <div className="mb-2">
         <div className="text-sm font-medium">{title}</div>
-        {hint ? <div className="text-[12px] text-black/60">{hint}</div> : null}
+        {hint ? <div className="text-[12px] text-muted-foreground">{hint}</div> : null}
       </div>
       {children}
     </div>
@@ -257,7 +259,7 @@ function NumberField({ id, label, value, onChange, min, max, step, suffix }: {
         <input
           id={id}
           type="number"
-          className="w-full rounded-lg border border-black/15 px-3 py-2 pr-16 text-sm outline-none focus:ring-0"
+          className="w-full rounded-lg border border-border bg-background px-3 py-2 pr-16 text-sm text-foreground outline-none focus:ring-0"
           value={Number.isFinite(value) ? String(value) : ""}
           onChange={(e) => onChange(clamp(toNumberStrict(e.target.value), min ?? Number.MIN_SAFE_INTEGER, max ?? Number.MAX_SAFE_INTEGER))}
           min={min}
@@ -266,11 +268,9 @@ function NumberField({ id, label, value, onChange, min, max, step, suffix }: {
           inputMode="decimal"
         />
         {suffix && (
-          <span className="pointer-events-none absolute inset-y-0 right-2 my-auto h-6 rounded-md border border-black/10 bg-white px-2 text-[12px] leading-6 text-black/70">{suffix}</span>
+          <span className="pointer-events-none absolute inset-y-0 right-2 my-auto h-6 rounded-md border border-border bg-foreground/5 px-2 text-[12px] leading-6 text-muted-foreground">{suffix}</span>
         )}
       </div>
     </div>
   );
 }
-
-

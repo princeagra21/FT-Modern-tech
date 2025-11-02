@@ -105,9 +105,9 @@ function copy(val: string) {
 // ---- Atoms ----
 const StatusBadge = ({ status }: { status: Vehicledatatype["status"] }) => {
   const map = {
-    running: { label: "RUNNING", style: "bg-black text-white dark:bg-white dark:text-black" },
-    idle: { label: "IDLE", style: "bg-white text-black border border-black dark:bg-neutral-800 dark:text-white dark:border-white" },
-    stop: { label: "STOP", style: "bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white" },
+    running: { label: "RUNNING", style: "bg-primary text-white" },
+    idle: { label: "IDLE", style: "bg-warning text-white" },
+    stop: { label: "STOP", style: "bg-error text-white" },
   } as const;
   const s = map[status] ?? map.idle;
   return (
@@ -129,14 +129,15 @@ const KV = ({ label, value, mono }: { label: string; value: React.ReactNode; mon
 );
 
 const Pill = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) => (
-  <div className="flex items-center gap-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 shadow-sm">
-    <div className="grid h-8 w-8 place-items-center rounded-lg border border-neutral-300 dark:border-neutral-600 dark:text-neutral-100">{icon}</div>
+  <div className="flex items-center gap-3 rounded-xl border border-border bg-card px-3 py-2 shadow-sm dark:bg-foreground/5">
+    <div className="grid h-8 w-8 place-items-center rounded-lg border border-border text-foreground">{icon}</div>
     <div className="leading-tight">
-      <div className="text-[10px] tracking-widest text-neutral-500 dark:text-neutral-400">{label}</div>
-      <div className="text-sm font-medium dark:text-neutral-100">{value}</div>
+      <div className="text-[10px] tracking-widest text-muted-foreground">{label}</div>
+      <div className="text-sm font-medium text-foreground">{value}</div>
     </div>
   </div>
 );
+
 
 const SectionTitle = ({ icon, title, hint }: { icon: React.ReactNode; title: string; hint?: string }) => (
   <div className="mb-3 flex items-center justify-between">
@@ -165,36 +166,53 @@ export default function VehicleDetailsPreview({ data }: VehicleDetailsPreviewPro
   const progressSecondary = useMemo(() => pctBetween(v.lastUpdate, v.secondaryExpiry, v.createdAt), [v]);
 
   return (
-    <div className="mx-auto max-w-6xl p-4 md:p-6">
+    <div className="mx-auto max-w-6xl p-4 md:p-6 ">
       {/* Sticky Summary Bar */}
-      <div className="sticky top-0 z-10 -mx-4 mb-4 border-b border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70 px-4 py-3 backdrop-blur">
-        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="sticky top-0 z-10 -mx-4 mb-4 border-b border-border bg-background/70 px-4 py-3 backdrop-blur dark:bg-foreground/5">
+        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between ">
           <div className="flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 dark:text-neutral-100"><DirectionsCarIcon fontSize="small" /></div>
+            <div className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-background text-foreground">
+              <DirectionsCarIcon fontSize="small" />
+            </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold dark:text-neutral-100">{v.vehicleNo}</span>
+                <span className="text-sm font-semibold text-foreground">{v.vehicleNo}</span>
                 <StatusBadge status={v.status} />
-                <span className="rounded-sm border border-black dark:border-white px-1.5 py-0.5 text-[10px] tracking-widest dark:text-neutral-100">{v.deviceType.name}</span>
-                <span className="rounded-sm border border-black dark:border-white px-1.5 py-0.5 text-[10px] tracking-widest dark:text-neutral-100">{v.vehicleType.name}</span>
+                <span className="rounded-sm border border-foreground px-1.5 py-0.5 text-[10px] tracking-widest text-foreground">
+                  {v.deviceType.name}
+                </span>
+                <span className="rounded-sm border border-foreground px-1.5 py-0.5 text-[10px] tracking-widest text-foreground">
+                  {v.vehicleType.name}
+                </span>
               </div>
-              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                 <span>Last: {timeAgo(v.lastUpdate)}</span>
-                <span className="text-neutral-300 dark:text-neutral-600">•</span>
-                <span><SpeedIcon style={{fontSize:12}}/> {v.speed} km/h</span>
-                <span className="text-neutral-300 dark:text-neutral-600">•</span>
-                <span>Ignition <Dot on={v.ignition} /></span>
-                {v.coords && (<>
-                  <span className="text-neutral-300 dark:text-neutral-600">•</span>
-                  <span className="font-mono">{v.coords.lat.toFixed(4)}, {v.coords.lon.toFixed(4)}</span>
-                </>)}
+                <span className="text-muted-foreground/50">•</span>
+                <span>
+                  <SpeedIcon style={{ fontSize: 12 }} /> {v.speed} km/h
+                </span>
+                <span className="text-muted-foreground/50">•</span>
+                <span>
+                  Ignition <Dot on={v.ignition} />
+                </span>
+                {v.coords && (
+                  <>
+                    <span className="text-muted-foreground/50">•</span>
+                    <span className="font-mono">
+                      {v.coords.lat.toFixed(4)}, {v.coords.lon.toFixed(4)}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
           <div className="flex gap-2">
-             <button className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-xs dark:text-neutral-100"><DownloadOutlinedIcon style={{fontSize:16}}/> Download</button>
-            <button className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-xs dark:text-neutral-100"><EmailOutlinedIcon style={{fontSize:16}}/> Email</button>
-           
+            <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground">
+              <DownloadOutlinedIcon style={{ fontSize: 16 }} /> Download
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground">
+              <EmailOutlinedIcon style={{ fontSize: 16 }} /> Email
+            </button>
           </div>
         </div>
       </div>
@@ -207,134 +225,179 @@ export default function VehicleDetailsPreview({ data }: VehicleDetailsPreviewPro
         <Pill icon={<RouteIcon fontSize="small" />} label="ODOMETER" value={`${v.odometer.toLocaleString()} km`} />
       </div>
 
-          {/* Identifiers & Quick Actions */}
-      <div className="mt-6 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-        <SectionTitle icon={<InfoOutlinedIcon fontSize="small"/>} title="Identifiers" />
+      {/* Identifiers & Quick Actions */}
+      <div className="mt-6 rounded-2xl border border-border bg-background p-4 dark:bg-foreground/5">
+        <SectionTitle icon={<InfoOutlinedIcon fontSize="small" />} title="Identifiers" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">VIN</div>
-            <div className="mt-1 flex items-center justify-between font-mono text-sm dark:text-neutral-100">{v.vin}
-              <button onClick={() => copy(v.vin)} className="rounded border dark:border-neutral-600 px-1.5 py-0.5 text-[11px] dark:text-neutral-100"><ContentCopyIcon fontSize="inherit"/></button>
+          <div className="rounded-lg border border-border p-3 dark:bg-background">
+            <div className="text-xs text-muted-foreground">VIN</div>
+            <div className="mt-1 flex items-center justify-between font-mono text-sm text-foreground">
+              {v.vin}
+              <button
+                onClick={() => copy(v.vin)}
+                className="rounded border border-border px-1.5 py-0.5 text-[11px] text-foreground"
+              >
+                <ContentCopyIcon fontSize="inherit" />
+              </button>
             </div>
           </div>
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">IMEI</div>
-            <div className="mt-1 flex items-center justify-between font-mono text-sm dark:text-neutral-100">{v.imei}
-              <button onClick={() => copy(v.imei)} className="rounded border dark:border-neutral-600 px-1.5 py-0.5 text-[11px] dark:text-neutral-100"><ContentCopyIcon fontSize="inherit"/></button>
+          <div className="rounded-lg border border-border p-3 dark:bg-background">
+            <div className="text-xs text-muted-foreground">IMEI</div>
+            <div className="mt-1 flex items-center justify-between font-mono text-sm text-foreground">
+              {v.imei}
+              <button
+                onClick={() => copy(v.imei)}
+                className="rounded border border-border px-1.5 py-0.5 text-[11px] text-foreground"
+              >
+                <ContentCopyIcon fontSize="inherit" />
+              </button>
             </div>
           </div>
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">Timezone</div>
-            <div className="mt-1 text-sm dark:text-neutral-100">{v.gmt}</div>
+          <div className="rounded-lg border border-border p-3 dark:bg-background">
+            <div className="text-xs text-muted-foreground">Timezone</div>
+            <div className="mt-1 text-sm text-foreground">{v.gmt}</div>
           </div>
         </div>
       </div>
 
-      {/* Vehicle Meta — Separated Attributes */}
-      <div className="mt-5 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-        <SectionTitle icon={<InfoOutlinedIcon fontSize="small"/>} title="Vehicle Meta" hint="Vehicle Attributes" />
+      {/* Vehicle Meta */}
+      <div className="mt-5 rounded-2xl border border-border bg-background p-4 dark:bg-foreground/5">
+        <SectionTitle icon={<InfoOutlinedIcon fontSize="small" />} title="Vehicle Meta" hint="Vehicle Attributes" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Fuel Type</div>
-            <div className="text-sm font-medium uppercase dark:text-neutral-100">
-              {v.vehicleMeta?.fuelType ? String(v.vehicleMeta.fuelType) : "N/A"}
+          {[
+            { label: "Fuel Type", value: v.vehicleMeta?.fuelType ?? "N/A" },
+            {
+              label: "Axle Count",
+              value: Number.isFinite(v.vehicleMeta?.axleCount)
+                ? `${v.vehicleMeta.axleCount} ${v.vehicleMeta.axleCount === 1 ? "Axle" : "Axles"}`
+                : "—",
+            },
+            { label: "GPS Module", value: v.vehicleMeta?.gpsModule ? `v${v.vehicleMeta.gpsModule}` : "—" },
+            {
+              label: "Custom Color",
+              value: v.vehicleMeta?.customColor
+                ? String(v.vehicleMeta.customColor).replace(/-/g, " ")
+                : "—",
+            },
+          ].map((item, i) => (
+            <div key={i} className="rounded-lg border border-border dark:bg-background p-3">
+              <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
+              <div className="text-sm font-medium text-foreground uppercase">{item.value}</div>
             </div>
-          </div>
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Axle Count</div>
-            <div className="text-sm font-medium dark:text-neutral-100">
-              {Number.isFinite(v.vehicleMeta?.axleCount) 
-                ? `${v.vehicleMeta?.axleCount} ${v.vehicleMeta?.axleCount === 1 ? "Axle" : "Axles"}`
-                : "—"}
-            </div>
-          </div>
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">GPS Module</div>
-            <div className="text-sm font-medium dark:text-neutral-100">
-              {v.vehicleMeta?.gpsModule ? `v${v.vehicleMeta.gpsModule}` : "—"}
-            </div>
-          </div>
-          <div className="rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-900 p-3">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Custom Color</div>
-            <div className="text-sm font-medium capitalize dark:text-neutral-100">
-              {v.vehicleMeta?.customColor ? String(v.vehicleMeta.customColor).replace(/-/g, " ") : "—"}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Health & Power & Subscription */}
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-          <SectionTitle icon={<GpsFixedIcon fontSize="small"/>} title="Signal & Fix" />
+        <div className="rounded-2xl border border-border bg-background dark:bg-foreground/5 p-4">
+          <SectionTitle icon={<GpsFixedIcon fontSize="small" />} title="Signal & Fix" />
           <KV label="Satellites" value={<span className="font-mono">{v.deviceAttributes?.satellites ?? "—"}</span>} />
           <KV label="HDOP" value={<span className="font-mono">{v.deviceAttributes?.hdop ?? "—"}</span>} />
           <KV label="Fix" value={<Dot on={!!v.deviceAttributes?.fix} />} />
-          <div className="mt-2 h-2 w-full overflow-hidden rounded bg-neutral-200 dark:bg-neutral-700">
-            <motion.div className="h-full bg-black dark:bg-white" initial={{width:0}} animate={{width: `${Math.min(100, (v.deviceAttributes?.satellites ?? 0) * 8)}%`}} transition={{duration:0.6}} />
+          <div className="mt-2 h-2 w-full overflow-hidden rounded bg-primary/10">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min(100, (v.deviceAttributes?.satellites ?? 0) * 8)}%` }}
+              transition={{ duration: 0.6 }}
+            />
           </div>
         </div>
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-          <SectionTitle icon={<ShieldOutlinedIcon fontSize="small"/>} title="Power & Battery" />
+
+        <div className="rounded-2xl border border-border bg-background p-4 dark:bg-foreground/5">
+          <SectionTitle icon={<ShieldOutlinedIcon fontSize="small" />} title="Power & Battery" />
           <KV label="Battery (V)" value={<span className="font-mono">{v.deviceAttributes?.batteryVoltage ?? "—"}</span>} />
           <KV label="External (V)" value={<span className="font-mono">{v.deviceAttributes?.externalPower ?? "—"}</span>} />
           <KV label="Signal" value={<span className="capitalize">{String(v.deviceAttributes?.signal ?? "—")}</span>} />
-          <div className="mt-2 h-2 w-full overflow-hidden rounded bg-neutral-200 dark:bg-neutral-700">
-            <motion.div className="h-full bg-black dark:bg-white" initial={{width:0}} animate={{width: `${Math.min(100, (v.deviceAttributes?.batteryVoltage ?? 0) * 8)}%`}} transition={{duration:0.6}} />
+          <div className="mt-2 h-2 w-full overflow-hidden rounded bg-primary/10">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min(100, (v.deviceAttributes?.batteryVoltage ?? 0) * 8)}%` }}
+              transition={{ duration: 0.6 }}
+            />
           </div>
         </div>
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-          <SectionTitle icon={<KeyIcon fontSize="small"/>} title="Subscription" />
-          <div className="mb-2 flex items-center justify-between text-xs"><span className="text-neutral-500 dark:text-neutral-400">Primary</span><span className="font-mono dark:text-neutral-100">{v.primaryExpiry}</span></div>
-          <div className="h-2 w-full overflow-hidden rounded bg-neutral-200 dark:bg-neutral-700"><motion.div className="h-full bg-black dark:bg-white" initial={{width:0}} animate={{width: `${progressPrimary}%`}} transition={{duration:0.6}}/></div>
-          <div className="mt-2 text-xs text-neutral-600 dark:text-neutral-300">{primaryDaysLeft} days remaining</div>
-          <div className="mt-4 mb-2 flex items-center justify-between text-xs"><span className="text-neutral-500 dark:text-neutral-400">Secondary</span><span className="font-mono dark:text-neutral-100">{v.secondaryExpiry}</span></div>
-          <div className="h-2 w-full overflow-hidden rounded bg-neutral-200 dark:bg-neutral-700"><motion.div className="h-full bg-black dark:bg-white" initial={{width:0}} animate={{width: `${progressSecondary}%`}} transition={{duration:0.6, delay:0.1}}/></div>
-          <div className="mt-2 text-xs text-neutral-600 dark:text-neutral-300">{secondaryDaysLeft} days remaining</div>
+
+        <div className="rounded-2xl border border-border bg-background p-4 dark:bg-foreground/5">
+          <SectionTitle icon={<KeyIcon fontSize="small" />} title="Subscription" />
+          <div className="mb-2 flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Primary</span>
+            <span className="font-mono text-foreground">{v.primaryExpiry}</span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded bg-primary/10">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPrimary}%` }}
+              transition={{ duration: 0.6 }}
+            />
+          </div>
+          <div className="mt-2 text-xs text-muted-foreground">{primaryDaysLeft} days remaining</div>
+          <div className="mt-4 mb-2 flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Secondary</span>
+            <span className="font-mono text-foreground">{v.secondaryExpiry}</span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded bg-primary/10">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressSecondary}%` }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            />
+          </div>
+          <div className="mt-2 text-xs text-muted-foreground">{secondaryDaysLeft} days remaining</div>
         </div>
       </div>
 
       {/* Ownership & Activity */}
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-[7fr_3fr] gap-4">
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-          <SectionTitle icon={<PersonIcon fontSize="small"/>} title="People" />
+      <div className="mt-5 grid grid-cols-1 lg:grid-cols-[7fr_3fr] gap-4">
+        <div className="rounded-2xl border border-border bg-background p-4 dark:bg-foreground/5">
+          <SectionTitle icon={<PersonIcon fontSize="small" />} title="People" />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3">
-              <div className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">Primary User</div>
-              <div className="flex items-center gap-3">
-                <Avatar src={v.primaryUser.profileUrl} alt={v.primaryUser.name} fallback={initials(v.primaryUser.name)} />
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1"><div className="truncate text-sm font-medium dark:text-neutral-100">{v.primaryUser.name}</div>{v.primaryUser.isEmailVerified && <VerifiedIcon fontSize="small"/>}</div>
-                  <div className="truncate text-xs text-neutral-500 dark:text-neutral-400">{v.primaryUser.email}</div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">{v.primaryUser.mobilePrefix} {v.primaryUser.mobile} • @{v.primaryUser.username}</div>
+            {[v.primaryUser, v.addedBy].map((user, i) => (
+              <div key={i} className="rounded-xl border border-border p-3">
+                <div className="mb-2 text-xs text-muted-foreground">
+                  {i === 0 ? "Primary User" : "Added By"}
+                </div>
+                <div className="flex items-center gap-3">
+                  <Avatar src={user.profileUrl} alt={user.name} fallback={initials(user.name)} />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1">
+                      <div className="truncate text-sm font-medium text-foreground">{user.name}</div>
+                      {user.isEmailVerified && <VerifiedIcon fontSize="small" />}
+                    </div>
+                    <div className="truncate text-xs text-muted-foreground">{user.email}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {user.mobilePrefix} {user.mobile} • @{user.username}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3">
-              <div className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">Added By</div>
-              <div className="flex items-center gap-3">
-                <Avatar src={v.addedBy.profileUrl} alt={v.addedBy.name} fallback={initials(v.addedBy.name)} />
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1"><div className="truncate text-sm font-medium dark:text-neutral-100">{v.addedBy.name}</div>{v.addedBy.isEmailVerified && <VerifiedIcon fontSize="small"/>}</div>
-                  <div className="truncate text-xs text-neutral-500 dark:text-neutral-400">{v.addedBy.email}</div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">{v.addedBy.mobilePrefix} {v.addedBy.mobile} • @{v.addedBy.username}</div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-          <SectionTitle icon={<ReceiptLongIcon fontSize="small"/>} title="Recent Events" />
+        <div className="rounded-2xl border border-border bg-background p-4 dark:bg-foreground/5">
+          <SectionTitle icon={<ReceiptLongIcon fontSize="small" />} title="Recent Events" />
           <ul className="space-y-2 text-sm">
-            <li className="flex items-center justify-between"><span className="text-neutral-700 dark:text-neutral-200">Location ping</span><span className="text-xs text-neutral-500 dark:text-neutral-400">{timeAgo(v.lastUpdate)}</span></li>
-            <li className="flex items-center justify-between"><span className="text-neutral-700 dark:text-neutral-200">Ignition {v.ignition ? "ON" : "OFF"}</span><span className="text-xs text-neutral-500 dark:text-neutral-400">~</span></li>
-            <li className="flex items-center justify-between"><span className="text-neutral-700 dark:text-neutral-200">Speed updated</span><span className="text-xs text-neutral-500 dark:text-neutral-400">~</span></li>
+            <li className="flex items-center justify-between">
+              <span className="text-foreground">Location ping</span>
+              <span className="text-xs text-muted-foreground">{timeAgo(v.lastUpdate)}</span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="text-foreground">Ignition {v.ignition ? "ON" : "OFF"}</span>
+              <span className="text-xs text-muted-foreground">~</span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="text-foreground">Speed updated</span>
+              <span className="text-xs text-muted-foreground">~</span>
+            </li>
           </ul>
         </div>
       </div>
-
-  
     </div>
   );
 }
+
