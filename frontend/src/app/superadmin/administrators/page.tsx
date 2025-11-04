@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import HomeIcon from "@mui/icons-material/Home";
 import CallIcon from "@mui/icons-material/Call";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -26,7 +25,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
-import AdminRightDrawerInfo from "@/components/superadmin/adminrightdrawerinfo";
 import { AdminRow } from "@/lib/types/superadmin";
 import { ADMIN_DATA } from "@/lib/data/superadmin";
 
@@ -38,10 +36,6 @@ export default function Page() {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {}
   );
-
-  // Drawer state
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState<string>();
 
   // ✅ SUPER SIMPLE REFRESH: call API → set state
   const handleRefresh = async () => {
@@ -1033,11 +1027,12 @@ export default function Page() {
         displayOptions={displayOptions}
         filterConfig={filterConfig}
         multiSelectOptions={bulkActions}
-        onRowClick={(row) => {
-          console.log("Row Clicked →", row.name);
-          setSelectedUserId(row.id);
-          setDrawerOpen(true);
-        }}
+        // onRowClick={(row) => {
+        //   console.log("Row Clicked →", row.name);
+        //   setSelectedUserId(row.id);
+        //   setDrawerOpen(true);
+        // }}
+        isDrawerTypeFilter
         onRefresh={handleRefresh} // ✅ only one function, super simple
         exportBrand={{
           name: "Fleet Stack",
@@ -1045,16 +1040,6 @@ export default function Page() {
           addressLine1: "Self-Hosted GPS Software",
           addressLine2: "fleetstackglobal.com",
           footerNote: "We make it easiest — just deploy.",
-        }}
-      />
-
-      {/* Admin Details Drawer */}
-      <AdminRightDrawerInfo
-        userId={selectedUserId}
-        isOpen={drawerOpen}
-        onClose={() => {
-          setDrawerOpen(false);
-          setSelectedUserId(undefined);
         }}
       />
     </>

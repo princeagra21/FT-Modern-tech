@@ -39,6 +39,7 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import SummarizeRoundedIcon from "@mui/icons-material/SummarizeRounded";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DateRangeIcon from "@mui/icons-material/DateRange";
+import SendEmailDialog from "../common/CommonEmail";
 
 // ——————————————————————————————————————————
 // Types & Sample Data
@@ -317,6 +318,7 @@ function CreditDialog({
 export default function CreditHistoryPage() {
   const [txns, setTxns] = React.useState<CreditTxn[]>(SAMPLE_TXNS);
   const [query, setQuery] = React.useState("");
+  const [openEmailDialog, setOpenEmailDialog] = React.useState(false);
   const [typeFilter, setTypeFilter] = React.useState<
     "all" | "add" | "use" | "deduct"
   >("all");
@@ -375,289 +377,300 @@ export default function CreditHistoryPage() {
   }).format(new Date());
 
   return (
-    <TooltipProvider>
-      <div className="min-h-[100vh] w-full bg-background text-foreground">
-        {/* Header */}
-        <div className="sticky top-0 z-30 border-b border-border bg-background/70 dark:bg-foreground/5 backdrop-blur-sm">
-          <div className="mx-auto max-w-7xl px-4 md:px-6 py-3 flex items-center justify-between">
-            <div>
-              <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                Billing
+    <>
+      <TooltipProvider>
+        <div className="min-h-[100vh] w-full bg-background text-foreground">
+          {/* Header */}
+          <div className="sticky top-0 z-30 border-b border-border bg-background/70 dark:bg-foreground/5 backdrop-blur-sm">
+            <div className="mx-auto max-w-7xl px-4 md:px-6 py-3 flex items-center justify-between">
+              <div>
+                <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Billing
+                </div>
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                  Credit History
+                </h1>
               </div>
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                Credit History
-              </h1>
-            </div>
 
-            {/* Date Range Selector */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Popover
-                  open={datePopoverOpen}
-                  onOpenChange={setDatePopoverOpen}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="rounded-xl border-border text-left font-normal bg-background dark:bg-foreground/10 hover:bg-foreground/5 dark:hover:bg-foreground/20"
-                    >
-                      <CalendarMonthIcon className="mr-2 h-4 w-4" />
-                      {dateFrom
-                        ? dateTo
-                          ? `${dateFrom.toLocaleDateString()} - ${dateTo.toLocaleDateString()}`
-                          : `From ${dateFrom.toLocaleDateString()}`
-                        : "Select date range"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto p-0 bg-background dark:bg-foreground/10 border border-border"
-                    align="end"
+              {/* Date Range Selector */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Popover
+                    open={datePopoverOpen}
+                    onOpenChange={setDatePopoverOpen}
                   >
-                    <div className="flex">
-                      <div className="p-3">
-                        <div className="text-sm font-medium mb-2 text-foreground">
-                          From Date
-                        </div>
-                        <Calendar
-                          mode="single"
-                          selected={dateFrom}
-                          onSelect={setDateFrom}
-                          initialFocus
-                        />
-                      </div>
-                      <div className="p-3 border-l border-border">
-                        <div className="text-sm font-medium mb-2 text-foreground">
-                          To Date
-                        </div>
-                        <Calendar
-                          mode="single"
-                          selected={dateTo}
-                          onSelect={setDateTo}
-                          disabled={(date) =>
-                            dateFrom ? date < dateFrom : false
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="border-t border-border p-3 flex justify-between">
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setDateFrom(undefined);
-                            setDateTo(undefined);
-                          }}
-                        >
-                          Clear
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            const today = new Date();
-                            const thirtyDaysAgo = new Date();
-                            thirtyDaysAgo.setDate(today.getDate() - 30);
-                            setDateFrom(thirtyDaysAgo);
-                            setDateTo(today);
-                          }}
-                        >
-                          Last 30 Days
-                        </Button>
-                      </div>
+                    <PopoverTrigger asChild>
                       <Button
-                        size="sm"
-                        className="bg-primary text-white hover:bg-primary/90"
-                        onClick={() => setDatePopoverOpen(false)}
+                        variant="outline"
+                        className="rounded-xl border-border text-left font-normal bg-background dark:bg-foreground/10 hover:bg-foreground/5 dark:hover:bg-foreground/20"
                       >
-                        OK
+                        <CalendarMonthIcon className="mr-2 h-4 w-4" />
+                        {dateFrom
+                          ? dateTo
+                            ? `${dateFrom.toLocaleDateString()} - ${dateTo.toLocaleDateString()}`
+                            : `From ${dateFrom.toLocaleDateString()}`
+                          : "Select date range"}
                       </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto p-0 bg-background dark:bg-foreground/10 border border-border"
+                      align="end"
+                    >
+                      <div className="flex">
+                        <div className="p-3">
+                          <div className="text-sm font-medium mb-2 text-foreground">
+                            From Date
+                          </div>
+                          <Calendar
+                            mode="single"
+                            selected={dateFrom}
+                            onSelect={setDateFrom}
+                            initialFocus
+                          />
+                        </div>
+                        <div className="p-3 border-l border-border">
+                          <div className="text-sm font-medium mb-2 text-foreground">
+                            To Date
+                          </div>
+                          <Calendar
+                            mode="single"
+                            selected={dateTo}
+                            onSelect={setDateTo}
+                            disabled={(date) =>
+                              dateFrom ? date < dateFrom : false
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="border-t border-border p-3 flex justify-between">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setDateFrom(undefined);
+                              setDateTo(undefined);
+                            }}
+                          >
+                            Clear
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const today = new Date();
+                              const thirtyDaysAgo = new Date();
+                              thirtyDaysAgo.setDate(today.getDate() - 30);
+                              setDateFrom(thirtyDaysAgo);
+                              setDateTo(today);
+                            }}
+                          >
+                            Last 30 Days
+                          </Button>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="bg-primary text-white hover:bg-primary/90"
+                          onClick={() => setDatePopoverOpen(false)}
+                        >
+                          OK
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
 
-                {(dateFrom || dateTo) && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setDateFrom(undefined);
-                      setDateTo(undefined);
-                    }}
-                    className="h-8 px-2 text-muted-foreground hover:bg-foreground/10"
-                  >
-                    ×
-                  </Button>
-                )}
+                  {(dateFrom || dateTo) && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setDateFrom(undefined);
+                        setDateTo(undefined);
+                      }}
+                      className="h-8 px-2 text-muted-foreground hover:bg-foreground/10"
+                    >
+                      ×
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Summary panel */}
-        <div className="mx-auto max-w-7xl px-4 md:px-6 py-6">
-          <Card className="rounded-2xl border border-border bg-background dark:bg-foreground/5">
-            <CardContent className="p-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Bill To */}
-                <div>
-                  <div className="text-sm font-semibold text-foreground">
-                    Bill To:
+          {/* Summary panel */}
+          <div className="mx-auto max-w-7xl px-4 md:px-6 py-6">
+            <Card className="rounded-2xl border border-border bg-background dark:bg-foreground/5">
+              <CardContent className="p-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Bill To */}
+                  <div>
+                    <div className="text-sm font-semibold text-foreground">
+                      Bill To:
+                    </div>
+                    <div className="mt-2 font-semibold text-foreground">
+                      {BILL_TO.name}
+                    </div>
+                    <div className="mt-1 text-sm text-muted-foreground">
+                      {BILL_TO.addressLines.map((l, i) => (
+                        <div key={i}>{l}</div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="mt-2 font-semibold text-foreground">
-                    {BILL_TO.name}
+                  {/* Credit Summary */}
+                  <div className="md:pl-10">
+                    <div className="flex items-center justify-between">
+                      <div className="text-xl font-semibold text-foreground">
+                        Today ( {today} )
+                      </div>
+                    </div>
+                    <div className="mt-2 divide-y divide-border text-sm">
+                      <div className="flex items-center justify-between py-2 text-muted-foreground">
+                        <span>Assign Credit :</span>
+                        <span>{summary.assign}</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 text-muted-foreground">
+                        <span>Deduct Credit :</span>
+                        <span>{summary.deduct}</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 text-muted-foreground">
+                        <span>Used Credit :</span>
+                        <span>-{summary.used}</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 font-semibold text-foreground">
+                        <span>Current Credit Balance :</span>
+                        <span>{summary.currentBalance}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-1 text-sm text-muted-foreground">
-                    {BILL_TO.addressLines.map((l, i) => (
-                      <div key={i}>{l}</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* History Table */}
+          <div className="mx-auto max-w-7xl px-4 md:px-6 pb-10">
+            <Card className="rounded-2xl border border-border bg-background dark:bg-foreground/5">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:flex items-center gap-2 border border-border rounded-xl px-3 py-2 dark:bg-foreground/10">
+                    <SearchRoundedIcon
+                      fontSize="small"
+                      className="text-muted-foreground"
+                    />
+                    <input
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search description, id, device…"
+                      className="bg-transparent outline-none text-sm w-[260px] text-foreground placeholder:text-muted-foreground"
+                    />
+                    <Separator
+                      orientation="vertical"
+                      className="h-4 bg-border"
+                    />
+                    {["all", "add", "deduct", "use"].map((type) => (
+                      <Button
+                        key={type}
+                        variant="ghost"
+                        className="rounded-lg px-2 text-muted-foreground hover:bg-foreground/10"
+                        onClick={() =>
+                          setTypeFilter(
+                            type as "all" | "use" | "add" | "deduct"
+                          )
+                        }
+                      >
+                        {type === "add"
+                          ? "Assign"
+                          : type === "deduct"
+                          ? "Deduct"
+                          : type === "use"
+                          ? "Used"
+                          : "All"}
+                      </Button>
                     ))}
                   </div>
+                  <CreditDialog onCommit={addTxn} />
                 </div>
-                {/* Credit Summary */}
-                <div className="md:pl-10">
-                  <div className="flex items-center justify-between">
-                    <div className="text-xl font-semibold text-foreground">
-                      Today ( {today} )
-                    </div>
-                  </div>
-                  <div className="mt-2 divide-y divide-border text-sm">
-                    <div className="flex items-center justify-between py-2 text-muted-foreground">
-                      <span>Assign Credit :</span>
-                      <span>{summary.assign}</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2 text-muted-foreground">
-                      <span>Deduct Credit :</span>
-                      <span>{summary.deduct}</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2 text-muted-foreground">
-                      <span>Used Credit :</span>
-                      <span>-{summary.used}</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2 font-semibold text-foreground">
-                      <span>Current Credit Balance :</span>
-                      <span>{summary.currentBalance}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
-        {/* History Table */}
-        <div className="mx-auto max-w-7xl px-4 md:px-6 pb-10">
-          <Card className="rounded-2xl border border-border bg-background dark:bg-foreground/5">
-            <CardHeader className="pb-2">
-              <div className="flex items-center gap-4">
-                <div className="hidden md:flex items-center gap-2 border border-border rounded-xl px-3 py-2 dark:bg-foreground/10">
-                  <SearchRoundedIcon
-                    fontSize="small"
-                    className="text-muted-foreground"
-                  />
-                  <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search description, id, device…"
-                    className="bg-transparent outline-none text-sm w-[260px] text-foreground placeholder:text-muted-foreground"
-                  />
-                  <Separator orientation="vertical" className="h-4 bg-border" />
-                  {["all", "add", "deduct", "use"].map((type) => (
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base tracking-tight text-foreground">
+                    History
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
                     <Button
-                      key={type}
-                      variant="ghost"
-                      className="rounded-lg px-2 text-muted-foreground hover:bg-foreground/10"
-                      onClick={() => setTypeFilter(type as "all" | "use" | "add" | "deduct")}
+                      variant="outline"
+                      className="rounded-xl border-border text-foreground hover:bg-foreground/10"
                     >
-                      {type === "add"
-                        ? "Assign"
-                        : type === "deduct"
-                        ? "Deduct"
-                        : type === "use"
-                        ? "Used"
-                        : "All"}
+                      <DownloadRoundedIcon className="mr-2" fontSize="small" />
+                      Download
                     </Button>
-                  ))}
+                    <Button
+                      onClick={() => setOpenEmailDialog(true)}
+                      variant="outline"
+                      className="rounded-xl border-border text-foreground hover:bg-foreground/10"
+                    >
+                      <EmailRoundedIcon className="mr-2" fontSize="small" />
+                      Email
+                    </Button>
+                  </div>
                 </div>
-                <CreditDialog onCommit={addTxn} />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base tracking-tight text-foreground">
-                  History
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    className="rounded-xl border-border text-foreground hover:bg-foreground/10"
-                  >
-                    <DownloadRoundedIcon className="mr-2" fontSize="small" />
-                    Download
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-xl border-border text-foreground hover:bg-foreground/10"
-                  >
-                    <EmailRoundedIcon className="mr-2" fontSize="small" />
-                    Email
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <THead>
-                  <Th>Date & Time</Th>
-                  <Th>Description</Th>
-                  <Th className="text-right">+ / −</Th>
-                  <Th className="text-right">Balance</Th>
-                  <Th>Action</Th>
-                </THead>
-                <TBody>
-                  {filtered.map((t) => (
-                    <Tr key={t.id}>
-                      <Td className="whitespace-nowrap">{fmtDate(t.when)}</Td>
-                      <Td>
-                        <div className="font-medium text-foreground">
-                          {t.description}
-                        </div>
-                        {t.deviceRef && (
-                          <div className="text-xs text-muted-foreground">
-                            Device: {t.deviceRef}
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <THead>
+                    <Th>Date & Time</Th>
+                    <Th>Description</Th>
+                    <Th className="text-right">+ / −</Th>
+                    <Th className="text-right">Balance</Th>
+                    <Th>Action</Th>
+                  </THead>
+                  <TBody>
+                    {filtered.map((t) => (
+                      <Tr key={t.id}>
+                        <Td className="whitespace-nowrap">{fmtDate(t.when)}</Td>
+                        <Td>
+                          <div className="font-medium text-foreground">
+                            {t.description}
                           </div>
-                        )}
-                      </Td>
-                      <Td className="text-right">
-                        <span
-                          className={`inline-flex items-center rounded-full border px-2 py-[2px] text-xs ${
-                            t.creditsChange > 0
-                              ? "border-border bg-foreground/10"
-                              : "border-border bg-foreground/5"
-                          } text-foreground`}
-                        >
-                          {t.creditsChange > 0 ? "+" : "−"}
-                          {Math.abs(t.creditsChange)}
-                        </span>
-                      </Td>
-                      <Td className="text-right text-foreground">
-                        {t.balanceAfter}
-                      </Td>
-                      <Td>
-                        <Badge
-                          variant="outline"
-                          className="rounded-full border-border text-foreground text-[11px] capitalize"
-                        >
-                          {t.action}
-                        </Badge>
-                      </Td>
-                    </Tr>
-                  ))}
-                </TBody>
-              </Table>
-            </CardContent>
-          </Card>
+                          {t.deviceRef && (
+                            <div className="text-xs text-muted-foreground">
+                              Device: {t.deviceRef}
+                            </div>
+                          )}
+                        </Td>
+                        <Td className="text-right">
+                          <span
+                            className={`inline-flex items-center rounded-full border px-2 py-[2px] text-xs ${
+                              t.creditsChange > 0
+                                ? "border-border bg-foreground/10"
+                                : "border-border bg-foreground/5"
+                            } text-foreground`}
+                          >
+                            {t.creditsChange > 0 ? "+" : "−"}
+                            {Math.abs(t.creditsChange)}
+                          </span>
+                        </Td>
+                        <Td className="text-right text-foreground">
+                          {t.balanceAfter}
+                        </Td>
+                        <Td>
+                          <Badge
+                            variant="outline"
+                            className="rounded-full border-border text-foreground text-[11px] capitalize"
+                          >
+                            {t.action}
+                          </Badge>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </TBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
-    </TooltipProvider>
+      </TooltipProvider>
+      <SendEmailDialog open={openEmailDialog} onOpenChange={() => setOpenEmailDialog(false)} />
+    </>
   );
 }
 

@@ -90,6 +90,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import CommonDrawer from "./commonDrawer";
 
 // ------------------------------------
 // Types
@@ -173,6 +174,7 @@ type SmartAutoTableProps<T> = {
   multiSelectOptions?: MultiSelectOption<T>[]; // optional; if omitted -> no checkboxes/bulk bar
   exportBrand?: BrandConfig; // optional; branding for exports
   onRefresh?: () => Promise<any>; // optional; refresh callback
+  isDrawerTypeFilter?: boolean;
 };
 
 // ------------------------------------
@@ -642,7 +644,12 @@ function DateRangeField({
                   ? { opacity: 0 }
                   : { opacity: 0, y: -6, rotateX: -4, scale: 0.985 }
               }
-              transition={{ type: "spring", stiffness: 520, damping: 38, mass: 0.7 }}
+              transition={{
+                type: "spring",
+                stiffness: 520,
+                damping: 38,
+                mass: 0.7,
+              }}
               style={{ transformOrigin: "50% -10px" }}
               className="p-2 will-change-transform"
             >
@@ -694,6 +701,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
     multiSelectOptions,
     exportBrand,
     onRefresh,
+    isDrawerTypeFilter = false,
   } = props;
 
   const hasBulk = (multiSelectOptions?.length ?? 0) > 0;
@@ -1127,73 +1135,82 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
   // UI
   // ------------------------------------
   return (
-    <MotionConfig
-      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-      reducedMotion="user"
-    >
-      <div ref={containerRef} className="mx-auto max-w-[1400px] p-4">
-        {/* Bulk actions bar (only if hasBulk and selection) */}
-        <AnimatePresence initial={false}>
-          {hasBulk && selectedIds.size > 0 && (
-            <motion.div
-              key="bulk-bar"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ type: "spring", stiffness: 420, damping: 32, mass: 0.6 }}
-              className="mb-3 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-800/90 backdrop-blur p-3 shadow-[0_6px_24px_rgba(2,6,23,0.06)]"
-            >
-              <div className="flex flex-col px-3 sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="text-sm text-neutral-700 dark:text-neutral-300">
-                  <span className="font-semibold">{selectedIds.size}</span>{" "}
-                  selected
+    <>
+      <MotionConfig
+        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+        reducedMotion="user"
+      >
+        <div ref={containerRef} className="mx-auto max-w-[1400px] p-4">
+          {/* Bulk actions bar (only if hasBulk and selection) */}
+          <AnimatePresence initial={false}>
+            {hasBulk && selectedIds.size > 0 && (
+              <motion.div
+                key="bulk-bar"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 420,
+                  damping: 32,
+                  mass: 0.6,
+                }}
+                className="mb-3 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-800/90 backdrop-blur p-3 shadow-[0_6px_24px_rgba(2,6,23,0.06)]"
+              >
+                <div className="flex flex-col px-3 sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="text-sm text-neutral-700 dark:text-neutral-300">
+                    <span className="font-semibold">{selectedIds.size}</span>{" "}
+                    selected
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    {multiSelectOptions!.map(renderBulkButton)}
+                    <Button
+                      variant="ghost"
+                      className="h-9"
+                      onClick={clearSelection}
+                    >
+                      Clear selection
+                    </Button>
+                  </div>
                 </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  {multiSelectOptions!.map(renderBulkButton)}
-                  <Button
-                    variant="ghost"
-                    className="h-9"
-                    onClick={clearSelection}
-                  >
-                    Clear selection
-                  </Button>
+          {/* Toolbar */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 420,
+              damping: 32,
+              mass: 0.6,
+            }}
+            className="mb-4 bg-white/90 dark:bg-neutral-800/90 backdrop-blur border border-neutral-200/80 dark:border-neutral-700 rounded-2xl p-4 shadow-[0_6px_24px_rgba(2,6,23,0.06)]"
+          >
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              {/* Left: search + filter */}
+              <div className="flex flex-1 items-stretch gap-3">
+                <div className="relative flex-1 lg:max-w-sm">
+                  <SearchIcon
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500"
+                    fontSize="small"
+                  />
+                  <input
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Search name, email, role, department…"
+                    className="h-10 w-full rounded-xl border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 pl-10 pr-4 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 outline-none ring-0 transition focus:border-neutral-400 dark:focus:border-neutral-400 focus:bg-white dark:focus:bg-neutral-600 focus:shadow-sm"
+                  />
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Toolbar */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 420, damping: 32, mass: 0.6 }}
-          className="mb-4 bg-white/90 dark:bg-neutral-800/90 backdrop-blur border border-neutral-200/80 dark:border-neutral-700 rounded-2xl p-4 shadow-[0_6px_24px_rgba(2,6,23,0.06)]"
-        >
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            {/* Left: search + filter */}
-            <div className="flex flex-1 items-stretch gap-3">
-              <div className="relative flex-1 lg:max-w-sm">
-                <SearchIcon
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500"
-                  fontSize="small"
-                />
-                <input
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setPage(1);
-                  }}
-                  placeholder="Search name, email, role, department…"
-                  className="h-10 w-full rounded-xl border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 pl-10 pr-4 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 outline-none ring-0 transition focus:border-neutral-400 dark:focus:border-neutral-400 focus:bg-white dark:focus:bg-neutral-600 focus:shadow-sm"
-                />
-              </div>
-
-              {/* Filter popover */}
-              <Popover open={filterOpen} onOpenChange={setFilterOpen}>
-                <PopoverTrigger asChild>
+                {isDrawerTypeFilter && (
                   <MotionButton
+                    onClick={() => setFilterOpen(true)}
                     whileTap={{ scale: 0.98 }}
                     whileHover={{ y: -1 }}
                     onMouseMove={magnet.onMouseMove}
@@ -1205,766 +1222,1088 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                   >
                     <FilterIcon fontSize="small" /> Filter
                   </MotionButton>
-                </PopoverTrigger>
+                )}
 
-                <PopoverContent
-                  align="start"
-                  side="bottom"
-                  sideOffset={10}
-                  className={`w-[360px] sm:w-[460px] rounded-2xl border border-neutral-200/80 dark:border-neutral-600/80 bg-white/95 dark:bg-neutral-800/95 backdrop-blur p-0 shadow-[0_20px_70px_rgba(2,6,23,0.25)] ${Z_FILTER} overflow-visible`}
-                >
-                  <AnimatePresence initial={false} mode="wait">
-                    <motion.div
-                      key={filterOpen ? "open" : "closed"}
-                      initial={{
-                        opacity: 0,
-                        y: -10,
-                        rotateX: -7,
-                        scale: 0.985,
-                      }}
-                      animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -8, rotateX: -5, scale: 0.985 }}
-                      transition={{ type: "spring", stiffness: 520, damping: 38, mass: 0.7 }}
-                      style={{ transformOrigin: "50% -10px" }}
-                      className="will-change-transform"
+                {/* Filter popover */}
+                {!isDrawerTypeFilter && (
+                  <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+                    <PopoverTrigger asChild>
+                      <MotionButton
+                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ y: -1 }}
+                        onMouseMove={magnet.onMouseMove}
+                        onMouseLeave={magnet.onMouseLeave}
+                        style={{ x: magnet.ry, y: magnet.rx }}
+                        transition={springPress}
+                        variant="outline"
+                        className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
+                      >
+                        <FilterIcon fontSize="small" /> Filter
+                      </MotionButton>
+                    </PopoverTrigger>
+
+                    <PopoverContent
+                      align="start"
+                      side="bottom"
+                      sideOffset={10}
+                      className={`w-[360px] sm:w-[460px] rounded-2xl border border-neutral-200/80 dark:border-neutral-600/80 bg-white/95 dark:bg-neutral-800/95 backdrop-blur p-0 shadow-[0_20px_70px_rgba(2,6,23,0.25)] ${Z_FILTER} overflow-visible`}
                     >
-                      <div className="px-3 pt-3">
-                        <div className="px-1 pb-2 text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 font-medium">
-                          Dynamic Filters
-                        </div>
-                        <Separator className="mb-3" />
-                      </div>
+                      <AnimatePresence initial={false} mode="wait">
+                        <motion.div
+                          key={filterOpen ? "open" : "closed"}
+                          initial={{
+                            opacity: 0,
+                            y: -10,
+                            rotateX: -7,
+                            scale: 0.985,
+                          }}
+                          animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+                          exit={{
+                            opacity: 0,
+                            y: -8,
+                            rotateX: -5,
+                            scale: 0.985,
+                          }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 520,
+                            damping: 38,
+                            mass: 0.7,
+                          }}
+                          style={{ transformOrigin: "50% -10px" }}
+                          className="will-change-transform"
+                        >
+                          <div className="px-3 pt-3">
+                            <div className="px-1 pb-2 text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 font-medium">
+                              Dynamic Filters
+                            </div>
+                            <Separator className="mb-3" />
+                          </div>
 
-                      <div className="px-3 pb-3">
-                        <div className="max-h-[520px] overflow-y-auto pr-2">
-                          <motion.div
-                            initial="hidden"
-                            animate="show"
-                            variants={{
-                              hidden: {
-                                transition: {
-                                  staggerChildren: 0.02,
-                                  staggerDirection: -1,
-                                },
-                              },
-                              show: { transition: { staggerChildren: 0.04 } },
-                            }}
-                            className="space-y-3"
-                          >
-                            {Object.entries(filterConfig).map(([key, conf]) => {
-                              const value = (filterValues as any)[key];
-                              const setVal = (v: any) => {
-                                const newFilters = {
-                                  ...filterValues,
-                                  [key]: v,
-                                };
-                                updateFilterValues(newFilters);
-                              };
+                          <div className="px-3 pb-3">
+                            <div className="max-h-[520px] overflow-y-auto pr-2">
+                              <motion.div
+                                initial="hidden"
+                                animate="show"
+                                variants={{
+                                  hidden: {
+                                    transition: {
+                                      staggerChildren: 0.02,
+                                      staggerDirection: -1,
+                                    },
+                                  },
+                                  show: {
+                                    transition: { staggerChildren: 0.04 },
+                                  },
+                                }}
+                                className="space-y-3"
+                              >
+                                {Object.entries(filterConfig).map(
+                                  ([key, conf]) => {
+                                    const value = (filterValues as any)[key];
+                                    const setVal = (v: any) => {
+                                      const newFilters = {
+                                        ...filterValues,
+                                        [key]: v,
+                                      };
+                                      updateFilterValues(newFilters);
+                                    };
 
-                              let selectOptions:
-                                | Array<{ label: string; value: string }>
-                                | undefined;
-                              if (conf.kind === "select") {
-                                if (conf.options) {
-                                  selectOptions = conf.options.map((o) => ({
-                                    label: o.label,
-                                    value: String(o.value ?? o.label ?? ""),
-                                  }));
-                                } else if (conf.derive) {
-                                  const derived = new Set<string>();
-                                  data.forEach((row) => {
-                                    const v = getCell(row, conf.field);
-                                    if (v !== undefined && v !== null)
-                                      derived.add(String(v));
-                                  });
-                                  selectOptions = Array.from(derived).map(
-                                    (u) => ({ label: u, value: u })
-                                  );
-                                } else selectOptions = [];
-                              }
+                                    let selectOptions:
+                                      | Array<{ label: string; value: string }>
+                                      | undefined;
+                                    if (conf.kind === "select") {
+                                      if (conf.options) {
+                                        selectOptions = conf.options.map(
+                                          (o) => ({
+                                            label: o.label,
+                                            value: String(
+                                              o.value ?? o.label ?? ""
+                                            ),
+                                          })
+                                        );
+                                      } else if (conf.derive) {
+                                        const derived = new Set<string>();
+                                        data.forEach((row) => {
+                                          const v = getCell(row, conf.field);
+                                          if (v !== undefined && v !== null)
+                                            derived.add(String(v));
+                                        });
+                                        selectOptions = Array.from(derived).map(
+                                          (u) => ({ label: u, value: u })
+                                        );
+                                      } else selectOptions = [];
+                                    }
 
-                              return (
-                                <motion.div
-                                  key={String(key)}
-                                  variants={{
-                                    hidden: { opacity: 0, y: 6 },
-                                    show: { opacity: 1, y: 0 },
-                                  }}
-                                  transition={{ type: "spring", stiffness: 420, damping: 32, mass: 0.6 }}
-                                  className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3 bg-white/70 dark:bg-neutral-800/70"
-                                >
-                                  <Label className="mb-2 block text-xs text-neutral-700 dark:text-neutral-300">
-                                    {conf.label ?? key}
-                                  </Label>
-
-                                  {"text" === conf.kind && (
-                                    <Input
-                                      value={value ?? ""}
-                                      onChange={(e) => setVal(e.target.value)}
-                                      placeholder="Type to filter…"
-                                      className="h-9"
-                                    />
-                                  )}
-
-                                  {"select" === conf.kind && (
-                                    <>
-                                      {conf.multiple ? (
-                                        <select
-                                          multiple
-                                          value={
-                                            Array.isArray(value)
-                                              ? value.map(String)
-                                              : value
-                                              ? [String(value)]
-                                              : []
-                                          }
-                                          onChange={(e) => {
-                                            const arr = Array.from(
-                                              e.target.selectedOptions
-                                            ).map((o) => o.value);
-                                            setVal(arr);
-                                          }}
-                                          className="h-24 w-full rounded-lg border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 px-2 text-sm outline-none"
-                                        >
-                                          {(selectOptions || []).map((opt) => (
-                                            <option
-                                              key={opt.value}
-                                              value={opt.value}
-                                            >
-                                              {opt.label}
-                                            </option>
-                                          ))}
-                                        </select>
-                                      ) : (
-                                        <Select
-                                          value={value ?? ANY_SENTINEL}
-                                          onValueChange={(v) =>
-                                            setVal(
-                                              v === ANY_SENTINEL ? undefined : v
-                                            )
-                                          }
-                                        >
-                                          <SelectTrigger className="h-9">
-                                            <SelectValue placeholder="(Any)" />
-                                          </SelectTrigger>
-                                          <SelectContent
-                                            position="popper"
-                                            sideOffset={6}
-                                            className={`${Z_SELECT} max-h-64 overflow-y-auto`}
-                                          >
-                                            <SelectItem value={ANY_SENTINEL}>
-                                              (Any)
-                                            </SelectItem>
-                                            {(selectOptions || []).map(
-                                              (opt) => (
-                                                <SelectItem
-                                                  key={opt.value}
-                                                  value={opt.value}
-                                                >
-                                                  {opt.label}
-                                                </SelectItem>
-                                              )
-                                            )}
-                                          </SelectContent>
-                                        </Select>
-                                      )}
-                                    </>
-                                  )}
-
-                                  {"boolean" === conf.kind && (
-                                    <Select
-                                      value={value ?? "all"}
-                                      onValueChange={(v) => setVal(v)}
-                                    >
-                                      <SelectTrigger className="h-9">
-                                        <SelectValue placeholder="All" />
-                                      </SelectTrigger>
-                                      <SelectContent
-                                        position="popper"
-                                        sideOffset={6}
-                                        className={`${Z_SELECT} max-h-64 overflow-y-auto`}
+                                    return (
+                                      <motion.div
+                                        key={String(key)}
+                                        variants={{
+                                          hidden: { opacity: 0, y: 6 },
+                                          show: { opacity: 1, y: 0 },
+                                        }}
+                                        transition={{
+                                          type: "spring",
+                                          stiffness: 420,
+                                          damping: 32,
+                                          mass: 0.6,
+                                        }}
+                                        className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3 bg-white/70 dark:bg-neutral-800/70"
                                       >
-                                        <SelectItem value="all">All</SelectItem>
-                                        <SelectItem value="true">
-                                          True
-                                        </SelectItem>
-                                        <SelectItem value="false">
-                                          False
-                                        </SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  )}
+                                        <Label className="mb-2 block text-xs text-neutral-700 dark:text-neutral-300">
+                                          {conf.label ?? key}
+                                        </Label>
 
-                                  {"numberRange" === conf.kind && (
-                                    <div className="flex items-center gap-2">
-                                      <Input
-                                        type="number"
-                                        placeholder="Min"
-                                        className="h-9"
-                                        value={value?.min ?? ""}
-                                        onChange={(e) =>
-                                          setVal({
-                                            ...value,
-                                            min:
-                                              e.target.value === ""
-                                                ? undefined
-                                                : Number(e.target.value),
-                                          })
-                                        }
-                                      />
-                                      <span className="text-neutral-400">
-                                        —
-                                      </span>
-                                      <Input
-                                        type="number"
-                                        placeholder="Max"
-                                        className="h-9"
-                                        value={value?.max ?? ""}
-                                        onChange={(e) =>
-                                          setVal({
-                                            ...value,
-                                            max:
-                                              e.target.value === ""
-                                                ? undefined
-                                                : Number(e.target.value),
-                                          })
-                                        }
-                                      />
-                                    </div>
-                                  )}
+                                        {"text" === conf.kind && (
+                                          <Input
+                                            value={value ?? ""}
+                                            onChange={(e) =>
+                                              setVal(e.target.value)
+                                            }
+                                            placeholder="Type to filter…"
+                                            className="h-9"
+                                          />
+                                        )}
 
-                                  {"dateRange" === conf.kind && (
-                                    <DateRangeField
-                                      value={value}
-                                      onChange={setVal}
-                                    />
-                                  )}
+                                        {"select" === conf.kind && (
+                                          <>
+                                            {conf.multiple ? (
+                                              <select
+                                                multiple
+                                                value={
+                                                  Array.isArray(value)
+                                                    ? value.map(String)
+                                                    : value
+                                                    ? [String(value)]
+                                                    : []
+                                                }
+                                                onChange={(e) => {
+                                                  const arr = Array.from(
+                                                    e.target.selectedOptions
+                                                  ).map((o) => o.value);
+                                                  setVal(arr);
+                                                }}
+                                                className="h-24 w-full rounded-lg border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 px-2 text-sm outline-none"
+                                              >
+                                                {(selectOptions || []).map(
+                                                  (opt) => (
+                                                    <option
+                                                      key={opt.value}
+                                                      value={opt.value}
+                                                    >
+                                                      {opt.label}
+                                                    </option>
+                                                  )
+                                                )}
+                                              </select>
+                                            ) : (
+                                              <Select
+                                                value={value ?? ANY_SENTINEL}
+                                                onValueChange={(v) =>
+                                                  setVal(
+                                                    v === ANY_SENTINEL
+                                                      ? undefined
+                                                      : v
+                                                  )
+                                                }
+                                              >
+                                                <SelectTrigger className="h-9">
+                                                  <SelectValue placeholder="(Any)" />
+                                                </SelectTrigger>
+                                                <SelectContent
+                                                  position="popper"
+                                                  sideOffset={6}
+                                                  className={`${Z_SELECT} max-h-64 overflow-y-auto`}
+                                                >
+                                                  <SelectItem
+                                                    value={ANY_SENTINEL}
+                                                  >
+                                                    (Any)
+                                                  </SelectItem>
+                                                  {(selectOptions || []).map(
+                                                    (opt) => (
+                                                      <SelectItem
+                                                        key={opt.value}
+                                                        value={opt.value}
+                                                      >
+                                                        {opt.label}
+                                                      </SelectItem>
+                                                    )
+                                                  )}
+                                                </SelectContent>
+                                              </Select>
+                                            )}
+                                          </>
+                                        )}
 
-                                  {"custom" === conf.kind && (
-                                    <div>{conf.editor(value, setVal)}</div>
-                                  )}
-                                </motion.div>
-                              );
-                            })}
-                          </motion.div>
-                        </div>
+                                        {"boolean" === conf.kind && (
+                                          <Select
+                                            value={value ?? "all"}
+                                            onValueChange={(v) => setVal(v)}
+                                          >
+                                            <SelectTrigger className="h-9">
+                                              <SelectValue placeholder="All" />
+                                            </SelectTrigger>
+                                            <SelectContent
+                                              position="popper"
+                                              sideOffset={6}
+                                              className={`${Z_SELECT} max-h-64 overflow-y-auto`}
+                                            >
+                                              <SelectItem value="all">
+                                                All
+                                              </SelectItem>
+                                              <SelectItem value="true">
+                                                True
+                                              </SelectItem>
+                                              <SelectItem value="false">
+                                                False
+                                              </SelectItem>
+                                            </SelectContent>
+                                          </Select>
+                                        )}
+
+                                        {"numberRange" === conf.kind && (
+                                          <div className="flex items-center gap-2">
+                                            <Input
+                                              type="number"
+                                              placeholder="Min"
+                                              className="h-9"
+                                              value={value?.min ?? ""}
+                                              onChange={(e) =>
+                                                setVal({
+                                                  ...value,
+                                                  min:
+                                                    e.target.value === ""
+                                                      ? undefined
+                                                      : Number(e.target.value),
+                                                })
+                                              }
+                                            />
+                                            <span className="text-neutral-400">
+                                              —
+                                            </span>
+                                            <Input
+                                              type="number"
+                                              placeholder="Max"
+                                              className="h-9"
+                                              value={value?.max ?? ""}
+                                              onChange={(e) =>
+                                                setVal({
+                                                  ...value,
+                                                  max:
+                                                    e.target.value === ""
+                                                      ? undefined
+                                                      : Number(e.target.value),
+                                                })
+                                              }
+                                            />
+                                          </div>
+                                        )}
+
+                                        {"dateRange" === conf.kind && (
+                                          <DateRangeField
+                                            value={value}
+                                            onChange={setVal}
+                                          />
+                                        )}
+
+                                        {"custom" === conf.kind && (
+                                          <div>
+                                            {conf.editor(value, setVal)}
+                                          </div>
+                                        )}
+                                      </motion.div>
+                                    );
+                                  }
+                                )}
+                              </motion.div>
+                            </div>
+                          </div>
+
+                          <div className="sticky bottom-0 left-0 right-0 border-t border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-800/90 backdrop-blur px-3 py-3 rounded-b-2xl">
+                            <div className="flex items-center justify-between">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-xs text-neutral-500"
+                                onClick={() => {
+                                  updateFilterValues({});
+                                }}
+                              >
+                                Clear all
+                              </Button>
+                              <MotionButton
+                                size="sm"
+                                className="text-xs"
+                                whileTap={{ scale: 0.98 }}
+                                whileHover={{ y: -0.5 }}
+                                transition={springPress}
+                                onClick={() => setFilterOpen(false)}
+                              >
+                                Apply
+                              </MotionButton>
+                            </div>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </PopoverContent>
+                  </Popover>
+                )}
+              </div>
+
+              {/* Right: refresh + records per page + EXPORT + columns + fullscreen */}
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Refresh Button */}
+                {onRefresh && (
+                  <MotionButton
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ y: -1 }}
+                    transition={springPress}
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    variant="outline"
+                    className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-600 disabled:opacity-60"
+                  >
+                    <RefreshIcon
+                      fontSize="small"
+                      className={isRefreshing ? "animate-spin" : ""}
+                    />
+                    {isRefreshing ? "Refreshing..." : "Refresh"}
+                  </MotionButton>
+                )}
+
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-neutral-600 dark:text-neutral-400 font-medium whitespace-nowrap">
+                    Records:
+                  </span>
+                  <Select
+                    value={String(pageSize)}
+                    onValueChange={(value) => {
+                      updatePageSize(Number(value));
+                    }}
+                  >
+                    <SelectTrigger className="h-10 w-20 rounded-xl border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 px-3 text-sm font-medium">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      {[10, 20, 30, 50, 100].map((n) => (
+                        <SelectItem
+                          key={n}
+                          value={String(n)}
+                          className="cursor-pointer hover:bg-neutral-900 hover:text-white dark:hover:bg-white dark:hover:text-black focus:bg-neutral-900 focus:text-white dark:focus:bg-white dark:focus:text-black"
+                        >
+                          {n}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* EXPORT (hover to open) */}
+                <Popover open={exportOpen} onOpenChange={setExportOpen}>
+                  <PopoverTrigger asChild>
+                    <MotionButton
+                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ y: -1 }}
+                      transition={springPress}
+                      variant="outline"
+                      className="h-10 gap-2 rounded-xl"
+                      onMouseEnter={handleExportEnter}
+                      onMouseLeave={handleExportLeave}
+                    >
+                      <DownloadIcon fontSize="small" /> Export
+                    </MotionButton>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="start"
+                    side="bottom"
+                    sideOffset={8}
+                    className="w-48 rounded-xl p-1"
+                    onMouseEnter={handleExportEnter}
+                    onMouseLeave={handleExportLeave}
+                  >
+                    <ul className="text-sm">
+                      <li>
+                        <button
+                          className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
+                          onClick={exportCSV}
+                        >
+                          <CsvIcon fontSize="small" /> CSV
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
+                          onClick={exportXLSX}
+                        >
+                          <XlsxIcon fontSize="small" /> XLSX
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
+                          onClick={exportJSON}
+                        >
+                          <JsonIcon fontSize="small" /> JSON
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
+                          onClick={exportPDF}
+                        >
+                          <PdfIcon fontSize="small" /> PDF
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
+                          onClick={exportHTML}
+                        >
+                          <HtmlIcon fontSize="small" /> HTML
+                        </button>
+                      </li>
+                    </ul>
+                  </PopoverContent>
+                </Popover>
+
+                {/* Column Manager */}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <MotionButton
+                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ y: -1 }}
+                      transition={springPress}
+                      variant="outline"
+                      className="h-10 gap-2 rounded-xl"
+                    >
+                      <SettingsIcon fontSize="small" />{" "}
+                      <span className="hidden sm:inline">Columns</span>
+                    </MotionButton>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-72 rounded-2xl">
+                    <div className="mb-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 font-medium">
+                        <ColumnsIcon fontSize="small" /> Drag to reorder ·
+                        Toggle to hide
                       </div>
-
-                      <div className="sticky bottom-0 left-0 right-0 border-t border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-800/90 backdrop-blur px-3 py-3 rounded-b-2xl">
-                        <div className="flex items-center justify-between">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-xs text-neutral-500"
-                            onClick={() => {
-                              updateFilterValues({});
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={resetPreferences}
+                        className="h-7 px-2 text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+                        title="Reset all table preferences"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {columnOrder.map((idx, i) => (
+                        <motion.div
+                          key={idx}
+                          layout
+                          draggable
+                          onDragStart={() => onDragStart(i)}
+                          onDragOver={onDragOver}
+                          onDrop={() => onDrop(i)}
+                          whileTap={{ scale: 0.98 }}
+                          whileHover={{ scale: 1.01 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 600,
+                            damping: 36,
+                          }}
+                          className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                        >
+                          <div className="flex items-center gap-2">
+                            <GripIcon
+                              fontSize="small"
+                              className="text-neutral-400"
+                            />
+                            <div className="text-sm">
+                              {displayOptions[idx]?.title?.()}
+                            </div>
+                          </div>
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4"
+                            checked={!hiddenCols.includes(idx)}
+                            onChange={() => {
+                              const newHidden = hiddenCols.includes(idx)
+                                ? hiddenCols.filter((c) => c !== idx)
+                                : [...hiddenCols, idx];
+                              updateHiddenCols(newHidden);
                             }}
-                          >
-                            Clear all
-                          </Button>
-                          <MotionButton
-                            size="sm"
-                            className="text-xs"
-                            whileTap={{ scale: 0.98 }}
-                            whileHover={{ y: -0.5 }}
-                            transition={springPress}
-                            onClick={() => setFilterOpen(false)}
-                          >
-                            Apply
-                          </MotionButton>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </PopoverContent>
-              </Popover>
-            </div>
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
 
-            {/* Right: refresh + records per page + EXPORT + columns + fullscreen */}
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Refresh Button */}
-              {onRefresh && (
                 <MotionButton
                   whileTap={{ scale: 0.98 }}
                   whileHover={{ y: -1 }}
                   transition={springPress}
-                  onClick={handleRefresh}
-                  disabled={isRefreshing}
+                  onClick={toggleFullscreen}
                   variant="outline"
-                  className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-600 disabled:opacity-60"
+                  className="h-10 gap-2 rounded-xl"
                 >
-                  <RefreshIcon
-                    fontSize="small"
-                    className={isRefreshing ? "animate-spin" : ""}
-                  />
-                  {isRefreshing ? "Refreshing..." : "Refresh"}
+                  {!document.fullscreenElement ? (
+                    <FullIcon fontSize="small" />
+                  ) : (
+                    <ExitFullIcon fontSize="small" />
+                  )}{" "}
+                  Full Screen
                 </MotionButton>
-              )}
-
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-neutral-600 dark:text-neutral-400 font-medium whitespace-nowrap">
-                  Records:
-                </span>
-                <Select
-                  value={String(pageSize)}
-                  onValueChange={(value) => {
-                    updatePageSize(Number(value));
-                  }}
-                >
-                  <SelectTrigger className="h-10 w-20 rounded-xl border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 px-3 text-sm font-medium">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {[10, 20, 30, 50, 100].map((n) => (
-                      <SelectItem
-                        key={n}
-                        value={String(n)}
-                        className="cursor-pointer hover:bg-neutral-900 hover:text-white dark:hover:bg-white dark:hover:text-black focus:bg-neutral-900 focus:text-white dark:focus:bg-white dark:focus:text-black"
-                      >
-                        {n}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
-
-              {/* EXPORT (hover to open) */}
-              <Popover open={exportOpen} onOpenChange={setExportOpen}>
-                <PopoverTrigger asChild>
-                  <MotionButton
-                    whileTap={{ scale: 0.98 }}
-                    whileHover={{ y: -1 }}
-                    transition={springPress}
-                    variant="outline"
-                    className="h-10 gap-2 rounded-xl"
-                    onMouseEnter={handleExportEnter}
-                    onMouseLeave={handleExportLeave}
-                  >
-                    <DownloadIcon fontSize="small" /> Export
-                  </MotionButton>
-                </PopoverTrigger>
-                <PopoverContent
-                  align="start"
-                  side="bottom"
-                  sideOffset={8}
-                  className="w-48 rounded-xl p-1"
-                  onMouseEnter={handleExportEnter}
-                  onMouseLeave={handleExportLeave}
-                >
-                  <ul className="text-sm">
-                    <li>
-                      <button
-                        className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
-                        onClick={exportCSV}
-                      >
-                        <CsvIcon fontSize="small" /> CSV
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
-                        onClick={exportXLSX}
-                      >
-                        <XlsxIcon fontSize="small" /> XLSX
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
-                        onClick={exportJSON}
-                      >
-                        <JsonIcon fontSize="small" /> JSON
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
-                        onClick={exportPDF}
-                      >
-                        <PdfIcon fontSize="small" /> PDF
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="w-full text-left px-3 py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 inline-flex items-center gap-2"
-                        onClick={exportHTML}
-                      >
-                        <HtmlIcon fontSize="small" /> HTML
-                      </button>
-                    </li>
-                  </ul>
-                </PopoverContent>
-              </Popover>
-
-              {/* Column Manager */}
-              <Popover>
-                <PopoverTrigger asChild>
-                  <MotionButton
-                    whileTap={{ scale: 0.98 }}
-                    whileHover={{ y: -1 }}
-                    transition={springPress}
-                    variant="outline"
-                    className="h-10 gap-2 rounded-xl"
-                  >
-                    <SettingsIcon fontSize="small" />{" "}
-                    <span className="hidden sm:inline">Columns</span>
-                  </MotionButton>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-72 rounded-2xl">
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 font-medium">
-                      <ColumnsIcon fontSize="small" /> Drag to reorder · Toggle
-                      to hide
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={resetPreferences}
-                      className="h-7 px-2 text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
-                      title="Reset all table preferences"
-                    >
-                      Reset
-                    </Button>
-                  </div>
-                  <div className="space-y-2">
-                    {columnOrder.map((idx, i) => (
-                      <motion.div
-                        key={idx}
-                        layout
-                        draggable
-                        onDragStart={() => onDragStart(i)}
-                        onDragOver={onDragOver}
-                        onDrop={() => onDrop(i)}
-                        whileTap={{ scale: 0.98 }}
-                        whileHover={{ scale: 1.01 }}
-                        transition={{ type: "spring", stiffness: 600, damping: 36 }}
-                        className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-700"
-                      >
-                        <div className="flex items-center gap-2">
-                          <GripIcon
-                            fontSize="small"
-                            className="text-neutral-400"
-                          />
-                          <div className="text-sm">
-                            {displayOptions[idx]?.title?.()}
-                          </div>
-                        </div>
-                        <input
-                          type="checkbox"
-                          className="h-4 w-4"
-                          checked={!hiddenCols.includes(idx)}
-                          onChange={() => {
-                            const newHidden = hiddenCols.includes(idx)
-                              ? hiddenCols.filter((c) => c !== idx)
-                              : [...hiddenCols, idx];
-                            updateHiddenCols(newHidden);
-                          }}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-
-              <MotionButton
-                whileTap={{ scale: 0.98 }}
-                whileHover={{ y: -1 }}
-                transition={springPress}
-                onClick={toggleFullscreen}
-                variant="outline"
-                className="h-10 gap-2 rounded-xl"
-              >
-                {!document.fullscreenElement ? (
-                  <FullIcon fontSize="small" />
-                ) : (
-                  <ExitFullIcon fontSize="small" />
-                )}{" "}
-                Full Screen
-              </MotionButton>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Table */}
-        <div className="w-full overflow-x-auto overflow-y-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 shadow-sm hover:shadow-md transition-shadow duration-300">
-          <div id="smart-table-print">
-            <table className="w-full min-w-[800px] text-sm">
-              <thead>
-                <tr className="text-left">
-                  {/* Selection header (only if hasBulk) */}
-                  {hasBulk && (
-                    <th className="w-10 px-3 py-4 bg-neutral-100 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600">
-                      {(() => {
-                        const allOnPageSelected =
-                          pageRows.length > 0 &&
-                          pageRows.every((r) => selectedIds.has(getId(r)));
-                        const someOnPageSelected = pageRows.some((r) =>
-                          selectedIds.has(getId(r))
-                        );
-                        const headerChecked = allOnPageSelected
-                          ? true
-                          : someOnPageSelected
-                          ? "indeterminate"
-                          : false;
+          {/* Table */}
+          <div className="w-full overflow-x-auto overflow-y-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div id="smart-table-print">
+              <table className="w-full min-w-[800px] text-sm">
+                <thead>
+                  <tr className="text-left">
+                    {/* Selection header (only if hasBulk) */}
+                    {hasBulk && (
+                      <th className="w-10 px-3 py-4 bg-neutral-100 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600">
+                        {(() => {
+                          const allOnPageSelected =
+                            pageRows.length > 0 &&
+                            pageRows.every((r) => selectedIds.has(getId(r)));
+                          const someOnPageSelected = pageRows.some((r) =>
+                            selectedIds.has(getId(r))
+                          );
+                          const headerChecked = allOnPageSelected
+                            ? true
+                            : someOnPageSelected
+                            ? "indeterminate"
+                            : false;
 
-                        return (
-                          <input
-                            type="checkbox"
-                            checked={headerChecked === true}
-                            ref={(el) => {
-                              if (el) {
-                                el.indeterminate =
-                                  headerChecked === "indeterminate";
+                          return (
+                            <input
+                              type="checkbox"
+                              checked={headerChecked === true}
+                              ref={(el) => {
+                                if (el) {
+                                  el.indeterminate =
+                                    headerChecked === "indeterminate";
+                                }
+                              }}
+                              className="h-5 w-5 rounded border border-neutral-300 text-neutral-900 focus:ring-neutral-500 dark:border-neutral-500 dark:bg-neutral-700"
+                              onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                setSelectedIds((prev) => {
+                                  const next = new Set(prev);
+                                  if (isChecked) {
+                                    pageRows.forEach((r) => next.add(getId(r)));
+                                  } else {
+                                    pageRows.forEach((r) =>
+                                      next.delete(getId(r))
+                                    );
+                                  }
+                                  return next;
+                                });
+                              }}
+                              aria-label="Select page rows"
+                            />
+                          );
+                        })()}
+                      </th>
+                    )}
+
+                    {visibleCols.map((i) => {
+                      const active = sortKey === i;
+                      return (
+                        <th
+                          key={i}
+                          className={`whitespace-nowrap select-none px-3 py-4 bg-neutral-100 dark:bg-neutral-700 border-b-2 border-neutral-200 dark:border-neutral-600 ${
+                            active ? "bg-neutral-200 dark:bg-neutral-600" : ""
+                          }`}
+                        >
+                          <button
+                            onClick={() => {
+                              if (sortKey === i) {
+                                const newDir =
+                                  sortDir === "asc" ? "desc" : "asc";
+                                updateSort(i, newDir);
+                              } else {
+                                updateSort(i, "asc");
                               }
                             }}
-                            className="h-5 w-5 rounded border border-neutral-300 text-neutral-900 focus:ring-neutral-500 dark:border-neutral-500 dark:bg-neutral-700"
-                            onChange={(e) => {
-                              const isChecked = e.target.checked;
-                              setSelectedIds((prev) => {
-                                const next = new Set(prev);
-                                if (isChecked) {
-                                  pageRows.forEach((r) => next.add(getId(r)));
-                                } else {
-                                  pageRows.forEach((r) =>
-                                    next.delete(getId(r))
-                                  );
-                                }
-                                return next;
-                              });
-                            }}
-                            aria-label="Select page rows"
-                          />
-                        );
-                      })()}
-                    </th>
-                  )}
+                            className="inline-flex items-center gap-2 font-bold text-sm text-neutral-900 dark:text-neutral-100 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors uppercase tracking-wide"
+                            title="Sort"
+                          >
+                            {displayOptions[i]?.title?.()}
+                            <span className="text-neutral-600 dark:text-neutral-400 ml-1">
+                              {active ? (
+                                sortDir === "asc" ? (
+                                  <ChevronUp fontSize="small" />
+                                ) : (
+                                  <ChevronDown fontSize="small" />
+                                )
+                              ) : null}
+                            </span>
+                          </button>
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
 
-                  {visibleCols.map((i) => {
-                    const active = sortKey === i;
-                    return (
-                      <th
-                        key={i}
-                        className={`whitespace-nowrap select-none px-3 py-4 bg-neutral-100 dark:bg-neutral-700 border-b-2 border-neutral-200 dark:border-neutral-600 ${
-                          active ? "bg-neutral-200 dark:bg-neutral-600" : ""
-                        }`}
-                      >
-                        <button
-                          onClick={() => {
-                            if (sortKey === i) {
-                              const newDir = sortDir === "asc" ? "desc" : "asc";
-                              updateSort(i, newDir);
-                            } else {
-                              updateSort(i, "asc");
-                            }
-                          }}
-                          className="inline-flex items-center gap-2 font-bold text-sm text-neutral-900 dark:text-neutral-100 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors uppercase tracking-wide"
-                          title="Sort"
+                {/* Page-level animation only (prevents bottom overlap) */}
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.tbody
+                    key={`page-${page}`}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {pageRows.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={visibleCols.length + (hasBulk ? 1 : 0)}
+                          className="px-6 py-10 text-center text-neutral-500 dark:text-neutral-400"
                         >
-                          {displayOptions[i]?.title?.()}
-                          <span className="text-neutral-600 dark:text-neutral-400 ml-1">
-                            {active ? (
-                              sortDir === "asc" ? (
-                                <ChevronUp fontSize="small" />
-                              ) : (
-                                <ChevronDown fontSize="small" />
-                              )
-                            ) : null}
-                          </span>
-                        </button>
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
+                          No results match your filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      pageRows.map((row) => {
+                        const rowId = getId(row);
+                        const isSelected = hasBulk && selectedIds.has(rowId);
 
-              {/* Page-level animation only (prevents bottom overlap) */}
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.tbody
-                  key={`page-${page}`}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {pageRows.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={visibleCols.length + (hasBulk ? 1 : 0)}
-                        className="px-6 py-10 text-center text-neutral-500 dark:text-neutral-400"
-                      >
-                        No results match your filters.
-                      </td>
-                    </tr>
-                  ) : (
-                    pageRows.map((row) => {
-                      const rowId = getId(row);
-                      const isSelected = hasBulk && selectedIds.has(rowId);
-
-                      return (
-                        <tr
-                          key={rowId}
-                          className={`group relative border-b border-neutral-100 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors duration-150
+                        return (
+                          <tr
+                            key={rowId}
+                            className={`group relative border-b border-neutral-100 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors duration-150
                             ${
                               isSelected
                                 ? "bg-neutral-100 dark:bg-neutral-800"
                                 : ""
                             }
                           `}
-                          onClick={() => onRowClick?.(row)}
-                        >
-                          {/* selection cell */}
-                          {hasBulk && (
-                            <td
-                              className="px-3 py-3 cursor-default"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={(e) =>
-                                  toggleRowSelection(row, e.target.checked)
-                                }
-                                aria-label="Select row"
-                                className="h-5 w-5 rounded border border-neutral-300 text-neutral-900 focus:ring-neutral-500 dark:border-neutral-500 dark:bg-neutral-700"
-                              />
-                            </td>
-                          )}
-
-                          {visibleCols.map((i) => {
-                            const cell = displayOptions[i];
-                            const contentNode = cell?.content?.(row);
-                            const tooltipNode = cell?.tooltip
-                              ? cell.tooltip(row)
-                              : null;
-
-                            return (
-                              <td key={i} className="px-3 py-3">
-                                {tooltipNode ? (
-                                  <TooltipProvider delayDuration={150}>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <div
-                                          onClick={(e) => e.stopPropagation()}
-                                        >
-                                          {contentNode}
-                                        </div>
-                                      </TooltipTrigger>
-                                      <TooltipContent
-                                        side="top"
-                                        className={`max-w-xs rounded-xl border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl ${Z_TIP}`}
-                                      >
-                                        {tooltipNode}
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                ) : (
-                                  <div onClick={(e) => e.stopPropagation()}>
-                                    {contentNode}
-                                  </div>
-                                )}
+                            onClick={() => onRowClick?.(row)}
+                          >
+                            {/* selection cell */}
+                            {hasBulk && (
+                              <td
+                                className="px-3 py-3 cursor-default"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={(e) =>
+                                    toggleRowSelection(row, e.target.checked)
+                                  }
+                                  aria-label="Select row"
+                                  className="h-5 w-5 rounded border border-neutral-300 text-neutral-900 focus:ring-neutral-500 dark:border-neutral-500 dark:bg-neutral-700"
+                                />
                               </td>
-                            );
-                          })}
-                        </tr>
-                      );
-                    })
+                            )}
+
+                            {visibleCols.map((i) => {
+                              const cell = displayOptions[i];
+                              const contentNode = cell?.content?.(row);
+                              const tooltipNode = cell?.tooltip
+                                ? cell.tooltip(row)
+                                : null;
+
+                              return (
+                                <td key={i} className="px-3 py-3">
+                                  {tooltipNode ? (
+                                    <TooltipProvider delayDuration={150}>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <div
+                                            onClick={(e) => e.stopPropagation()}
+                                          >
+                                            {contentNode}
+                                          </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent
+                                          side="top"
+                                          className={`max-w-xs rounded-xl border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl ${Z_TIP}`}
+                                        >
+                                          {tooltipNode}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  ) : (
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                      {contentNode}
+                                    </div>
+                                  )}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        );
+                      })
+                    )}
+                  </motion.tbody>
+                </AnimatePresence>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 sm:px-6 py-4">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div className="text-sm text-neutral-600 dark:text-neutral-400 text-center lg:text-left lg:flex-1">
+                  Showing{" "}
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {pageRows.length}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {sorted.length}
+                  </span>{" "}
+                  results
+                  {hasBulk && selectedIds.size > 0 && (
+                    <span className="ml-2 text-emerald-700 dark:text-emerald-400 font-medium">
+                      · {selectedIds.size} selected
+                    </span>
                   )}
-                </motion.tbody>
-              </AnimatePresence>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          <div className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 sm:px-6 py-4">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-              <div className="text-sm text-neutral-600 dark:text-neutral-400 text-center lg:text-left lg:flex-1">
-                Showing{" "}
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {pageRows.length}
-                </span>{" "}
-                of{" "}
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {sorted.length}
-                </span>{" "}
-                results
-                {hasBulk && selectedIds.size > 0 && (
-                  <span className="ml-2 text-emerald-700 dark:text-emerald-400 font-medium">
-                    · {selectedIds.size} selected
-                  </span>
-                )}
-              </div>
-
-              <div className="flex items-center justify-center gap-1 flex-wrap">
-                <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200 disabled:opacity-50"
-                  onClick={() => setPage(1)}
-                  disabled={page === 1}
-                >
-                  First
-                </button>
-                <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                >
-                  Previous
-                </button>
-
-                <div className="flex items-center gap-1 mx-2">
-                  {(() => {
-                    const out = [];
-                    const start = Math.max(1, page - 2);
-                    const end = Math.min(totalPages, page + 2);
-                    for (let i = start; i <= end; i++) {
-                      out.push(
-                        <button
-                          key={i}
-                          className={`min-w-[36px] h-9 px-2 text-sm font-medium rounded-lg transition-colors ${
-                            i === page
-                              ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 shadow-sm"
-                              : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                          }`}
-                          onClick={() => setPage(i)}
-                        >
-                          {i}
-                        </button>
-                      );
-                    }
-                    return out;
-                  })()}
                 </div>
 
-                <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </button>
-                <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
-                  onClick={() => setPage(totalPages)}
-                  disabled={page === totalPages}
-                >
-                  Last
-                </button>
-              </div>
+                <div className="flex items-center justify-center gap-1 flex-wrap">
+                  <button
+                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200 disabled:opacity-50"
+                    onClick={() => setPage(1)}
+                    disabled={page === 1}
+                  >
+                    First
+                  </button>
+                  <button
+                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                  >
+                    Previous
+                  </button>
 
-              <div className="text-sm text-neutral-600 dark:text-neutral-400 text-center lg:text-right lg:flex-1">
-                Page{" "}
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {page}
-                </span>{" "}
-                of{" "}
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {totalPages}
-                </span>
+                  <div className="flex items-center gap-1 mx-2">
+                    {(() => {
+                      const out = [];
+                      const start = Math.max(1, page - 2);
+                      const end = Math.min(totalPages, page + 2);
+                      for (let i = start; i <= end; i++) {
+                        out.push(
+                          <button
+                            key={i}
+                            className={`min-w-[36px] h-9 px-2 text-sm font-medium rounded-lg transition-colors ${
+                              i === page
+                                ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 shadow-sm"
+                                : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                            }`}
+                            onClick={() => setPage(i)}
+                          >
+                            {i}
+                          </button>
+                        );
+                      }
+                      return out;
+                    })()}
+                  </div>
+
+                  <button
+                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                  >
+                    Next
+                  </button>
+                  <button
+                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    onClick={() => setPage(totalPages)}
+                    disabled={page === totalPages}
+                  >
+                    Last
+                  </button>
+                </div>
+
+                <div className="text-sm text-neutral-600 dark:text-neutral-400 text-center lg:text-right lg:flex-1">
+                  Page{" "}
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {page}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {totalPages}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </MotionConfig>
+      </MotionConfig>
+      {isDrawerTypeFilter && (
+        <CommonDrawer isOpen={filterOpen} onClose={() => setFilterOpen(false)}>
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={filterOpen ? "open" : "closed"}
+              initial={{
+                opacity: 0,
+                y: -10,
+                rotateX: -7,
+                scale: 0.985,
+              }}
+              animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, rotateX: -5, scale: 0.985 }}
+              transition={{
+                type: "spring",
+                stiffness: 520,
+                damping: 38,
+                mass: 0.7,
+              }}
+              style={{ transformOrigin: "50% -10px" }}
+              className="will-change-transform"
+            >
+              <div className="px-3 pt-3">
+                <div className="px-1 pb-2 text-[11px] uppercase tracking-wide text-neutral-500 dark:text-neutral-400 font-medium">
+                  Dynamic Filters
+                </div>
+                <Separator className="mb-3" />
+              </div>
+
+              <div className="px-3 pb-3">
+                <div className="max-h-[520px] overflow-y-auto pr-2">
+                  <motion.div
+                    initial="hidden"
+                    animate="show"
+                    variants={{
+                      hidden: {
+                        transition: {
+                          staggerChildren: 0.02,
+                          staggerDirection: -1,
+                        },
+                      },
+                      show: { transition: { staggerChildren: 0.04 } },
+                    }}
+                    className="space-y-3"
+                  >
+                    {Object.entries(filterConfig).map(([key, conf]) => {
+                      const value = (filterValues as any)[key];
+                      const setVal = (v: any) => {
+                        const newFilters = {
+                          ...filterValues,
+                          [key]: v,
+                        };
+                        updateFilterValues(newFilters);
+                      };
+
+                      let selectOptions:
+                        | Array<{ label: string; value: string }>
+                        | undefined;
+                      if (conf.kind === "select") {
+                        if (conf.options) {
+                          selectOptions = conf.options.map((o) => ({
+                            label: o.label,
+                            value: String(o.value ?? o.label ?? ""),
+                          }));
+                        } else if (conf.derive) {
+                          const derived = new Set<string>();
+                          data.forEach((row) => {
+                            const v = getCell(row, conf.field);
+                            if (v !== undefined && v !== null)
+                              derived.add(String(v));
+                          });
+                          selectOptions = Array.from(derived).map((u) => ({
+                            label: u,
+                            value: u,
+                          }));
+                        } else selectOptions = [];
+                      }
+
+                      return (
+                        <motion.div
+                          key={String(key)}
+                          variants={{
+                            hidden: { opacity: 0, y: 6 },
+                            show: { opacity: 1, y: 0 },
+                          }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 420,
+                            damping: 32,
+                            mass: 0.6,
+                          }}
+                          className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3 bg-white/70 dark:bg-neutral-800/70"
+                        >
+                          <Label className="mb-2 block text-xs text-neutral-700 dark:text-neutral-300">
+                            {conf.label ?? key}
+                          </Label>
+
+                          {"text" === conf.kind && (
+                            <Input
+                              value={value ?? ""}
+                              onChange={(e) => setVal(e.target.value)}
+                              placeholder="Type to filter…"
+                              className="h-9"
+                            />
+                          )}
+
+                          {"select" === conf.kind && (
+                            <>
+                              {conf.multiple ? (
+                                <select
+                                  multiple
+                                  value={
+                                    Array.isArray(value)
+                                      ? value.map(String)
+                                      : value
+                                      ? [String(value)]
+                                      : []
+                                  }
+                                  onChange={(e) => {
+                                    const arr = Array.from(
+                                      e.target.selectedOptions
+                                    ).map((o) => o.value);
+                                    setVal(arr);
+                                  }}
+                                  className="h-24 w-full rounded-lg border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 px-2 text-sm outline-none"
+                                >
+                                  {(selectOptions || []).map((opt) => (
+                                    <option key={opt.value} value={opt.value}>
+                                      {opt.label}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <Select
+                                  value={value ?? ANY_SENTINEL}
+                                  onValueChange={(v) =>
+                                    setVal(v === ANY_SENTINEL ? undefined : v)
+                                  }
+                                >
+                                  <SelectTrigger className="h-9">
+                                    <SelectValue placeholder="(Any)" />
+                                  </SelectTrigger>
+                                  <SelectContent
+                                    position="popper"
+                                    sideOffset={6}
+                                    className={`${Z_SELECT} max-h-64 overflow-y-auto`}
+                                  >
+                                    <SelectItem value={ANY_SENTINEL}>
+                                      (Any)
+                                    </SelectItem>
+                                    {(selectOptions || []).map((opt) => (
+                                      <SelectItem
+                                        key={opt.value}
+                                        value={opt.value}
+                                      >
+                                        {opt.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              )}
+                            </>
+                          )}
+
+                          {"boolean" === conf.kind && (
+                            <Select
+                              value={value ?? "all"}
+                              onValueChange={(v) => setVal(v)}
+                            >
+                              <SelectTrigger className="h-9">
+                                <SelectValue placeholder="All" />
+                              </SelectTrigger>
+                              <SelectContent
+                                position="popper"
+                                sideOffset={6}
+                                className={`${Z_SELECT} max-h-64 overflow-y-auto`}
+                              >
+                                <SelectItem value="all">All</SelectItem>
+                                <SelectItem value="true">True</SelectItem>
+                                <SelectItem value="false">False</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+
+                          {"numberRange" === conf.kind && (
+                            <div className="flex items-center gap-2">
+                              <Input
+                                type="number"
+                                placeholder="Min"
+                                className="h-9"
+                                value={value?.min ?? ""}
+                                onChange={(e) =>
+                                  setVal({
+                                    ...value,
+                                    min:
+                                      e.target.value === ""
+                                        ? undefined
+                                        : Number(e.target.value),
+                                  })
+                                }
+                              />
+                              <span className="text-neutral-400">—</span>
+                              <Input
+                                type="number"
+                                placeholder="Max"
+                                className="h-9"
+                                value={value?.max ?? ""}
+                                onChange={(e) =>
+                                  setVal({
+                                    ...value,
+                                    max:
+                                      e.target.value === ""
+                                        ? undefined
+                                        : Number(e.target.value),
+                                  })
+                                }
+                              />
+                            </div>
+                          )}
+
+                          {"dateRange" === conf.kind && (
+                            <DateRangeField value={value} onChange={setVal} />
+                          )}
+
+                          {"custom" === conf.kind && (
+                            <div>{conf.editor(value, setVal)}</div>
+                          )}
+                        </motion.div>
+                      );
+                    })}
+                  </motion.div>
+                </div>
+              </div>
+
+              <div className="sticky bottom-0 left-0 right-0 border-t border-neutral-200 dark:border-neutral-700 bg-white/90 dark:bg-neutral-800/90 backdrop-blur px-3 py-3 rounded-b-2xl">
+                <div className="flex items-center justify-between">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-neutral-500"
+                    onClick={() => {
+                      updateFilterValues({});
+                    }}
+                  >
+                    Clear all
+                  </Button>
+                  <MotionButton
+                    size="sm"
+                    className="text-xs"
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ y: -0.5 }}
+                    transition={springPress}
+                    onClick={() => setFilterOpen(false)}
+                  >
+                    Apply
+                  </MotionButton>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </CommonDrawer>
+      )}
+    </>
   );
 }
 
