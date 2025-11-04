@@ -49,3 +49,30 @@ export type DocumentItem = {
   url?: string; // Object URL for uploaded files (client-only)
   docType: typeof DOC_TYPE_OPTIONS[number]; // Business doc type
 };
+
+// Types
+ export type EventKind = "ADMIN_CREATED" | "USER_CREATED" | "VEHICLE_EXPIRY" | "VEHICLE_ADDED";
+ export type CalendarEvent = {
+  id: string;
+  kind: EventKind;
+  at: string; // ISO timestamp
+  title: string;
+  note?: string;
+  meta?: Record<string, any>;
+ };
+
+ export type FilterState = Record<EventKind, boolean>;
+
+export  type DayAgg = { total: number; ADMIN_CREATED: number; USER_CREATED: number; VEHICLE_EXPIRY: number; VEHICLE_ADDED: number };
+
+
+
+// ---- Types ----
+export type Health = { ok: boolean; uptimeSec: number; version: string; startedAt: string };
+export type Metrics = { cpu: number; mem: number; disk: number; load1: number; load5: number; load15: number };
+export type PgInfo = { dbName: string; sizeBytes: number; connections: number; deadTuples?: number };
+export type RedisInfo = { connected: boolean; usedMemoryBytes: number; hitRate: number; keys: number };
+export type SocketInfo = { clients: number; rooms: number; eventsPerSec: number };
+export type QueueInfo = { name: string; waiting: number; active: number; delayed: number; failed: number; paused: boolean };
+export type FirebaseInfo = { fcmReachable: boolean; lastPingISO: string };
+export type Service = { id: string; name: string; status: "running"|"degraded"|"stopped"; sinceISO: string };

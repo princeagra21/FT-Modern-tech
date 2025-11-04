@@ -1,4 +1,4 @@
-import { AdminRow } from "../types/superadmin";
+import { AdminRow, CalendarEvent } from "../types/superadmin";
 
 export const ADMIN_DATA: AdminRow[] = [
   {
@@ -602,3 +602,21 @@ export const ADMIN_DATA: AdminRow[] = [
     companies: [{ name: "Noor Fleet Dubai" }],
   },
 ];
+
+
+
+
+
+ // Demo seed (replace with real data)
+ export const SEED: CalendarEvent[] = [
+  { id: "e1", kind: "ADMIN_CREATED", at: "2025-10-02T10:15:00+05:30", title: "Admin created organization", note: "By superadmin", meta: { actor: "superadmin@fleet" } },
+  { id: "e2", kind: "USER_CREATED", at: "2025-10-02T12:40:00+05:30", title: "User added", note: "Akash Kumar", meta: { email: "akash.kumar@example.com" } },
+  { id: "e3", kind: "VEHICLE_ADDED", at: "2025-10-05T09:10:00+05:30", title: "Vehicle onboarded", note: "DL01 AB 1287", meta: { imei: "358920108765431" } },
+  { id: "e4", kind: "VEHICLE_EXPIRY", at: "2025-10-09T00:00:00+05:30", title: "Primary plan expiring", note: "DL01 AB 1287", meta: { expiry: "2025-10-31" } },
+  { id: "e5", kind: "USER_CREATED", at: "2025-10-11T18:35:00+05:30", title: "User added", note: "Priya Mehta", meta: { email: "priya.mehta@example.com" } },
+  { id: "e6", kind: "VEHICLE_ADDED", at: "2025-10-15T08:00:00+05:30", title: "Vehicle onboarded", note: "MH02 XY 5522", meta: { imei: "861234567890123" } },
+  { id: "e7", kind: "VEHICLE_EXPIRY", at: "2025-10-17T00:00:00+05:30", title: "Secondary plan expiring", note: "MH02 XY 5522", meta: { expiry: "2025-10-20" } },
+  { id: "e8", kind: "ADMIN_CREATED", at: "2025-10-20T14:05:00+05:30", title: "Role policy updated", note: "Admin updated roles", meta: { actor: "vinod.s" } },
+  { id: "e9", kind: "USER_CREATED", at: "2025-10-25T11:20:00+05:30", title: "User added", note: "Rahul Verma", meta: { email: "rahul.verma@example.com" } },
+  { id: "e10", kind: "VEHICLE_EXPIRY", at: "2025-10-31T00:00:00+05:30", title: "Vehicle insurance expiry", note: "DL01 AB 1287", meta: { insurer: "ICICI" } },
+ ];
