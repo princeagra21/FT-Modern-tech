@@ -76,3 +76,23 @@ export type SocketInfo = { clients: number; rooms: number; eventsPerSec: number 
 export type QueueInfo = { name: string; waiting: number; active: number; delayed: number; failed: number; paused: boolean };
 export type FirebaseInfo = { fcmReachable: boolean; lastPingISO: string };
 export type Service = { id: string; name: string; status: "running"|"degraded"|"stopped"; sinceISO: string };
+
+// roles
+
+
+export type Level = "none" | "view" | "edit" | "manage" | "full";
+
+export interface ModuleDef {
+  key: string;
+  label: string;
+}
+export interface Role {
+  id: string;
+  title: string;
+  description?: string;
+  isActive: boolean;
+  permissions: Record<string, Level>; // moduleKey → level
+  price?: number;
+  currency?: string; // e.g., INR, USD
+  audit: { updatedAt: string; updatedBy: string };
+}

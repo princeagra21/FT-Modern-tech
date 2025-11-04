@@ -1,4 +1,5 @@
-import { AdminRow, CalendarEvent } from "../types/superadmin";
+import { AdminRow, CalendarEvent, Level, ModuleDef, Role } from "../types/superadmin";
+import { fill, isoNow } from "../utils/superadmin/roles";
 
 export const ADMIN_DATA: AdminRow[] = [
   {
@@ -603,20 +604,200 @@ export const ADMIN_DATA: AdminRow[] = [
   },
 ];
 
+// Demo seed (replace with real data)
+export const SEED: CalendarEvent[] = [
+  {
+    id: "e1",
+    kind: "ADMIN_CREATED",
+    at: "2025-10-02T10:15:00+05:30",
+    title: "Admin created organization",
+    note: "By superadmin",
+    meta: { actor: "superadmin@fleet" },
+  },
+  {
+    id: "e2",
+    kind: "USER_CREATED",
+    at: "2025-10-02T12:40:00+05:30",
+    title: "User added",
+    note: "Akash Kumar",
+    meta: { email: "akash.kumar@example.com" },
+  },
+  {
+    id: "e3",
+    kind: "VEHICLE_ADDED",
+    at: "2025-10-05T09:10:00+05:30",
+    title: "Vehicle onboarded",
+    note: "DL01 AB 1287",
+    meta: { imei: "358920108765431" },
+  },
+  {
+    id: "e4",
+    kind: "VEHICLE_EXPIRY",
+    at: "2025-10-09T00:00:00+05:30",
+    title: "Primary plan expiring",
+    note: "DL01 AB 1287",
+    meta: { expiry: "2025-10-31" },
+  },
+  {
+    id: "e5",
+    kind: "USER_CREATED",
+    at: "2025-10-11T18:35:00+05:30",
+    title: "User added",
+    note: "Priya Mehta",
+    meta: { email: "priya.mehta@example.com" },
+  },
+  {
+    id: "e6",
+    kind: "VEHICLE_ADDED",
+    at: "2025-10-15T08:00:00+05:30",
+    title: "Vehicle onboarded",
+    note: "MH02 XY 5522",
+    meta: { imei: "861234567890123" },
+  },
+  {
+    id: "e7",
+    kind: "VEHICLE_EXPIRY",
+    at: "2025-10-17T00:00:00+05:30",
+    title: "Secondary plan expiring",
+    note: "MH02 XY 5522",
+    meta: { expiry: "2025-10-20" },
+  },
+  {
+    id: "e8",
+    kind: "ADMIN_CREATED",
+    at: "2025-10-20T14:05:00+05:30",
+    title: "Role policy updated",
+    note: "Admin updated roles",
+    meta: { actor: "vinod.s" },
+  },
+  {
+    id: "e9",
+    kind: "USER_CREATED",
+    at: "2025-10-25T11:20:00+05:30",
+    title: "User added",
+    note: "Rahul Verma",
+    meta: { email: "rahul.verma@example.com" },
+  },
+  {
+    id: "e10",
+    kind: "VEHICLE_EXPIRY",
+    at: "2025-10-31T00:00:00+05:30",
+    title: "Vehicle insurance expiry",
+    note: "DL01 AB 1287",
+    meta: { insurer: "ICICI" },
+  },
+];
 
+//  roles
 
+export const MODULES: ModuleDef[] = [
+  { key: "tenants", label: "Tenants" },
+  { key: "users", label: "Users" },
+  { key: "roles", label: "Roles" },
+  { key: "vehicles", label: "Vehicles" },
+  { key: "devices", label: "Devices" },
+  { key: "sim", label: "SIM/APN" },
+  { key: "tracking", label: "Live Tracking" },
+  { key: "geofences", label: "Geofences" },
+  { key: "alerts", label: "Alerts" },
+  { key: "commands", label: "Commands" },
+  { key: "reports", label: "Reports" },
+  { key: "billing", label: "Billing" },
+  { key: "integrations", label: "Integrations" },
+  { key: "support", label: "Support" },
+  { key: "ssl", label: "SSL" },
+];
 
+export const PRESETS: {
+  key: string;
+  label: string;
+  map: () => Record<string, Level>;
+}[] = [
+  { key: "full", label: "Full Admin", map: () => fill("full") },
+  {
+    key: "ops",
+    label: "Ops Manager",
+    map: () => ({
+      ...fill("view"),
+      vehicles: "manage",
+      devices: "manage",
+      tracking: "manage",
+      geofences: "manage",
+      alerts: "manage",
+      commands: "manage",
+      reports: "manage",
+    }),
+  },
+  {
+    key: "support",
+    label: "Support",
+    map: () => ({
+      ...fill("none"),
+      support: "manage",
+      users: "view",
+      devices: "view",
+      vehicles: "view",
+    }),
+  },
+  { key: "readonly", label: "Read Only", map: () => fill("view") },
+];
 
- // Demo seed (replace with real data)
- export const SEED: CalendarEvent[] = [
-  { id: "e1", kind: "ADMIN_CREATED", at: "2025-10-02T10:15:00+05:30", title: "Admin created organization", note: "By superadmin", meta: { actor: "superadmin@fleet" } },
-  { id: "e2", kind: "USER_CREATED", at: "2025-10-02T12:40:00+05:30", title: "User added", note: "Akash Kumar", meta: { email: "akash.kumar@example.com" } },
-  { id: "e3", kind: "VEHICLE_ADDED", at: "2025-10-05T09:10:00+05:30", title: "Vehicle onboarded", note: "DL01 AB 1287", meta: { imei: "358920108765431" } },
-  { id: "e4", kind: "VEHICLE_EXPIRY", at: "2025-10-09T00:00:00+05:30", title: "Primary plan expiring", note: "DL01 AB 1287", meta: { expiry: "2025-10-31" } },
-  { id: "e5", kind: "USER_CREATED", at: "2025-10-11T18:35:00+05:30", title: "User added", note: "Priya Mehta", meta: { email: "priya.mehta@example.com" } },
-  { id: "e6", kind: "VEHICLE_ADDED", at: "2025-10-15T08:00:00+05:30", title: "Vehicle onboarded", note: "MH02 XY 5522", meta: { imei: "861234567890123" } },
-  { id: "e7", kind: "VEHICLE_EXPIRY", at: "2025-10-17T00:00:00+05:30", title: "Secondary plan expiring", note: "MH02 XY 5522", meta: { expiry: "2025-10-20" } },
-  { id: "e8", kind: "ADMIN_CREATED", at: "2025-10-20T14:05:00+05:30", title: "Role policy updated", note: "Admin updated roles", meta: { actor: "vinod.s" } },
-  { id: "e9", kind: "USER_CREATED", at: "2025-10-25T11:20:00+05:30", title: "User added", note: "Rahul Verma", meta: { email: "rahul.verma@example.com" } },
-  { id: "e10", kind: "VEHICLE_EXPIRY", at: "2025-10-31T00:00:00+05:30", title: "Vehicle insurance expiry", note: "DL01 AB 1287", meta: { insurer: "ICICI" } },
- ];
+export const PRESET_HELP: Record<string, string> = {
+  full: "Every module → Full",
+  ops: "Ops: Manage tracking, vehicles, devices, alerts, commands, reports; others → View",
+  support:
+    "Support: Manage tickets; View users/devices/vehicles; others → None",
+  readonly: "All modules → View",
+};
+
+export const LEVEL_HELP: Record<Level, string> = {
+  none: "No access to the module",
+  view: "Read-only: see data & run basic reports",
+  edit: "Create & update (no destructive deletes or global settings)",
+  manage:
+    "Create, edit, delete within module scope (no global/system settings)",
+  full: "Everything: manage + global/admin actions for this module",
+};
+
+export const DEMO_ROLES: Role[] = [
+  {
+    id: "r1",
+    title: "Full Admin",
+    description: "Everything allowed",
+    isActive: true,
+    permissions: PRESETS[0].map(),
+    price: 0,
+    currency: "INR",
+    audit: { updatedAt: isoNow(), updatedBy: "system" },
+  },
+  {
+    id: "r2",
+    title: "Ops Manager",
+    description: "Daily operations",
+    isActive: true,
+    permissions: PRESETS[1].map(),
+    price: 0,
+    currency: "INR",
+    audit: { updatedAt: isoNow(), updatedBy: "superadmin@fleetstack" },
+  },
+  {
+    id: "r3",
+    title: "Support",
+    description: "Ticket focused",
+    isActive: true,
+    permissions: PRESETS[2].map(),
+    price: 0,
+    currency: "INR",
+    audit: { updatedAt: isoNow(), updatedBy: "superadmin@fleetstack" },
+  },
+  {
+    id: "r4",
+    title: "Read Only",
+    description: "View everything",
+    isActive: true,
+    permissions: PRESETS[3].map(),
+    price: 0,
+    currency: "INR",
+    audit: { updatedAt: isoNow(), updatedBy: "system" },
+  },
+];
