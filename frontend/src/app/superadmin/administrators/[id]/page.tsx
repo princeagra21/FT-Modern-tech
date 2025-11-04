@@ -25,6 +25,7 @@ import CreditHistoryPage from "@/components/superadmin/credithistorypage";
 import AdminDocumentsPage from "@/components/superadmin/admindocuments";
 import AdminSettingPage from "@/components/superadmin/adminsettings";
 import AdminVehiclesList from "@/components/superadmin/adminvehicleslist";
+import RoleContent from "@/components/superadmin/administrators/roles/RolePreview";
 
 // ——————————————————————————————————————————
 // User Type Definition
@@ -124,20 +125,6 @@ const navItems: NavItem[] = [
 // ——————————————————————————————————————————
 // Content Components
 // ——————————————————————————————————————————
-function RoleContent() {
-  return (
-    <div className="p-8 space-y-6 bg-background text-foreground">
-      <div>
-        <h2 className="text-2xl font-semibold mb-2">Role Management</h2>
-        <p className="text-muted">Manage user roles and permissions.</p>
-      </div>
-      <div className="flex flex-col items-center justify-center py-12 text-muted">
-        <SecurityRoundedIcon fontSize="large" />
-        <p className="mt-2">Role management coming soon...</p>
-      </div>
-    </div>
-  );
-}
 
 function DeleteAccountContent() {
   return (
