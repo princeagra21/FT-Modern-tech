@@ -93,7 +93,6 @@
     :is(
         select > option:is(:checked, :hover, :focus),
         [data-slot="select-item"]:is(
-            :hover,
             :focus,
             [data-highlighted],
             [data-state="checked"]
@@ -101,7 +100,19 @@
         [data-radix-select-content] [data-highlighted],
         [data-radix-dropdown-menu-content] [data-highlighted]
       ) {
-      background-color: var(--accent) !important;
+      background-color: var(--primary) !important;
+      color: var(--secondary) !important;
+    }
+
+        :is(
+        select > option:is(:checked, :hover, :focus),
+        [data-slot="select-item"]:is(
+            :hover,
+          ),
+        [data-radix-select-content] [data-highlighted],
+        [data-radix-dropdown-menu-content] [data-highlighted]
+      ) {
+      background-color: var(--muted) !important;
       color: var(--secondary) !important;
     }
 

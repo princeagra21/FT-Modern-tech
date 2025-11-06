@@ -120,7 +120,7 @@ const SendEmailDialog: React.FC<SendEmailDialogProps> = ({
         <div className="flex justify-end pt-3">
           <Button
             onClick={handleSend}
-            className="rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+            className="rounded-lg bg-primary text-white hover:bg-primary/90"
           >
             <SendIcon className="mr-2 h-4 w-4" /> Send
           </Button>

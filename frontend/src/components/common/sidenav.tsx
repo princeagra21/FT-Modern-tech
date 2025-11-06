@@ -65,11 +65,11 @@ function MenuItem({
       className={[
         "group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all border text-sm font-medium tracking-tight",
         danger
-          ? "border-border/60 text-destructive hover:bg-error/10"
+          ? "border-border/60 text-destructive"
           : `border-transparent ${!active ? "hover:bg-foreground/10" :  ""} `,
         active
-          ? "bg-primary text-white"
-          : "bg-card text-foreground",
+          ? "bg-primary text-white "
+          : "bg-card text-foreground hover:bg-error/10",
       ].join(" ")}
     >
       <IconEl
