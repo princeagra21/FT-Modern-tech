@@ -40,6 +40,7 @@ import SummarizeRoundedIcon from "@mui/icons-material/SummarizeRounded";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import SendEmailDialog from "../common/CommonEmail";
+import { DateRange } from "react-day-picker";
 
 // ——————————————————————————————————————————
 // Types & Sample Data
@@ -324,6 +325,11 @@ export default function CreditHistoryPage() {
   >("all");
   const [dateFrom, setDateFrom] = React.useState<Date | undefined>();
   const [dateTo, setDateTo] = React.useState<Date | undefined>();
+
+  const [dateRange, setDateRange] = React.useState<DateRange>({
+    from: undefined,
+    to: undefined,
+  });
   const [datePopoverOpen, setDatePopoverOpen] = React.useState(false);
 
   const summary = React.useMemo(() => deriveSummary(txns), [txns]);
@@ -405,13 +411,14 @@ export default function CreditHistoryPage() {
                         className="rounded-xl border-border text-left font-normal bg-background dark:bg-foreground/10 hover:bg-foreground/5 dark:hover:bg-foreground/20"
                       >
                         <CalendarMonthIcon className="mr-2 h-4 w-4" />
-                        {dateFrom
-                          ? dateTo
-                            ? `${dateFrom.toLocaleDateString()} - ${dateTo.toLocaleDateString()}`
-                            : `From ${dateFrom.toLocaleDateString()}`
+                        {dateRange?.from
+                          ? dateRange?.to
+                            ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
+                            : `From ${dateRange.from.toLocaleDateString()}`
                           : "Select date range"}
                       </Button>
                     </PopoverTrigger>
+
                     <PopoverContent
                       className="w-auto p-0 bg-background dark:bg-foreground/10 border border-border"
                       align="end"
@@ -419,16 +426,18 @@ export default function CreditHistoryPage() {
                       <div className="flex">
                         <div className="p-3">
                           <div className="text-sm font-medium mb-2 text-foreground">
-                            From Date
+                            Select Date Range
                           </div>
                           <Calendar
-                            mode="single"
-                            selected={dateFrom}
-                            onSelect={setDateFrom}
+                            mode="range"
+                            selected={dateRange}
+                            onSelect={setDateRange}
+                            // numberOfMonths={2}
                             initialFocus
+                            required
                           />
                         </div>
-                        <div className="p-3 border-l border-border">
+                        {/* <div className="p-3 border-l border-border">
                           <div className="text-sm font-medium mb-2 text-foreground">
                             To Date
                           </div>
@@ -440,7 +449,7 @@ export default function CreditHistoryPage() {
                               dateFrom ? date < dateFrom : false
                             }
                           />
-                        </div>
+                        </div> */}
                       </div>
                       <div className="border-t border-border p-3 flex justify-between">
                         <div className="flex gap-2">
@@ -669,7 +678,10 @@ export default function CreditHistoryPage() {
           </div>
         </div>
       </TooltipProvider>
-      <SendEmailDialog open={openEmailDialog} onOpenChange={() => setOpenEmailDialog(false)} />
+      <SendEmailDialog
+        open={openEmailDialog}
+        onOpenChange={() => setOpenEmailDialog(false)}
+      />
     </>
   );
 }
