@@ -274,12 +274,12 @@ export default function AdminDocumentsPage() {
       kind: "text",
       label: "🏷️ Search Tags",
       field: "tags",
-      predicate: (row, value) =>
-        !value ||
-        (row.tags &&
-          row.tags.some((tag) =>
-            tag.toLowerCase().includes(value.toLowerCase())
-          )),
+      // predicate: (row, value) =>
+      //   !value ||
+      //   (row.tags &&
+      //     row.tags.some((tag) =>
+      //       tag.toLowerCase().includes(value.toLowerCase())
+      //     )),
     },
     uploadedAt: {
       kind: "dateRange",
@@ -301,7 +301,7 @@ export default function AdminDocumentsPage() {
       variant: "destructive",
       tooltip: "Delete all selected documents",
       callback: (rows, ids) => {
-        setDocs((prev) => prev.filter((d) => !ids.includes(d.id)));
+        setDocs((prev) => prev.filter((d) => !ids.has(d.id)));
       },
     },
     {
