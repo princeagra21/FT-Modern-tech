@@ -89,7 +89,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         >
           <div className="px-3 py-2">
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+              <Search className="pointer-events-none absolute left-3 top-4 h-4 w-4 -translate-y-1/2 text-muted" />
               <Input
                 placeholder="Search orders, customers, devices…"
                 className="h-9 w-full rounded-xl border-input bg-background pl-9 pr-10 text-sm shadow-sm placeholder:text-muted focus-visible:ring-4 focus-visible:ring-primary/60"

@@ -1849,7 +1849,7 @@ function page() {
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-7xl">
       <SmartCheckboxAutoTable<VehicleRow>
         title="Vehicle Management"
         data={VEHICLE_DATA}
@@ -1869,7 +1869,7 @@ function page() {
           footerNote: "We make it easiest — just deploy.",
         }}
       />
-    </>
+    </div>
   );
 }
 

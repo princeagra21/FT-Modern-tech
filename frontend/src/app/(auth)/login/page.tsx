@@ -5,7 +5,7 @@ import LoginForm from "@/components/auth/loginform";
 
 const LoginPage = () => {
   return (
-    <div>
+    <div className="w-full px-4">
       <LoginForm />
     </div>
   );

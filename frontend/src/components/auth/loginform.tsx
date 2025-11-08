@@ -85,10 +85,10 @@ function LoginForm() {
   };
 
   return (
-    <>
+    <div className='w-full'>
       <Toaster position="top-right" />
 
-      <Card className="w-full max-w-md bg-background text-foreground border border-border shadow-md rounded-xl">
+      <Card className="w-full lg:max-w-md bg-background text-foreground border border-border shadow-md rounded-xl">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center text-foreground">
             Sign In
@@ -221,7 +221,7 @@ function LoginForm() {
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
 

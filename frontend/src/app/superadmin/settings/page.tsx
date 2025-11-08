@@ -93,7 +93,7 @@ export default function SingleUser() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-[100vh] w-full">
+      <div className="min-h-[100vh] w-full mx-auto max-w-7xl">
         {/* Main 3/7 layout */}
         <div className="mx-auto max-w-[1400px] px-4 md:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-10 gap-6 items-start">

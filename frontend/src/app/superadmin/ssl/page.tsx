@@ -74,7 +74,7 @@ export default function SSLManager() {
 
   // Action dialog state (single‑click)
   const [action, setAction] = useState<{ type: 'install'|'renew'|'uninstall'; id: string }|null>(null);
-  const [detailId, setDetailId] = useState<string | null>(items[0]?.id ?? null);
+  const [detailId, setDetailId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

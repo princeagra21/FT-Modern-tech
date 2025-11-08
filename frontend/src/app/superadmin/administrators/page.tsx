@@ -1019,7 +1019,7 @@ export default function Page() {
   ];
 
   return (
-    <>
+    <div className="mx-auto max-w-7xl">
       <SmartCheckboxAutoTable<AdminRow>
         title="Administrator Management"
         data={adminData}
@@ -1050,6 +1050,6 @@ export default function Page() {
         showtoolbarColumn = {true}
         showtoolbarFullScreen = {true}
       />
-    </>
+    </div>
   );
 }
