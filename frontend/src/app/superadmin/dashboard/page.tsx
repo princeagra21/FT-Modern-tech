@@ -7,6 +7,7 @@ import KpiStats from "@/components/superadmin/dashboard/KpiStats";
 import AdoptionAndVehicleSection from "@/components/superadmin/dashboard/AdoptionAndVehicleSection";
 import RecentActivities from "@/components/superadmin/dashboard/RecentActivities";
 import NotificationsAndActivitySection from "@/components/superadmin/dashboard/NotificationsAndActivitySection";
+import AddAdminDialog from "@/components/superadmin/AddAdminDialog";
 
 
 const Lastsync =()=>{
@@ -33,6 +34,7 @@ const Lastsync =()=>{
 export default function FleetStackDashboard() {
   // State
   const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isAddAdminOpen, setIsAddAdminOpen] = useState(false);
 
   // Detect dark mode changes
   useEffect(() => {
@@ -52,7 +54,10 @@ export default function FleetStackDashboard() {
     return () => observer.disconnect();
   }, []);
 
-  // Last sync ticker
+   const handleAddAdminSave = (data: any) => {
+    console.log("New admin added:", data);
+  
+  };
  
 
 
@@ -66,7 +71,7 @@ export default function FleetStackDashboard() {
         {/* Quick Actions */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <button className="rounded-xl border border-border px-3 py-2 text-xs text-muted  hover:bg-neutral-100 ">
+            <button className="rounded-xl border border-border px-3 py-2 text-xs text-muted  hover:bg-neutral-100 " onClick={() => setIsAddAdminOpen(true)}>
               + Create Admin
             </button>
           </div>
@@ -88,6 +93,11 @@ export default function FleetStackDashboard() {
       </div>
 
       {/* Copy Modal (last resort when clipboard is blocked) */}
+          <AddAdminDialog
+        open={isAddAdminOpen}
+        onOpenChange={setIsAddAdminOpen}
+        onSave={handleAddAdminSave}
+      />
     </main>
   );
 }
