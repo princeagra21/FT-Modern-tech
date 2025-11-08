@@ -1,4 +1,4 @@
-import LeafletBareMap from '@/components/common/map/fleet_stack_leaflet_map'
+import LeafletBareMap from '@/components/common/map/CommonMap'
 import React from 'react'
 
 const page = () => {
