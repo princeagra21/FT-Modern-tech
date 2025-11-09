@@ -21,6 +21,7 @@ import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 
 // Social icons
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import EditIcon from "@mui/icons-material/Edit";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -28,6 +29,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import EditSuperAdminDialog from "./administrators/profile/EditSuperAdminDialog";
 import UpdatePasswordDialog from "../common/UpdatePasswordDialog";
+import { EditCompanyDialog } from "../common/EditCompanyDialog";
 
 export type User = {
   id: string;
@@ -106,6 +108,13 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
   const [inactive, setInactive] = React.useState(user.status !== "active");
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openPassword, setOpenPassword] = React.useState(false);
+  const [hovered, setHovered] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleSave = (updatedCompany: any) => {
+    // Here you’d typically call your API or update parent state
+    console.log("Updated company:", updatedCompany);
+  };
 
   const handleEdit = () => setOpenEdit(true);
 
@@ -245,7 +254,22 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
         {/* Company + Address */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Company block */}
-          <div className="rounded-2xl border border-border p-5 bg-card dark:bg-foreground/5">
+          <div
+            className="relative rounded-2xl border border-border p-5 bg-card dark:bg-foreground/5 transition-all"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+          >
+            {/* Hover Edit Button */}
+            {hovered && (
+              <button
+                onClick={() => setOpen(true)}
+                className="absolute top-3 right-3 p-2 bg-muted rounded-full hover:bg-muted-foreground/20 transition"
+                title="Edit Company"
+              >
+                <EditIcon fontSize="small" className="text-muted-foreground" />
+              </button>
+            )}
+
             <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
               Company
             </div>
@@ -428,13 +452,22 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
           email: user.email,
           mobilePrefix: user.mobilePrefix,
           mobileNumber: user.mobileNumber,
-          address: user.address.line1,
-          company: user.company.name,
+          addressLine: user.address.line1,
+          countryCode: user.address.countryCode,
+          stateCode: user.address.state || "",
+          cityName: user.address.city || "",
+          pincode: user.address.postalCode || "",
         }}
         onSave={(updated) => {
           setAdminData((prev) => (prev ? { ...prev, ...updated } : prev));
           console.log("Updated admin:", updated);
         }}
+      />
+       <EditCompanyDialog
+        open={open}
+        onOpenChange={setOpen}
+        company={user.company}
+        onSave={handleSave}
       />
       <UpdatePasswordDialog
         open={openPassword}
