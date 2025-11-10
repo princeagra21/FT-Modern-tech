@@ -82,11 +82,11 @@ const navData: {
           icon: "logs",
           route: "/admin/logs"
         },
-        {
-          name: "Webhooks",
-          icon: "webhooks",
-          route: "/admin/webhooks"
-        },
+        // {
+        //   name: "Webhooks",
+        //   icon: "webhooks",
+        //   route: "/admin/webhooks"
+        // },
         {
           name: "Settings",
           icon: "settings",

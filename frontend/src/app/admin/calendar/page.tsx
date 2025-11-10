@@ -1,8 +1,9 @@
+import EventsCalendar from '@/components/common/CommonCalendar'
 import React from 'react'
 
-function page() {
+const page = () => {
   return (
-    <div>Clander to show the data</div>
+    <div><EventsCalendar isSuperAdmin={false}/></div>
   )
 }
 

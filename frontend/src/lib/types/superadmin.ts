@@ -54,7 +54,8 @@ export type DocumentItem = {
 };
 
 // Types
- export type EventKind = "ADMIN_CREATED" | "USER_CREATED" | "VEHICLE_EXPIRY" | "VEHICLE_ADDED";
+//  export type EventKind = "ADMIN_CREATED" | "USER_CREATED" | "VEHICLE_EXPIRY" | "VEHICLE_ADDED";
+ export type EventKind = string;
  export type CalendarEvent = {
   id: string;
   kind: EventKind;

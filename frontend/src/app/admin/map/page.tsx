@@ -1,9 +1,12 @@
-import React from 'react'
+import FleetStackLeafletMap from "@/components/common/map/CommonMap";
+import React from "react";
 
 function page() {
   return (
-    <div>Map to show the data</div>
-  )
+    <div>
+      <FleetStackLeafletMap />
+    </div>
+  );
 }
 
-export default page
+export default page;
