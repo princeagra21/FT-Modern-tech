@@ -7,12 +7,22 @@ import ArrowOutwardOutlinedIcon from "@mui/icons-material/ArrowOutwardOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { motion } from "framer-motion";
 
-const KpiStats = () => {
-  const KPIS = [
+const KpiStats = ({isSuperadmin = true}:{isSuperadmin?:boolean}) => {
+ 
+
+  const SuperAdminKPIS = [
     { title: "All Admins", value: 276, icon: AdminPanelSettingsOutlinedIcon },
     { title: "Total Vehicles", value: 3577, icon: DirectionsCarOutlinedIcon },
     { title: "Active Vehicle", value: 2986, icon: TimelineOutlinedIcon },
     { title: "Total Users", value: 3847, icon: PersonAddAltOutlinedIcon },
+    { title: "License Issued", value: 57067, icon: ArrowOutwardOutlinedIcon },
+    { title: "License Used", value: 48234, icon: CheckCircleOutlineIcon },
+  ];
+  
+  const AdminKPIS = [
+    { title: "Total Users", value: 3847, icon: PersonAddAltOutlinedIcon },
+    { title: "Total Vehicles", value: 3577, icon: DirectionsCarOutlinedIcon },
+    { title: "Active Vehicle", value: 2986, icon: TimelineOutlinedIcon },
     { title: "License Issued", value: 57067, icon: ArrowOutwardOutlinedIcon },
     { title: "License Used", value: 48234, icon: CheckCircleOutlineIcon },
   ];
@@ -49,7 +59,7 @@ const KpiStats = () => {
 
   return (
     <section className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-      {KPIS.map((k) => (
+      { (isSuperadmin ? SuperAdminKPIS : AdminKPIS).map((k) => (
         <KpiCard key={k.title} title={k.title} value={k.value} Icon={k.icon} />
       ))}
     </section>
