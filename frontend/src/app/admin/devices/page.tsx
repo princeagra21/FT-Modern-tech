@@ -161,7 +161,7 @@ function page() {
         <CommonKpiStats data={kpiData} />
 
            {/* Devices Table */}
-      <div className="bg-white rounded-lg shadow border">
+      <div>
         <DevicesTable
           devices={mockDevices}
           onRefresh={fetchDevices}
