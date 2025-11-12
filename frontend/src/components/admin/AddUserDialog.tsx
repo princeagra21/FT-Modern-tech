@@ -19,6 +19,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import AddressSelector from "../common/AddressSelector";
 
 interface AddUserDialogProps {
   open: boolean;
@@ -55,6 +56,14 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
     onSave(form);
     onOpenChange(false);
   };
+  const ROLES = [
+    "Admin",
+    "User",
+    "Sub-User",
+    "Driver",
+    "Manager",
+    "Team",
+  ] as const;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -75,12 +84,13 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
               <SelectValue placeholder="Select Role" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="Manager">Manager</SelectItem>
-              <SelectItem value="User">User</SelectItem>
+              {ROLES.map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
-
           <Input
             placeholder="Full Name"
             value={form.name}
@@ -91,14 +101,12 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
             value={form.email}
             onChange={(e) => handleChange("email", e.target.value)}
           />
-
           <PhoneInput
             value={form.mobileNumber}
             onChange={(val) => {
               handleChange("mobileNumber", val);
             }}
           />
-
           <Input
             placeholder="Username"
             value={form.username}
@@ -120,26 +128,16 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
             value={form.address}
             onChange={(e) => handleChange("address", e.target.value)}
           />
-
+          {/* <div className="grid  gap-2"> */}
+          <AddressSelector
+            onChange={({ countryCode, stateCode, city }) => {
+              handleChange("countryCode", countryCode);
+              handleChange("stateCode", stateCode);
+              handleChange("city", city);
+            }}
+          />{" "}
+          {/* </div> */}
           <div className="grid grid-cols-2 gap-2">
-            <Input
-              placeholder="Country Code (e.g. IN)"
-              value={form.countryCode}
-              onChange={(e) => handleChange("countryCode", e.target.value)}
-            />
-            <Input
-              placeholder="State Code (e.g. UP)"
-              value={form.stateCode}
-              onChange={(e) => handleChange("stateCode", e.target.value)}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <Input
-              placeholder="City"
-              value={form.city}
-              onChange={(e) => handleChange("city", e.target.value)}
-            />
             <Input
               placeholder="Pincode"
               value={form.pincode}
