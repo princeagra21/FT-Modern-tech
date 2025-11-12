@@ -1,1030 +1,1911 @@
-'use client'
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+"use client";
+
 import {
-  DirectionsCar as Car,
-  Speed as Gauge,
-  Lock,
-  Satellite,
-  Power,
-  FilterList as Filter,
-  Search,
-  Settings as Settings2,
-  Fullscreen as Maximize2,
-  FullscreenExit as Minimize2,
-  Download,
-  Print as Printer,
-  KeyboardArrowDown as ChevronDown,
-  KeyboardArrowUp as ChevronUp,
-  KeyboardArrowLeft as ChevronLeft,
-  KeyboardArrowRight as ChevronRight,
-  ViewColumn as Columns3,
-  DragIndicator as GripVertical,
-  Delete as Trash2,
-  PersonAdd as UserPlus,
-  PowerOff,
-  Send,
-} from "@mui/icons-material";
+  DisplayMap,
+  SmartCheckboxAutoTable,
+  FilterConfigMap,
+  MultiSelectOption,
+} from "@/components/common/smartcheckboxautotable";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Switch } from "@/components/ui/switch";
+import React from "react";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import SpeedIcon from "@mui/icons-material/Speed";
 
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { useRouter } from "next/navigation";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { Button } from "@/components/ui/button";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
+// Core unions
+export type VehicleStatus = "running" | "stop" | "idle";
 
+// Reusable nested refs
+export interface PersonRef {
+  name: string;
+  email: string;
+  mobilePrefix: string; // e.g., "+91"
+  mobile: string; // digits only
+  isEmailVerified: boolean;
+  profileUrl: string; // URL or path
+  username: string;
+}
 
+export interface NamedType {
+  name: string; // e.g., "Truck", "Car" | "GT06", "FBM920"
+}
 
-type Status = "running" | "stopped";
-
-type VehicleRow = {
+/**
+ * VehicleRow — normalized to camelCase keys.
+ * For all date/time fields, use ISO-8601 strings, e.g. "2025-10-17T08:15:00+05:30".
+ * Units:
+ *  - speed: km/h (number)
+ *  - engineHour: hours (number)
+ *  - odometer: kilometers (number)
+ *  - gmt: IANA offset string like "+05:30"
+ */
+export interface VehicleRow {
   id: string;
-  vehicleName: string;
+  vehicleNo: string;
   imei: string;
   vin: string;
-  status: Status;
-  statusDuration: string;
+
+  status: VehicleStatus;
   speed: number;
-  lastUpdate: string;
-  user: { name: string; avatarColor: string };
-  icons: { ignition: boolean; satellite: boolean; lock: boolean };
-  active: boolean;
-  expiry: string;
-};
 
-const ALT_DETAILS: Record<
-  string,
-  { fuelLevel: number; odometer: number; sim: string; deviceModel: string; geoFence: string[] }
-> = {};
+  vehicleType: NamedType; // { name: "Truck" | "Car" | ... }
+  deviceType: NamedType; // { name: "GT06" | "FBM920" | ... }
 
-// ---------------------------
-// Utilities
-// ---------------------------
+  lastUpdate: string; // ISO datetime
+  primaryUser: PersonRef;
+  addedBy: PersonRef;
 
-function randChoice<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-function pad(num: number, size = 2) {
-  let s = String(num);
-  while (s.length < size) s = "0" + s;
-  return s;
-}
-function randomIMEI() {
-  let s = "";
-  for (let i = 0; i < 15; i++) s += Math.floor(Math.random() * 10);
-  return s;
-}
-function randomVIN() {
-  const chars = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789";
-  let v = "";
-  for (let i = 0; i < 17; i++) v += chars[Math.floor(Math.random() * chars.length)];
-  return v;
-}
-function makeName(i: number) {
-  const brands = ["Tata", "Mahindra", "Ashok Leyland", "Eicher", "Force", "Maruti"];
-  const models = ["Ace", "Bolero", "XUV700", "Intra", "Scorpio", "4000XL", "Pro 3015"];
-  return `${randChoice(brands)} ${randChoice(models)} #${pad(i + 1, 2)}`;
-}
-function makeUser(_i: number) {
-  const first = ["Aarav", "Isha", "Vivaan", "Diya", "Kabir", "Anaya", "Reyansh", "Aanya", "Arjun", "Mira"];
-  const last = ["Sharma", "Verma", "Patel", "Singh", "Iyer", "Khan", "Das", "Nair", "Gupta", "Reddy"];
-  const name = `${randChoice(first)} ${randChoice(last)}`;
-  const colors = ["#1F2937", "#374151", "#4B5563", "#6B7280", "#111827", "#0F172A"];
-  return { name, avatarColor: randChoice(colors) };
-}
-function humanDate(offsetMins: number) {
-  const d = new Date(Date.now() - offsetMins * 60 * 1000);
-  const hrs12 = ((d.getHours() + 11) % 12) + 1;
-  const ampm = d.getHours() >= 12 ? "PM" : "AM";
-  return `${d.getDate()} ${d.toLocaleString("en-US", { month: "short" })} ${pad(hrs12)}:${pad(d.getMinutes())}${ampm}`;
-}
-function makeRows(count = 50): VehicleRow[] {
-  const rows: VehicleRow[] = [];
-  for (let i = 0; i < count; i++) {
-    const speed = Math.floor(Math.random() * 100);
-    const status: Status = speed > 0 && Math.random() > 0.3 ? "running" : "stopped";
-    const duration = `${Math.floor(Math.random() * 5)}h ${Math.floor(Math.random() * 59)}m`;
-    const id = crypto.randomUUID();
-    rows.push({
-      id,
-      vehicleName: makeName(i),
-      imei: randomIMEI(),
-      vin: randomVIN(),
-      status,
-      statusDuration: duration,
-      speed,
-      lastUpdate: humanDate(Math.floor(Math.random() * 300)),
-      user: makeUser(i),
-      icons: { ignition: status === "running", satellite: Math.random() > 0.1, lock: Math.random() > 0.6 },
-      active: Math.random() > 0.2,
-      expiry: `${Math.floor(Math.random() * 28) + 1} ${randChoice(["Oct", "Nov", "Dec"]).toString()} ${
-        Math.floor(Math.random() * 3) + 2025
-      }`,
-    });
+  primaryExpiry: string; // ISO date or datetime
+  secondaryExpiry: string; // ISO date or datetime
+  createdAt: string; // ISO datetime
 
-    ALT_DETAILS[id] = {
-      fuelLevel: Math.floor(Math.random() * 80) + 10,
-      odometer: 10000 + Math.floor(Math.random() * 90000),
-      sim: randChoice(["Airtel", "Jio", "VI", "BSNL"]) + " - +91-98XXXXXX",
-      deviceModel: randChoice(["Teltonika FMB920", "Concox GT06N", "Queclink GV57", "Ruijie R300"]),
-      geoFence: ["Warehouse A", "Delhi Yard", "NH48 Corridor"].filter(() => Math.random() > 0.4),
-    };
-  }
-  return rows;
+  ignition: boolean;
+  engineHour: number;
+  odometer: number;
+
+  gmt: string; // e.g., "+05:30"
+  parking: boolean;
+  isActive: boolean;
 }
 
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 500);
-}
-
-function toCSV(rows: VehicleRow[], visibleCols: ColumnKey[]): string {
-  const headers = visibleCols.map((k) => COLUMN_LABELS[k]);
-  const lines = rows.map((r) =>
-    visibleCols
-      .map((k) => {
-        switch (k) {
-          case "select":
-            return "";
-          case "vehicle":
-            return `${r.vehicleName} (IMEI: ${r.imei}; VIN: ${r.vin})`;
-          case "status":
-            return `${r.status.toUpperCase()} [${r.statusDuration}]`;
-          case "speed":
-            return `${r.speed} km/h`;
-          case "lastUpdate":
-            return r.lastUpdate;
-          case "user":
-            return r.user.name;
-          case "icons":
-            return `ignition:${r.icons.ignition ? 1 : 0}; satellite:${r.icons.satellite ? 1 : 0}; lock:${r.icons.lock ? 1 : 0}`;
-          case "active":
-            return r.active ? "Yes" : "No";
-          case "expiry":
-            return r.expiry;
-          default:
-            return "";
-        }
-      })
-      .map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`)
-      .join(",")
-  );
-  return [headers.join(","), ...lines].join("\n");
-}
-
-// ---------------------------
-// Column Config
-// ---------------------------
-
-type ColumnKey =
-  | "select"
-  | "vehicle"
-  | "status"
-  | "speed"
-  | "lastUpdate"
-  | "user"
-  | "icons"
-  | "active"
-  | "expiry";
-
-const COLUMN_LABELS: Record<ColumnKey, string> = {
-  select: "",
-  vehicle: "Vehicle Name { IMEI & VIN }",
-  status: "Status",
-  speed: "Speed",
-  lastUpdate: "Last Update",
-  user: "Primary User",
-  icons: "Icons",
-  active: "Active",
-  expiry: "Expiry",
-};
-
-const COLUMN_CONFIG: Record<ColumnKey, { icon?: React.ComponentType<any> }> = {
-  select: {},
-  vehicle: { icon: Car },
-  status: { icon: PowerOff },
-  speed: { icon: Gauge },
-  lastUpdate: { icon: Send },
-  user: { icon: UserPlus },
-  icons: { icon: Settings2 },
-  active: { icon: Power },
-  expiry: { icon: Send },
-};
-
-const DEFAULT_ORDER: ColumnKey[] = [
-  "select",
-  "vehicle",
-  "status",
-  "speed",
-  "lastUpdate",
-  "user",
-  "icons",
-  "active",
-  "expiry",
+export const VEHICLE_DATA: VehicleRow[] = [
+  {
+    id: "v-0001",
+    vehicleNo: "DL01 AB 1287",
+    imei: "358920108765431",
+    vin: "MA1TA2C43J5K78901",
+    status: "running",
+    speed: 62,
+    vehicleType: { name: "Truck" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T08:02:15+05:30",
+    primaryUser: {
+      name: "Akash Kumar",
+      email: "akash.kumar@example.com",
+      mobilePrefix: "+91",
+      mobile: "9810012345",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/akash.png",
+      username: "akash.k",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-08-31",
+    secondaryExpiry: "2026-12-31",
+    createdAt: "2024-11-03T10:22:40+05:30",
+    ignition: true,
+    engineHour: 1820.5,
+    odometer: 148520.7,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0002",
+    vehicleNo: "MH12 CD 9042",
+    imei: "352094560123789",
+    vin: "MH4KS2B47L9F34567",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "Car" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T07:55:02+05:30",
+    primaryUser: {
+      name: "Riya Sharma",
+      email: "riya.sharma@example.com",
+      mobilePrefix: "+91",
+      mobile: "9820098765",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/riya.png",
+      username: "riya.s",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-07-15",
+    secondaryExpiry: "2026-10-15",
+    createdAt: "2025-01-12T14:05:10+05:30",
+    ignition: false,
+    engineHour: 760.2,
+    odometer: 38540.1,
+    gmt: "+05:30",
+    parking: true,
+    isActive: true,
+  },
+  {
+    id: "v-0003",
+    vehicleNo: "GJ05 EF 4421",
+    imei: "863451029874561",
+    vin: "MA3EXXMR200123456",
+    status: "idle",
+    speed: 3,
+    vehicleType: { name: "Pickup" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T08:06:29+05:30",
+    primaryUser: {
+      name: "Mohit Verma",
+      email: "mohit.verma@example.com",
+      mobilePrefix: "+91",
+      mobile: "9876543201",
+      isEmailVerified: false,
+      profileUrl: "/uploads/users/mohit.png",
+      username: "mohit.v",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2026-05-30",
+    secondaryExpiry: "2026-09-30",
+    createdAt: "2024-09-20T09:40:33+05:30",
+    ignition: true,
+    engineHour: 1120.8,
+    odometer: 90512.9,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0004",
+    vehicleNo: "KA03 GH 7788",
+    imei: "354789120345678",
+    vin: "MBJZZZ6RZLU012345",
+    status: "running",
+    speed: 48,
+    vehicleType: { name: "Bus" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T07:59:45+05:30",
+    primaryUser: {
+      name: "Ananya Iyer",
+      email: "ananya.iyer@example.com",
+      mobilePrefix: "+91",
+      mobile: "9845099900",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/ananya.png",
+      username: "ananya.i",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2027-01-10",
+    secondaryExpiry: "2027-04-10",
+    createdAt: "2025-03-07T16:10:12+05:30",
+    ignition: true,
+    engineHour: 2215.3,
+    odometer: 189210.4,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0005",
+    vehicleNo: "UP14 JK 5501",
+    imei: "861234598765432",
+    vin: "MALAN51CLHM123456",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "Truck" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T08:09:18+05:30",
+    primaryUser: {
+      name: "Pooja Mishra",
+      email: "pooja.mishra@example.com",
+      mobilePrefix: "+91",
+      mobile: "9935012345",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/pooja.png",
+      username: "pooja.m",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2026-11-01",
+    secondaryExpiry: "2027-02-01",
+    createdAt: "2024-12-22T11:55:00+05:30",
+    ignition: false,
+    engineHour: 540.0,
+    odometer: 42110.3,
+    gmt: "+05:30",
+    parking: true,
+    isActive: false,
+  },
+  {
+    id: "v-0006",
+    vehicleNo: "RJ14 LM 2299",
+    imei: "357894561203478",
+    vin: "MA6FP8AM1JT234567",
+    status: "idle",
+    speed: 2,
+    vehicleType: { name: "SUV" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:11:51+05:30",
+    primaryUser: {
+      name: "Sandeep Jain",
+      email: "sandeep.jain@example.com",
+      mobilePrefix: "+91",
+      mobile: "9929012345",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/sandeep.png",
+      username: "sandeep.j",
+    },
+    addedBy: {
+      name: "Aarti Mehta",
+      email: "aarti.mehta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9811102233",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/aarti.png",
+      username: "aarti.m",
+    },
+    primaryExpiry: "2026-06-20",
+    secondaryExpiry: "2026-09-20",
+    createdAt: "2025-02-01T08:10:45+05:30",
+    ignition: true,
+    engineHour: 895.7,
+    odometer: 61500.0,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0007",
+    vehicleNo: "TN09 NP 6611",
+    imei: "861205479012346",
+    vin: "MCAUA8EV0NA123456",
+    status: "running",
+    speed: 71,
+    vehicleType: { name: "Van" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T07:50:40+05:30",
+    primaryUser: {
+      name: "Harish K",
+      email: "harish.k@example.com",
+      mobilePrefix: "+91",
+      mobile: "9952098765",
+      isEmailVerified: false,
+      profileUrl: "/uploads/users/harish.png",
+      username: "harish.k",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2027-03-05",
+    secondaryExpiry: "2027-06-05",
+    createdAt: "2025-04-11T12:00:00+05:30",
+    ignition: true,
+    engineHour: 310.4,
+    odometer: 22400.9,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0008",
+    vehicleNo: "WB20 QR 3310",
+    imei: "352099887654321",
+    vin: "MC2HN4820KT789012",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "Car" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:04:05+05:30",
+    primaryUser: {
+      name: "Aditi Sen",
+      email: "aditi.sen@example.com",
+      mobilePrefix: "+91",
+      mobile: "9804091122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/aditi.png",
+      username: "aditi.s",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-12-20",
+    secondaryExpiry: "2027-03-20",
+    createdAt: "2024-10-05T18:45:59+05:30",
+    ignition: false,
+    engineHour: 435.2,
+    odometer: 33010.5,
+    gmt: "+05:30",
+    parking: true,
+    isActive: true,
+  },
+  {
+    id: "v-0009",
+    vehicleNo: "CH01 ST 9090",
+    imei: "354120987650123",
+    vin: "MEXXX12345K789012",
+    status: "idle",
+    speed: 1,
+    vehicleType: { name: "Truck" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T08:10:33+05:30",
+    primaryUser: {
+      name: "Karan Batra",
+      email: "karan.batra@example.com",
+      mobilePrefix: "+91",
+      mobile: "9817012345",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/karan.png",
+      username: "karan.b",
+    },
+    addedBy: {
+      name: "Aarti Mehta",
+      email: "aarti.mehta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9811102233",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/aarti.png",
+      username: "aarti.m",
+    },
+    primaryExpiry: "2026-04-12",
+    secondaryExpiry: "2026-08-12",
+    createdAt: "2025-05-14T09:14:22+05:30",
+    ignition: true,
+    engineHour: 1502.1,
+    odometer: 120450.4,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0010",
+    vehicleNo: "JK10 UV 1203",
+    imei: "861309875421076",
+    vin: "MK4ZZZ8KZFY123456",
+    status: "running",
+    speed: 55,
+    vehicleType: { name: "SUV" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:12:10+05:30",
+    primaryUser: {
+      name: "Zara Khan",
+      email: "zara.khan@example.com",
+      mobilePrefix: "+91",
+      mobile: "9797012345",
+      isEmailVerified: false,
+      profileUrl: "/uploads/users/zara.png",
+      username: "zara.k",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2027-02-28",
+    secondaryExpiry: "2027-05-31",
+    createdAt: "2025-06-01T13:30:00+05:30",
+    ignition: true,
+    engineHour: 245.9,
+    odometer: 18410.8,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0011",
+    vehicleNo: "PB08 WX 7780",
+    imei: "352198760054321",
+    vin: "MA1YN2AB0LC123456",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "Tractor" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T07:42:55+05:30",
+    primaryUser: {
+      name: "Gurpreet Singh",
+      email: "gurpreet.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9876001122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/gurpreet.png",
+      username: "gurpreet.s",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-03-19",
+    secondaryExpiry: "2026-06-19",
+    createdAt: "2024-08-19T10:05:05+05:30",
+    ignition: false,
+    engineHour: 129.3,
+    odometer: 9120.4,
+    gmt: "+05:30",
+    parking: true,
+    isActive: true,
+  },
+  {
+    id: "v-0012",
+    vehicleNo: "HR26 YZ 1122",
+    imei: "863459012345678",
+    vin: "MCAUA8EVMRA456789",
+    status: "idle",
+    speed: 4,
+    vehicleType: { name: "Car" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:08:08+05:30",
+    primaryUser: {
+      name: "Neha Arora",
+      email: "neha.arora@example.com",
+      mobilePrefix: "+91",
+      mobile: "9810003344",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/neha.png",
+      username: "neha.a",
+    },
+    addedBy: {
+      name: "Aarti Mehta",
+      email: "aarti.mehta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9811102233",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/aarti.png",
+      username: "aarti.m",
+    },
+    primaryExpiry: "2026-10-01",
+    secondaryExpiry: "2027-01-01",
+    createdAt: "2025-06-25T17:22:11+05:30",
+    ignition: true,
+    engineHour: 560.0,
+    odometer: 41220.0,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0013",
+    vehicleNo: "BR01 AA 3344",
+    imei: "352045678901234",
+    vin: "MALAC51RLJM765432",
+    status: "running",
+    speed: 64,
+    vehicleType: { name: "Truck" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T07:57:37+05:30",
+    primaryUser: {
+      name: "Rahul Raj",
+      email: "rahul.raj@example.com",
+      mobilePrefix: "+91",
+      mobile: "9304012345",
+      isEmailVerified: false,
+      profileUrl: "/uploads/users/rahul.png",
+      username: "rahul.r",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2027-04-14",
+    secondaryExpiry: "2027-07-14",
+    createdAt: "2025-07-10T08:18:45+05:30",
+    ignition: true,
+    engineHour: 980.6,
+    odometer: 74550.2,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0014",
+    vehicleNo: "CG04 BB 5566",
+    imei: "861234507894561",
+    vin: "MA1PB2AB5KT345678",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "Bus" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T07:44:12+05:30",
+    primaryUser: {
+      name: "Tanvi Rao",
+      email: "tanvi.rao@example.com",
+      mobilePrefix: "+91",
+      mobile: "9822102233",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/tanvi.png",
+      username: "tanvi.r",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-09-09",
+    secondaryExpiry: "2026-12-09",
+    createdAt: "2025-08-02T15:00:00+05:30",
+    ignition: false,
+    engineHour: 1770.3,
+    odometer: 154330.6,
+    gmt: "+05:30",
+    parking: true,
+    isActive: true,
+  },
+  {
+    id: "v-0015",
+    vehicleNo: "OD02 CC 7789",
+    imei: "354321098765432",
+    vin: "MB1ZZZ7NZFY654321",
+    status: "idle",
+    speed: 5,
+    vehicleType: { name: "Pickup" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T08:05:41+05:30",
+    primaryUser: {
+      name: "Arjun Sahu",
+      email: "arjun.sahu@example.com",
+      mobilePrefix: "+91",
+      mobile: "9777012345",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/arjun.png",
+      username: "arjun.s",
+    },
+    addedBy: {
+      name: "Aarti Mehta",
+      email: "aarti.mehta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9811102233",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/aarti.png",
+      username: "aarti.m",
+    },
+    primaryExpiry: "2026-02-18",
+    secondaryExpiry: "2026-06-18",
+    createdAt: "2025-07-28T19:12:55+05:30",
+    ignition: true,
+    engineHour: 310.2,
+    odometer: 20540.0,
+    gmt: "+05:30",
+    parking: false,
+    isActive: false,
+  },
+  {
+    id: "v-0016",
+    vehicleNo: "AS01 DD 9900",
+    imei: "863401298765432",
+    vin: "MA1FL2AB2NT987654",
+    status: "running",
+    speed: 80,
+    vehicleType: { name: "Truck" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:00:59+05:30",
+    primaryUser: {
+      name: "Imran Ali",
+      email: "imran.ali@example.com",
+      mobilePrefix: "+91",
+      mobile: "9864012345",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/imran.png",
+      username: "imran.a",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2027-06-25",
+    secondaryExpiry: "2027-09-25",
+    createdAt: "2025-09-03T09:30:10+05:30",
+    ignition: true,
+    engineHour: 154.7,
+    odometer: 10120.3,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0017",
+    vehicleNo: "KL07 EE 1230",
+    imei: "352067890123456",
+    vin: "MCAUA8EV0PA345678",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "Car" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T07:46:45+05:30",
+    primaryUser: {
+      name: "Vivek Menon",
+      email: "vivek.menon@example.com",
+      mobilePrefix: "+91",
+      mobile: "9847011223",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vivek.png",
+      username: "vivek.m",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-01-12",
+    secondaryExpiry: "2026-04-12",
+    createdAt: "2025-09-21T11:11:11+05:30",
+    ignition: false,
+    engineHour: 88.0,
+    odometer: 6540.2,
+    gmt: "+05:30",
+    parking: true,
+    isActive: true,
+  },
+  {
+    id: "v-0018",
+    vehicleNo: "MP09 FF 4420",
+    imei: "861209876543210",
+    vin: "MA1TA2C45NT654321",
+    status: "idle",
+    speed: 2,
+    vehicleType: { name: "Van" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:03:33+05:30",
+    primaryUser: {
+      name: "Sonal Jain",
+      email: "sonal.jain@example.com",
+      mobilePrefix: "+91",
+      mobile: "9826098765",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/sonal.png",
+      username: "sonal.j",
+    },
+    addedBy: {
+      name: "Aarti Mehta",
+      email: "aarti.mehta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9811102233",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/aarti.png",
+      username: "aarti.m",
+    },
+    primaryExpiry: "2026-08-08",
+    secondaryExpiry: "2026-11-08",
+    createdAt: "2025-10-01T10:00:00+05:30",
+    ignition: true,
+    engineHour: 45.6,
+    odometer: 3200.0,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0019",
+    vehicleNo: "TS11 GG 7711",
+    imei: "354000987612345",
+    vin: "MBJZZZ6RZMY987654",
+    status: "running",
+    speed: 67,
+    vehicleType: { name: "Truck" },
+    deviceType: { name: "GT06" },
+    lastUpdate: "2025-10-17T07:53:20+05:30",
+    primaryUser: {
+      name: "Prathik Reddy",
+      email: "prathik.reddy@example.com",
+      mobilePrefix: "+91",
+      mobile: "9849012345",
+      isEmailVerified: false,
+      profileUrl: "/uploads/users/prathik.png",
+      username: "prathik.r",
+    },
+    addedBy: {
+      name: "Seema Gupta",
+      email: "seema.gupta@example.com",
+      mobilePrefix: "+91",
+      mobile: "9818899001",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/seema.png",
+      username: "seema.g",
+    },
+    primaryExpiry: "2027-08-01",
+    secondaryExpiry: "2027-11-01",
+    createdAt: "2025-10-10T12:45:30+05:30",
+    ignition: true,
+    engineHour: 22.4,
+    odometer: 1500.9,
+    gmt: "+05:30",
+    parking: false,
+    isActive: true,
+  },
+  {
+    id: "v-0020",
+    vehicleNo: "UK07 HH 9909",
+    imei: "863450987601234",
+    vin: "MA1TN2AB3PT123987",
+    status: "stop",
+    speed: 0,
+    vehicleType: { name: "SUV" },
+    deviceType: { name: "FBM920" },
+    lastUpdate: "2025-10-17T08:07:22+05:30",
+    primaryUser: {
+      name: "Divya Joshi",
+      email: "divya.joshi@example.com",
+      mobilePrefix: "+91",
+      mobile: "9897098765",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/divya.png",
+      username: "divya.j",
+    },
+    addedBy: {
+      name: "Vinod Singh",
+      email: "vinod.singh@example.com",
+      mobilePrefix: "+91",
+      mobile: "9899011122",
+      isEmailVerified: true,
+      profileUrl: "/uploads/users/vinod.png",
+      username: "vinod.s",
+    },
+    primaryExpiry: "2026-12-31",
+    secondaryExpiry: "2027-03-31",
+    createdAt: "2025-10-15T09:09:09+05:30",
+    ignition: false,
+    engineHour: 10.1,
+    odometer: 820.5,
+    gmt: "+05:30",
+    parking: true,
+    isActive: true,
+  },
 ];
 
-// ---------------------------
-// Main Component
-// ---------------------------
+// Minimal tooltip component for complete vehicle information
 
-export default function FleetStackVehicleTable() {
+function page() {
   const router = useRouter();
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [rows, setRows] = useState<VehicleRow[]>(() => makeRows(50));
-  const [isLoading, setIsLoading] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  // Search / Filter / Sort
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
-  const [sortKey, setSortKey] = useState<ColumnKey>("vehicle");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
-
-  // Column visibility & order
-  const [columnOrder, setColumnOrder] = useState<ColumnKey[]>(DEFAULT_ORDER);
-  const [hiddenCols, setHiddenCols] = useState<ColumnKey[]>([]);
-
-  // Paging
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-
-  // Navigation function
-  const navigateToVehicle = (vehicleId: string) => {
-    router.push(`/admin/vehicles/${vehicleId}`);
-  };
-
-  // Selection
-  const [selected, setSelected] = useState<Set<string>>(new Set());
-
-  // Hover & Drawer
-  const [hoverCard, setHoverCard] = useState<{ row: VehicleRow | null; x: number; y: number }>(
-    { row: null, x: 0, y: 0 }
-  );
-  const [drawerRow, setDrawerRow] = useState<VehicleRow | null>(null);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Initial loading animation
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800); // Simulate loading time
-    
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Page transition effect when changing pages
-  useEffect(() => {
-    setIsTransitioning(true);
-    const timer = setTimeout(() => {
-      setIsTransitioning(false);
-    }, 200);
-    
-    return () => clearTimeout(timer);
-  }, [page]);
-
-  // Derived
-  const visibleCols = useMemo(
-    () => columnOrder.filter((c) => !hiddenCols.includes(c)),
-    [columnOrder, hiddenCols]
-  );
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    let f = rows;
-    if (q)
-      f = f.filter((r) =>
-        [r.vehicleName, r.imei, r.vin, r.user.name, r.lastUpdate, r.expiry]
-          .join(" ")
-          .toLowerCase()
-          .includes(q)
-      );
-    if (statusFilter !== "all") f = f.filter((r) => r.status === statusFilter);
-    return f;
-  }, [rows, search, statusFilter]);
-
-  const sorted = useMemo(() => {
-    const copy = [...filtered];
-    copy.sort((a, b) => {
-      const dir = sortDir === "asc" ? 1 : -1;
-      const get = (r: VehicleRow) => {
-        switch (sortKey) {
-          case "vehicle":
-            return r.vehicleName;
-          case "status":
-            return r.status + r.statusDuration;
-          case "speed":
-            return r.speed;
-          case "lastUpdate":
-            return new Date(r.lastUpdate).getTime();
-          case "user":
-            return r.user.name;
-          case "icons":
-            return Number(r.icons.ignition) + Number(r.icons.satellite) + Number(r.icons.lock);
-          case "active":
-            return Number(r.active);
-          case "expiry":
-            return r.expiry;
-          default:
-            return 0;
-        }
-      };
-      const va = get(a) as string | number;
-      const vb = get(b) as string | number;
-      if (va < vb) return -1 * dir;
-      if (va > vb) return 1 * dir;
-      return 0;
-    });
-    return copy;
-  }, [filtered, sortKey, sortDir]);
-
-  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
-  const pageRows = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return sorted.slice(start, start + pageSize);
-  }, [sorted, page, pageSize]);
-
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [totalPages, page]);
-
-  // Hide hover card on scroll/resize/mouse leave for reliability
-  useEffect(() => {
-    const hide = () => {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = null;
-      }
-      setHoverCard({ row: null, x: 0, y: 0 });
-    };
-
-    const handleMouseLeave = (e: MouseEvent) => {
-      // Hide popup if mouse leaves the window entirely
-      if (e.clientY <= 0 || e.clientX <= 0 || 
-          e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
-        hide();
-      }
-    };
-
-    window.addEventListener("scroll", hide, true);
-    window.addEventListener("resize", hide);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    
-    return () => {
-      window.removeEventListener("scroll", hide, true);
-      window.removeEventListener("resize", hide);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  // Helper functions for hover management - Perfect hover behavior
-  const showHoverCard = (row: VehicleRow, x: number, y: number) => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    setHoverCard({ row, x, y });
-  };
-
-  const hideHoverCardImmediate = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    setHoverCard({ row: null, x: 0, y: 0 });
-  };
-
-  const startHideTimer = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
-    hoverTimeoutRef.current = setTimeout(() => {
-      setHoverCard({ row: null, x: 0, y: 0 });
-      hoverTimeoutRef.current = null;
-    }, 50); // Very short delay to prevent flicker when moving between elements
-  };
-
-  const cancelHideTimer = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-  };
-
-  // ---------------------------
-  // Actions
-  // ---------------------------
-
-  function toggleFullscreen() {
-    const el = containerRef.current as HTMLElement | null;
-    if (!document.fullscreenElement && el) {
-      el.requestFullscreen?.();
-    } else {
-      document.exitFullscreen?.();
-    }
-  }
-
-  function onExportCSV() {
-    const csv = toCSV(sorted, visibleCols);
-    downloadBlob(new Blob([csv], { type: "text/csv" }), `fleetstack_vehicles_${Date.now()}.csv`);
-  }
-  function onExportJSON() {
-    const minimal = sorted.map((r) => ({
-      id: r.id,
-      vehicleName: r.vehicleName,
-      imei: r.imei,
-      vin: r.vin,
-      status: r.status,
-      statusDuration: r.statusDuration,
-      speed: r.speed,
-      lastUpdate: r.lastUpdate,
-      user: r.user,
-      icons: r.icons,
-      active: r.active,
-      expiry: r.expiry,
-    }));
-    downloadBlob(
-      new Blob([JSON.stringify(minimal, null, 2)], { type: "application/json" }),
-      `fleetstack_vehicles_${Date.now()}.json`
+  // Helper function to calculate expiry status
+  const calculateExpiry = (expiryStr: string) => {
+    const expiryDate = new Date(expiryStr);
+    const today = new Date();
+    const daysUntilExpiry = Math.floor(
+      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
     );
-  }
-  function onExportPDF() {
-    // uses print dialog so user can "Save as PDF"
-    onPrint();
-  }
+    const isExpiringSoon = daysUntilExpiry <= 30 && daysUntilExpiry >= 0;
+    const isExpired = daysUntilExpiry < 0;
+    return { daysUntilExpiry, isExpiringSoon, isExpired };
+  };
 
-  function onPrint() {
-    const printable = document.getElementById("fs-print-area");
-    if (!printable) return;
-    const win = window.open("", "_blank", "width=1024,height=768");
-    if (!win) return;
-    win.document.write(`<!doctype html><html><head><meta charset=\"utf-8\"/><title>Print — FleetStack Vehicles</title>
-      <style>
-        body{font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji;}
-        h1{font-size:16px;margin:0 0 8px 0}
-        table{width:100%;border-collapse:collapse;font-size:12px}
-        th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left}
-        th{background:#f9fafb}
-      </style></head><body>`);
-    win.document.write(`<h1>FleetStack Vehicles</h1>`);
-    win.document.write(printable.outerHTML);
-    win.document.write("</body></html>");
-    win.document.close();
-    win.focus();
-    win.print();
-    win.close();
-  }
-
-  function sortBy(col: ColumnKey) {
-    if (col === "select") return;
-    if (sortKey === col) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else {
-      setSortKey(col);
-      setSortDir("asc");
-    }
-  }
-
-  // Selection helpers
-  function toggleRowSelection(id: string, checked: boolean) {
-    setSelected((prev) => {
-      const s = new Set(prev);
-      if (checked) s.add(id);
-      else s.delete(id);
-      return s;
+  // Format ISO datetime to readable format
+  const formatDateTime = (isoString: string) => {
+    const date = new Date(isoString);
+    const dateStr = date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
-  }
-  function togglePageSelection(checked: boolean) {
-    setSelected((prev) => {
-      const s = new Set(prev);
-      pageRows.forEach((r) => (checked ? s.add(r.id) : s.delete(r.id)));
-      return s;
+    const timeStr = date.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
     });
-  }
-  const allOnPageSelected = pageRows.length > 0 && pageRows.every((r) => selected.has(r.id));
+    return { date: dateStr, time: timeStr };
+  };
 
-  // Column menu DnD
-  const [dragIdx, setDragIdx] = useState<number | null>(null);
-  function onDragStart(i: number) { setDragIdx(i); }
-  function onDragOver(e: React.DragEvent<HTMLDivElement>) { e.preventDefault(); }
-  function onDrop(i: number) {
-    if (dragIdx === null || dragIdx === i) return;
-    setColumnOrder((prev) => {
-      const arr = [...prev];
-      const [moved] = arr.splice(dragIdx, 1);
-      arr.splice(i, 0, moved);
-      return arr;
-    });
-    setDragIdx(null);
-  }
+  // Tooltip component for vehicle details
+  const VehicleTooltip = (row: VehicleRow) => {
+    const { date, time } = formatDateTime(row.lastUpdate);
 
-  function toggleHidden(col: ColumnKey) {
-    if (col === "select") return;
-    setHiddenCols((prev) => (prev.includes(col) ? prev.filter((c) => c !== col) : [...prev, col]));
-  }
-
-  // ---------------------------
-  // Render helpers
-  // ---------------------------
-
-  function HeaderCell({ col }: { col: ColumnKey }) {
-    const active = sortKey === col;
-    const config = COLUMN_CONFIG[col];
-    const IconComponent = config.icon;
-    
     return (
-      <th className={`whitespace-nowrap select-none px-3 py-4 bg-slate-100 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-600 ${active ? "bg-slate-200 dark:bg-slate-600" : ""}`}>
-        {col === "select" ? (
-          <input
-            type="checkbox"
-            aria-label="Select all on page"
-            checked={allOnPageSelected}
-            onChange={(e) => { e.stopPropagation(); togglePageSelection(e.target.checked); }}
-            onClick={(e) => e.stopPropagation()}
-            className="h-4 w-4 rounded border-slate-300 dark:border-slate-500 text-slate-900 focus:ring-slate-500"
-          />
-        ) : (
-          <button onClick={() => sortBy(col)} className="inline-flex items-center gap-2 font-bold text-sm text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors uppercase tracking-wide" title="Sort">
-            {IconComponent && <IconComponent fontSize="small" className="text-slate-700 dark:text-slate-300" />}
-            <span className="font-bold">{COLUMN_LABELS[col]}</span>
-            <span className="opacity-70">{active ? (sortDir === "asc" ? <ChevronUp fontSize="small" /> : <ChevronDown fontSize="small" />) : null}</span>
-          </button>
-        )}
-      </th>
-    );
-  }
+      <div className="p-2 max-w-xs">
+        {/* Header */}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-7 h-7 rounded-md bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 font-medium text-[10px]">
+            {row.vehicleNo.slice(0, 2).toUpperCase()}
+          </div>
+          <div>
+            <div className="font-semibold text-[12px] text-neutral-900 dark:text-neutral-100">
+              {row.vehicleNo}
+            </div>
+            <div className="text-[9px] text-neutral-500 dark:text-neutral-400">
+              {row.vehicleType.name} • {row.status}
+            </div>
+          </div>
+        </div>
 
-  function Avatar({ name, color }: { name: string; color: string }) {
-    const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
-    return (
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ backgroundColor: color }} title={name}>
-        {initials}
+        {/* Device Info */}
+        <div className="space-y-1 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-2.5 w-2.5 text-neutral-400 dark:text-neutral-500 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+              />
+            </svg>
+            <span className="text-neutral-700 dark:text-neutral-300 font-mono">
+              {row.imei}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-2.5 w-2.5 text-neutral-400 dark:text-neutral-500 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              />
+            </svg>
+            <span className="text-neutral-700 dark:text-neutral-300 font-mono">
+              {row.vin}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-2.5 w-2.5 text-neutral-400 dark:text-neutral-500 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+              />
+            </svg>
+            <span className="text-neutral-700 dark:text-neutral-300">
+              {row.deviceType.name}
+            </span>
+          </div>
+        </div>
+
+        {/* Engine & Odometer */}
+        <div className="mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="flex justify-between text-[10px]">
+            <span className="text-neutral-500 dark:text-neutral-400">
+              Engine Hours:
+            </span>
+            <span className="font-medium text-neutral-900 dark:text-neutral-100">
+              {row.engineHour.toFixed(1)} hrs
+            </span>
+          </div>
+          <div className="flex justify-between text-[10px] mt-1">
+            <span className="text-neutral-500 dark:text-neutral-400">
+              Odometer:
+            </span>
+            <span className="font-medium text-neutral-900 dark:text-neutral-100">
+              {row.odometer.toLocaleString()} km
+            </span>
+          </div>
+        </div>
+
+        {/* Last Update */}
+        <div className="mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="flex items-center gap-1 text-[10px] text-neutral-500 dark:text-neutral-400">
+            <AccessTimeIcon style={{ fontSize: "9px" }} />
+            <span>
+              Last: {date} at {time}
+            </span>
+          </div>
+        </div>
       </div>
     );
-  }
+  };
 
-  function Cell({ col, r }: { col: ColumnKey; r: VehicleRow }) {
-    switch (col) {
-      case "select":
-        return (
-          <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
-            <input
-              type="checkbox"
-              checked={selected.has(r.id)}
-              onChange={(e) => toggleRowSelection(r.id, e.target.checked)}
-              onClick={(e) => e.stopPropagation()}
-              aria-label="Select row"
+  // User Tooltip
+  const UserTooltip = (user: PersonRef) => {
+    return (
+      <div className="p-3 max-w-xs">
+        <div className="flex items-center gap-2 mb-2">
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={user.profileUrl} alt={user.name} />
+            <AvatarFallback className="bw-gradient-primary bw-text-primary-fg text-xs font-semibold">
+              {user.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <div className="font-semibold bw-text-primary">{user.name}</div>
+            <div className="text-xs bw-text-muted">@{user.username}</div>
+          </div>
+        </div>
+
+        <div className="space-y-1 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <EmailIcon
+              style={{ fontSize: "11px" }}
+              className="text-neutral-400 dark:text-neutral-500"
             />
-          </td>
+            <span className="text-neutral-700 dark:text-neutral-300 truncate">
+              {user.email}
+            </span>
+            {user.isEmailVerified && (
+              <VerifiedIcon
+                style={{ fontSize: "10px" }}
+                className="text-blue-500 dark:text-blue-400 flex-shrink-0"
+              />
+            )}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <PhoneIcon
+              style={{ fontSize: "11px" }}
+              className="text-neutral-400 dark:text-neutral-500"
+            />
+            <span className="text-neutral-700 dark:text-neutral-300 font-mono">
+              {user.mobilePrefix} {user.mobile}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // -------- Filters Configuration --------
+  const filterConfig: FilterConfigMap<VehicleRow> = {
+    status: {
+      kind: "custom",
+      label: "⚡ Status",
+      editor: (value, setValue) => {
+        const [isOpen, setIsOpen] = React.useState(false);
+        const [searchQuery, setSearchQuery] = React.useState("");
+        const statuses = Array.from(
+          new Set(VEHICLE_DATA.map((v) => v.status))
+        ).sort();
+        const filteredStatuses = statuses.filter((s) =>
+          s.toLowerCase().includes(searchQuery.toLowerCase())
         );
-      case "vehicle":
+
         return (
-          <td className="px-3 py-3">
-            <div className="flex items-center gap-2">
-              <div className="h-9 w-9 flex items-center justify-center rounded-xl bg-slate-900 dark:bg-slate-100 ring-1 ring-slate-700 dark:ring-slate-300">
-                <Car fontSize="small" className="text-white dark:text-slate-900" />
-              </div>
-              <div className="leading-tight">
-                <div 
-                  className="font-medium text-primary hover:text-primary/80 cursor-pointer transition-colors duration-200"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateToVehicle(r.id);
-                  }}
-                >
-                  {r.vehicleName}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(!isOpen);
+                setSearchQuery("");
+              }}
+              className="w-full h-8 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-2.5 text-[11px] outline-none flex items-center justify-between text-left hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors"
+            >
+              <span
+                className={
+                  value
+                    ? "capitalize text-neutral-900 dark:text-neutral-100"
+                    : "text-neutral-500 dark:text-neutral-400"
+                }
+              >
+                {value ? value : "(Any Status)"}
+              </span>
+              <svg
+                className="w-3 h-3 text-neutral-400 dark:text-neutral-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {isOpen && (
+              <div className="absolute z-50 w-full mt-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-md shadow-lg max-h-80 overflow-hidden">
+                <div className="p-1.5 border-b border-neutral-200 dark:border-neutral-700">
+                  <input
+                    type="text"
+                    placeholder="Search status..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-8 pl-8 pr-3 rounded-md border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-sm outline-none"
+                    autoFocus
+                  />
+                  <svg
+                    className="absolute left-4 top-4 w-3.5 h-3.5 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
                 </div>
-                <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                  IMEI: <span 
-                    className="font-mono text-primary hover:text-primary/80 cursor-pointer transition-colors duration-200" 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigateToVehicle(r.id);
+                <div className="max-h-52 overflow-y-auto">
+                  <div
+                    className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm"
+                    onClick={() => {
+                      setValue(undefined);
+                      setIsOpen(false);
                     }}
                   >
-                    {r.imei}
-                  </span> · VIN: <span className="font-mono">{r.vin}</span>
+                    <span className="text-slate-500">(Any Status)</span>
+                  </div>
+                  {filteredStatuses.map((s) => (
+                    <div
+                      key={s}
+                      className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm capitalize"
+                      onClick={() => {
+                        setValue(s);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {s}
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          </td>
+            )}
+            {isOpen && (
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setIsOpen(false)}
+              />
+            )}
+          </div>
         );
-      case "status":
+      },
+      predicate: (row, value) => !value || row.status === value,
+    },
+
+    vehicleType: {
+      kind: "custom",
+      label: "🚚 Vehicle Type",
+      editor: (value, setValue) => {
+        const [isOpen, setIsOpen] = React.useState(false);
+        const [searchQuery, setSearchQuery] = React.useState("");
+        const types = Array.from(
+          new Set(VEHICLE_DATA.map((v) => v.vehicleType.name))
+        ).sort();
+        const filteredTypes = types.filter((t) =>
+          t.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
         return (
-          <td
-            className="px-3 py-3"
-            onMouseEnter={(e) => {
-              cancelHideTimer();
-              showHoverCard(r, e.clientX, e.clientY);
-            }}
-            onMouseMove={(e) => showHoverCard(r, e.clientX, e.clientY)}
-            onMouseLeave={startHideTimer}
-          >
-            <div className="flex flex-col gap-0.5">
-              <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium transition-colors duration-200 ${r.status === "running" ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400" : "bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400"}`}>
-                <div className={`w-1.5 h-1.5 rounded-full ${r.status === "running" ? "bg-emerald-500 animate-premium-glow" : "bg-amber-500"}`}></div>
-                {r.status.toUpperCase()}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(!isOpen);
+                setSearchQuery("");
+              }}
+              className="w-full h-9 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 text-sm outline-none flex items-center justify-between text-left"
+            >
+              <span className={value ? "" : "text-slate-500"}>
+                {value || "(Any Type)"}
               </span>
-              <div className="text-xs text-slate-500 dark:text-slate-400 pl-2">
-                {r.statusDuration}
+              <svg
+                className="w-4 h-4 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {isOpen && (
+              <div className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-lg max-h-80 overflow-hidden">
+                <div className="p-2 border-b border-slate-200 dark:border-slate-600">
+                  <input
+                    type="text"
+                    placeholder="Search vehicle types..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-8 pl-8 pr-3 rounded-md border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-sm outline-none"
+                    autoFocus
+                  />
+                  <svg
+                    className="absolute left-4 top-4 w-3.5 h-3.5 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="max-h-52 overflow-y-auto">
+                  <div
+                    className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm"
+                    onClick={() => {
+                      setValue(undefined);
+                      setIsOpen(false);
+                    }}
+                  >
+                    <span className="text-slate-500">(Any Type)</span>
+                  </div>
+                  {filteredTypes.map((t) => (
+                    <div
+                      key={t}
+                      className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm"
+                      onClick={() => {
+                        setValue(t);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {t}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </td>
-        );
-      case "speed":
-        return (
-          <td className="px-3 py-3">
-            <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300"><Gauge fontSize="small" /><span className="font-medium">{r.speed}</span><span className="text-xs">km/h</span></div>
-          </td>
-        );
-      case "lastUpdate":
-        return <td className="px-3 py-3 text-slate-600 dark:text-slate-400">{r.lastUpdate}</td>;
-      case "user":
-        return (
-          <td className="px-3 py-3">
-            <div className="flex items-center gap-2"><Avatar name={r.user.name} color={r.user.avatarColor} /><div className="text-sm text-slate-700 dark:text-slate-300">{r.user.name}</div></div>
-          </td>
-        );
-      case "icons":
-        return (
-          <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center gap-2 text-slate-600">
-              <span title={`Ignition ${r.icons.ignition ? "On" : "Off"}`}><Power fontSize="small" className={r.icons.ignition ? "text-slate-900 dark:text-slate-100" : "text-slate-400"} /></span>
-              <span title={`GPS ${r.icons.satellite ? "OK" : "No Fix"}`}><Satellite fontSize="small" className={r.icons.satellite ? "text-slate-900 dark:text-slate-100" : "text-slate-400"} /></span>
-              <span title={`Lock ${r.icons.lock ? "Engaged" : "Open"}`}><Lock fontSize="small" className={r.icons.lock ? "text-slate-900" : "text-slate-400"} /></span>
-            </div>
-          </td>
-        );
-      case "active":
-        return (
-          <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
-            <label className="relative inline-flex cursor-pointer items-center">
-              <input type="checkbox" className="peer sr-only" checked={r.active} onChange={(e) => setRows((prev) => prev.map((x) => (x.id === r.id ? { ...x, active: e.target.checked } : x)))} onClick={(e) => e.stopPropagation()} />
-              <div className="h-5 w-9 rounded-full bg-slate-200 dark:bg-slate-600 transition-all peer-checked:bg-slate-900 dark:peer-checked:bg-slate-300"></div>
-              <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white dark:bg-slate-800 shadow transition-transform peer-checked:translate-x-4 peer-checked:bg-white dark:peer-checked:bg-slate-900"></div>
-            </label>
-          </td>
-        );
-      case "expiry":
-        return <td className="px-3 py-3 text-slate-700 dark:text-slate-300">{r.expiry}</td>;
-    }
-  }
-
-  // ---------------------------
-  // UI
-  // ---------------------------
-
-  // Loading Skeleton Component
-  const LoadingSkeleton = () => (
-    <div className="animate-fade-in-up">
-      <div className="mb-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-80 rounded-xl bg-slate-200 dark:bg-slate-700 shimmer-loading"></div>
-            <div className="h-10 w-20 rounded-xl bg-slate-200 dark:bg-slate-700 shimmer-loading"></div>
-            <div className="h-10 w-32 rounded-xl bg-slate-200 dark:bg-slate-700 shimmer-loading"></div>
+            )}
+            {isOpen && (
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setIsOpen(false)}
+              />
+            )}
           </div>
-          <div className="flex gap-2">
-            {[1,2,3,4].map(i => (
-              <div key={i} className="h-10 w-16 rounded-xl bg-slate-200 dark:bg-slate-700 shimmer-loading"></div>
-            ))}
+        );
+      },
+      predicate: (row, value) => !value || row.vehicleType.name === value,
+    },
+
+    deviceType: {
+      kind: "custom",
+      label: "📡 Device Type",
+      editor: (value, setValue) => {
+        const [isOpen, setIsOpen] = React.useState(false);
+        const [searchQuery, setSearchQuery] = React.useState("");
+        const devices = Array.from(
+          new Set(VEHICLE_DATA.map((v) => v.deviceType.name))
+        ).sort();
+        const filteredDevices = devices.filter((d) =>
+          d.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(!isOpen);
+                setSearchQuery("");
+              }}
+              className="w-full h-9 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 text-sm outline-none flex items-center justify-between text-left"
+            >
+              <span className={value ? "" : "text-slate-500"}>
+                {value || "(Any Device)"}
+              </span>
+              <svg
+                className="w-4 h-4 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {isOpen && (
+              <div className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-lg max-h-80 overflow-hidden">
+                <div className="p-2 border-b border-slate-200 dark:border-slate-600">
+                  <input
+                    type="text"
+                    placeholder="Search device types..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-8 pl-8 pr-3 rounded-md border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-sm outline-none"
+                    autoFocus
+                  />
+                  <svg
+                    className="absolute left-4 top-4 w-3.5 h-3.5 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="max-h-52 overflow-y-auto">
+                  <div
+                    className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm"
+                    onClick={() => {
+                      setValue(undefined);
+                      setIsOpen(false);
+                    }}
+                  >
+                    <span className="text-slate-500">(Any Device)</span>
+                  </div>
+                  {filteredDevices.map((d) => (
+                    <div
+                      key={d}
+                      className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm"
+                      onClick={() => {
+                        setValue(d);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {d}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {isOpen && (
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setIsOpen(false)}
+              />
+            )}
+          </div>
+        );
+      },
+      predicate: (row, value) => !value || row.deviceType.name === value,
+    },
+
+    addedBy: {
+      kind: "custom",
+      label: "👥 Added By",
+      editor: (value, setValue) => {
+        const [isOpen, setIsOpen] = React.useState(false);
+        const [searchQuery, setSearchQuery] = React.useState("");
+        const users = Array.from(
+          new Set(VEHICLE_DATA.map((v) => v.addedBy.name))
+        ).sort();
+        const filteredUsers = users.filter((u) =>
+          u.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(!isOpen);
+                setSearchQuery("");
+              }}
+              className="w-full h-9 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 text-sm outline-none flex items-center justify-between text-left"
+            >
+              <span className={value ? "truncate" : "text-slate-500"}>
+                {value || "(Any User)"}
+              </span>
+              <svg
+                className="w-4 h-4 text-slate-400 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {isOpen && (
+              <div className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-lg max-h-80 overflow-hidden">
+                <div className="p-2 border-b border-slate-200 dark:border-slate-600">
+                  <input
+                    type="text"
+                    placeholder="Search users..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-8 pl-8 pr-3 rounded-md border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-sm outline-none"
+                    autoFocus
+                  />
+                  <svg
+                    className="absolute left-4 top-4 w-3.5 h-3.5 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="max-h-52 overflow-y-auto">
+                  <div
+                    className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm"
+                    onClick={() => {
+                      setValue(undefined);
+                      setIsOpen(false);
+                    }}
+                  >
+                    <span className="text-slate-500">(Any User)</span>
+                  </div>
+                  {filteredUsers.map((u) => (
+                    <div
+                      key={u}
+                      className="px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm truncate"
+                      onClick={() => {
+                        setValue(u);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {u}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {isOpen && (
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setIsOpen(false)}
+              />
+            )}
+          </div>
+        );
+      },
+      predicate: (row, value) => !value || row.addedBy.name === value,
+    },
+
+    speed: {
+      kind: "numberRange",
+      label: "⚡ Speed (km/h)",
+      field: "speed",
+    },
+    ignition: {
+      kind: "boolean",
+      label: "🔑 Ignition",
+      field: "ignition",
+    },
+    isActive: {
+      kind: "boolean",
+      label: "✅ Account Status",
+      field: "isActive",
+    },
+    lastUpdate: {
+      kind: "dateRange",
+      label: "📅 Last Activity",
+      field: "lastUpdate",
+    },
+    primaryExpiry: {
+      kind: "dateRange",
+      label: "🎫 Primary License",
+      field: "primaryExpiry",
+    },
+    secondaryExpiry: {
+      kind: "dateRange",
+      label: "🎫 Secondary License",
+      field: "secondaryExpiry",
+    },
+    createdAt: {
+      kind: "dateRange",
+      label: "📆 Created Date",
+      field: "createdAt",
+    },
+    parking: {
+      kind: "boolean",
+      label: "🅿️ Parking",
+      field: "parking",
+    },
+  };
+
+  // -------- Bulk Actions --------
+  const bulkActions: MultiSelectOption<VehicleRow>[] = [
+    {
+      name: "Activate",
+      iconName: "toggle_on",
+      variant: "default",
+      callback: async (selectedRows, selectedIds) => {
+        console.log("Activating vehicles:", selectedIds);
+        // API call to activate selected vehicles
+      },
+      tooltip: "Activate selected vehicles",
+    },
+    {
+      name: "Deactivate",
+      iconName: "toggle_off",
+      variant: "secondary",
+      callback: async (selectedRows, selectedIds) => {
+        console.log("Deactivating vehicles:", selectedIds);
+        // API call to deactivate selected vehicles
+      },
+      tooltip: "Deactivate selected vehicles",
+    },
+    {
+      name: "Export Selected",
+      iconName: "download",
+      variant: "outline",
+      callback: async (selectedRows) => {
+        console.log("Exporting vehicles:", selectedRows);
+        // Export selected vehicles
+      },
+      tooltip: "Export selected vehicles data",
+    },
+    {
+      name: "Delete",
+      iconName: "delete",
+      variant: "destructive",
+      callback: async (selectedRows, selectedIds) => {
+        if (
+          confirm(
+            `Are you sure you want to delete ${selectedIds.size} vehicle(s)?`
+          )
+        ) {
+          console.log("Deleting vehicles:", selectedIds);
+          // API call to delete selected vehicles
+        }
+      },
+      tooltip: "Delete selected vehicles",
+    },
+  ];
+
+  // -------- table columns (CONDENSED & ORGANIZED) --------
+  const displayOptions: DisplayMap<VehicleRow> = {
+    // Column 0: Vehicle Information with icon
+    0: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          <DirectionsCarIcon style={{ fontSize: "14px" }} />
+          Vehicle
+        </div>
+      ),
+      content: (row) => (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`vehicles/${row.id}`);
+          }}
+          className="flex items-center gap-2 min-w-[200px]"
+        >
+          {/* Icon Badge */}
+          <div className="flex-shrink-0 h-8 w-8 rounded-lg flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
+            <DirectionsCarIcon style={{ fontSize: "16px" }} />
+          </div>
+
+          {/* Vehicle Details */}
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[13px] text-neutral-900 dark:text-neutral-100 truncate">
+              {row.vehicleNo}
+            </div>
+            <div className="flex items-center gap-1 text-[10px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+              <span>{row.vehicleType.name}</span>
+              <span>•</span>
+              <span className="font-mono truncate">{row.imei}</span>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden">
-        <div className="bg-slate-100 dark:bg-slate-700 p-4">
-          <div className="flex gap-4">
-            {[1,2,3,4,5].map(i => (
-              <div key={i} className="h-6 flex-1 rounded bg-slate-200 dark:bg-slate-600 shimmer-loading"></div>
-            ))}
-          </div>
+      ),
+      tooltip: VehicleTooltip,
+    },
+
+    // Column 1: Status & Speed
+    1: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          <SpeedIcon style={{ fontSize: "14px" }} />
+          Status
         </div>
-        
-        {[1,2,3,4,5,6,7,8,9,10].map(i => (
-          <div key={i} className="border-b border-slate-200 dark:border-slate-700 p-4">
-            <div className="flex gap-4">
-              {[1,2,3,4,5].map(j => (
-                <div key={j} className="h-4 flex-1 rounded bg-slate-100 dark:bg-slate-700 shimmer-loading"></div>
-              ))}
+      ),
+      content: (row) => (
+        <div className="space-y-1 min-w-[140px]">
+          {/* Status Badge */}
+          <div className="inline-flex">
+            <span
+              className={`px-2 py-0.5 rounded text-[10px] font-medium ${
+                row.status === "running"
+                  ? "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
+                  : row.status === "stop"
+                  ? "bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800"
+                  : "bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800"
+              }`}
+            >
+              {row.status.charAt(0).toUpperCase() + row.status.slice(1)}
+            </span>
+          </div>
+
+          {/* Speed & Ignition */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <SpeedIcon
+                style={{ fontSize: "12px" }}
+                className="text-neutral-400 dark:text-neutral-500"
+              />
+              <span className="text-[21px] font-semibold text-neutral-900 dark:text-neutral-100 leading-none">
+                {row.speed}
+              </span>
+              <span className="text-[8px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
+                km/h
+              </span>
+            </div>
+            <div className="flex items-center gap-0.5 ml-1">
+              <PowerSettingsNewIcon
+                style={{ fontSize: "12px" }}
+                className={
+                  row.ignition
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-red-600 dark:text-red-400"
+                }
+              />
+              <span className="text-[9px] text-neutral-500 dark:text-neutral-400 font-medium">
+                {row.ignition ? "ON" : "OFF"}
+              </span>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+      ),
+    },
 
-  if (isLoading) {
-    return (
-      <div className="mx-auto max-w-7xl py-4">
-        <LoadingSkeleton />
-      </div>
-    );
-  }
+    // Column 2: Primary User
+    2: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          Primary User
+        </div>
+      ),
+      content: (row) => (
+        <div className="flex items-center gap-1.5 min-w-[140px]">
+          <Avatar className="w-7 h-7 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <AvatarImage
+              src={row.primaryUser.profileUrl}
+              alt={row.primaryUser.name}
+            />
+            <AvatarFallback className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-medium">
+              {row.primaryUser.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[12px] text-neutral-900 dark:text-neutral-100 truncate">
+              {row.primaryUser.name}
+            </div>
+            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 truncate">
+              @{row.primaryUser.username}
+            </div>
+          </div>
+        </div>
+      ),
+      tooltip: (row) => UserTooltip(row.primaryUser),
+    },
+
+    // Column 3: Added By
+    3: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          Added By
+        </div>
+      ),
+      content: (row) => (
+        <div className="flex items-center gap-1.5 min-w-[140px]">
+          <Avatar className="w-7 h-7 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <AvatarImage src={row.addedBy.profileUrl} alt={row.addedBy.name} />
+            <AvatarFallback className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-medium">
+              {row.addedBy.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-[12px] text-neutral-900 dark:text-neutral-100 truncate">
+              {row.addedBy.name}
+            </div>
+            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 truncate">
+              @{row.addedBy.username}
+            </div>
+          </div>
+        </div>
+      ),
+      tooltip: (row) => UserTooltip(row.addedBy),
+    },
+
+    // Column 4: Last Activity
+    4: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          <AccessTimeIcon style={{ fontSize: "14px" }} />
+          Last Activity
+        </div>
+      ),
+      content: (row) => {
+        const { date, time } = formatDateTime(row.lastUpdate);
+        return (
+          <div className="min-w-[110px]">
+            <div className="flex items-center gap-1">
+              <AccessTimeIcon
+                style={{ fontSize: "12px" }}
+                className="text-neutral-400 dark:text-neutral-500"
+              />
+              <span className="text-[12px] font-medium text-neutral-900 dark:text-neutral-100">
+                {date}
+              </span>
+            </div>
+            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+              {time}
+            </div>
+          </div>
+        );
+      },
+    },
+
+    // Column 5: License Status
+    5: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          License
+        </div>
+      ),
+      content: (row) => {
+        const primary = calculateExpiry(row.primaryExpiry);
+        const secondary = calculateExpiry(row.secondaryExpiry);
+
+        const getStatusIcon = (status: {
+          isExpired: boolean;
+          isExpiringSoon: boolean;
+        }) => {
+          if (status.isExpired) return "✕";
+          if (status.isExpiringSoon) return "!";
+          return "✓";
+        };
+
+        return (
+          <div className="space-y-1 min-w-[130px]">
+            {/* Primary */}
+            <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[9px] text-neutral-500 dark:text-neutral-400">
+                  Pri
+                </span>
+                <span className="text-[10px] font-mono text-neutral-900 dark:text-neutral-100">
+                  {row.primaryExpiry}
+                </span>
+              </div>
+              <span className="text-[10px] text-neutral-700 dark:text-neutral-300">
+                {getStatusIcon(primary)}
+              </span>
+            </div>
+
+            {/* Secondary */}
+            <div className="flex items-center justify-between px-1.5 py-0.5 rounded bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[9px] text-neutral-500 dark:text-neutral-400">
+                  Sec
+                </span>
+                <span className="text-[10px] font-mono text-neutral-900 dark:text-neutral-100">
+                  {row.secondaryExpiry}
+                </span>
+              </div>
+              <span className="text-[10px] text-neutral-700 dark:text-neutral-300">
+                {getStatusIcon(secondary)}
+              </span>
+            </div>
+          </div>
+        );
+      },
+    },
+
+    // Column 6: Created At
+    6: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          Created At
+        </div>
+      ),
+      content: (row) => {
+        const { date, time } = formatDateTime(row.createdAt);
+        return (
+          <div className="min-w-[110px]">
+            <div className="text-[12px] font-medium text-neutral-900 dark:text-neutral-100">
+              {date}
+            </div>
+            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+              {time}
+            </div>
+          </div>
+        );
+      },
+    },
+
+    // Column 7: Active Status with Toggle
+    7: {
+      title: () => (
+        <div className="flex items-center gap-1.5 font-medium text-[10px] uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+          Account
+        </div>
+      ),
+      content: (row) => (
+        <div className="min-w-[90px]">
+          <div className="flex items-center gap-1.5">
+            <Switch
+              checked={row.isActive}
+              onCheckedChange={(checked) => {
+                console.log(
+                  `Toggle vehicle ${row.id} to ${
+                    checked ? "active" : "inactive"
+                  }`
+                );
+                // Handle toggle logic here
+              }}
+            />
+            <span className="text-[11px] text-neutral-900 dark:text-neutral-100 font-medium">
+              {row.isActive ? "Active" : "Inactive"}
+            </span>
+          </div>
+        </div>
+      ),
+    },
+  };
 
   return (
-    <div ref={containerRef} className="mx-auto max-w-7xl py-4">
-      {/* Bulk Actions Bar */}
-      {selected.size > 0 && (
-        <div className="mb-5 py-2 px-5 flex flex-wrap items-center justify-between rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800  shadow-sm">
-          <div className="text-sm text-slate-700 dark:text-slate-300"><b>{selected.size}</b> selected</div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button className="inline-flex items-center gap-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600" title="Bulk delete" onClick={(e) => { e.stopPropagation(); setRows((prev) => prev.filter((r) => !selected.has(r.id))); setSelected(new Set()); }}><Trash2 fontSize="small"/> Delete</button>
-            <button className="inline-flex items-center gap-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600" title="Assign user"><UserPlus fontSize="small"/> Assign</button>
-            <button className="inline-flex items-center gap-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600" title="Mark inactive" onClick={(e) => { e.stopPropagation(); setRows((prev)=> prev.map(r => selected.has(r.id) ? ({...r, active:false}) : r)); }}><PowerOff fontSize="small"/> Inactive</button>
-            <button className="inline-flex items-center gap-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600" title="Send command"><Send fontSize="small"/> Send Cmd</button>
-          </div>
-        </div>
-      )}
-
-      {/* Toolbar */}
-      <div className="mb-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:gap-4">
-          {/* Top row: Search & Controls */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 lg:flex-1">
-            {/* Search Input */}
-            <div className="relative flex-1 lg:max-w-sm">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" fontSize="small" />
-              <input
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                placeholder="Search vehicle, IMEI, VIN, user…"
-                className="h-10 w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 outline-none ring-0 transition focus:border-slate-400 dark:focus:border-slate-400 focus:bg-white dark:focus:bg-slate-600 focus:shadow-sm"
-              />
+    <>
+      <main className="min-h-screen bg-background text-foreground">
+        <div className="mx-auto max-w-7xl px-6 pb-14 pt-8">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight">
+                User Management
+              </h1>
+              {/* <p className="text-sm text-neutral-500">
+                Self‑hosted GPS Software • FleetStack
+              </p> */}
             </div>
-
-            {/* Status Filter */}
-            <div className="relative">
-              <button className="inline-flex h-10 w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" title="Filter" onClick={(e) => { const menu = (e.currentTarget.nextSibling as HTMLElement)!; menu.classList.toggle("hidden"); }}>
-                <Filter fontSize="small" /> Filter
-              </button>
-              <div className="absolute z-[510] mt-1 hidden w-48 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 p-2 text-sm shadow-xl">
-                {(["all","running","stopped"] as const).map((opt) => (
-                  <button key={opt} className={`block w-full rounded-lg px-3 py-2 text-left text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors ${statusFilter === opt ? "bg-slate-100 dark:bg-slate-600 font-medium" : ""}`} onClick={() => setStatusFilter(opt)}>
-                    {opt === "all" ? "All statuses" : opt[0].toUpperCase()+opt.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Records Per Page */}
-          <div className="flex items-center justify-between sm:justify-start gap-2 text-sm">
-            <span className="text-slate-600 dark:text-slate-400 font-medium whitespace-nowrap">Records per page:</span>
-            <select 
-              value={pageSize} 
-              onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }} 
-              className="h-10 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-slate-100 px-3 text-sm font-medium outline-none focus:border-slate-400 dark:focus:border-slate-400 focus:bg-white dark:focus:bg-slate-600 transition-colors"
-            >
-              {[10, 20, 30, 50, 100].map((n) => (<option key={n} value={n}>{n}</option>))}
-            </select>
-          </div>
-
-          {/* Right Section: Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2">
-            <button onClick={onExportCSV} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 hover:scale-105 hover:shadow-md transition-all duration-200 active:scale-95" title="Export CSV">
-              <Download fontSize="small" /> <span className="hidden sm:inline">CSV</span>
-            </button>
-            <button onClick={onExportJSON} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" title="Export JSON">
-              <span className="hidden sm:inline">JSON</span>
-            </button>
-            <button onClick={onExportPDF} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" title="Export PDF">
-              <span className="hidden sm:inline">PDF</span>
-            </button>
-            <button onClick={onPrint} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" title="Print">
-              <Printer fontSize="small" /> <span className="hidden sm:inline">Print</span>
-            </button>
-
-            {/* Column settings with drag to reorder */}
-            <div className="relative">
-              <button className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" title="Customize Columns" onClick={(e) => { const menu = (e.currentTarget.nextSibling as HTMLElement)!; menu.classList.toggle("hidden"); }}>
-                <Settings2 fontSize="small" /> <span className="hidden sm:inline">Columns</span>
-              </button>
-              <div className="absolute right-0 z-[510] mt-1 hidden w-64 rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 p-3 text-sm shadow-xl">
-                <div className="mb-3 flex items-center gap-2 px-2 text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400 font-medium"><Columns3 fontSize="small" /> Drag to reorder · Toggle to hide</div>
-                {columnOrder.map((col, i) => (
-                  <div key={col} draggable={col !== "select"} onDragStart={() => onDragStart(i)} onDragOver={(e) => onDragOver(e)} onDrop={() => onDrop(i)} className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                    <div className="flex items-center gap-2"><GripVertical fontSize="small" className="text-slate-400 dark:text-slate-500" /><span className="font-medium">{COLUMN_LABELS[col] || (col === "select" ? "Selection" : col)}</span></div>
-                    <label className="flex items-center gap-2 text-slate-600 dark:text-slate-400">{col === "select" ? <span className="text-xs text-slate-400 dark:text-slate-500">fixed</span> : (<input type="checkbox" checked={!hiddenCols.includes(col)} onChange={() => toggleHidden(col)} />)}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Fullscreen */}
-            <button onClick={toggleFullscreen} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors" title="Full Screen">
-              {!document.fullscreenElement ? <Maximize2 fontSize="small" /> : <Minimize2 fontSize="small" />} <span className="hidden sm:inline">Full Screen</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Table Card */}
-      <div className="w-full overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-gradient-to-b from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-sm hover:shadow-md transition-shadow duration-300 animate-fade-in-up" style={{ animationDelay: '400ms' }} onMouseLeave={hideHoverCardImmediate}>
-        {/* Table */}
-        <div id="fs-print-area">
-          <table className="w-full min-w-[800px] text-sm">
-            <thead>
-              <tr className="bg-white dark:bg-slate-800 text-left">
-                {visibleCols.map((c) => (<HeaderCell key={c} col={c} />))}
-              </tr>
-            </thead>
-            <tbody>
-              {pageRows.map((r, index) => (
-                <tr 
-                  key={r.id} 
-                  className={`group cursor-pointer border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 ${isTransitioning ? 'opacity-50' : 'animate-slide-in-right'}`}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                  onClick={() => setDrawerRow(r)}
-                >
-                  {visibleCols.map((c) => (<Cell key={c} col={c} r={r} />))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Footer: Minimal Powerful Pagination */}
-        <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 sm:px-6 py-4">
-          {/* Responsive layout: Stack on mobile, 3-column on desktop */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            {/* Results Info */}
-            <div className="text-sm text-slate-600 dark:text-slate-400 text-center lg:text-left lg:flex-1">
-              Showing <span className="font-medium text-slate-900 dark:text-slate-100">{pageRows.length}</span> of <span className="font-medium text-slate-900 dark:text-slate-100">{sorted.length}</span> results
-            </div>
-
-            {/* Pagination Controls - Always centered */}
-            <div className="flex items-center justify-center gap-1 flex-wrap">
-            <button 
-              className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:scale-100" 
-              onClick={() => setPage(1)} 
-              disabled={page === 1}
-            >
-              First
-            </button>
-            <button 
-              className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent" 
-              onClick={() => setPage((p) => Math.max(1, p - 1))} 
-              disabled={page === 1}
-            >
-              Previous
-            </button>
-
-              {/* Page Numbers */}
-              <div className="flex items-center gap-1 mx-1 sm:mx-2">
-                {(() => {
-                  const showPages = [];
-                  const start = Math.max(1, page - 2);
-                  const end = Math.min(totalPages, page + 2);
-                  
-                  for (let i = start; i <= end; i++) {
-                    showPages.push(
-                      <button
-                        key={i}
-                        className={`min-w-[32px] sm:min-w-[36px] h-8 sm:h-9 px-1 sm:px-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
-                          i === page
-                            ? "bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm"
-                            : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
-                        }`}
-                        onClick={() => setPage(i)}
-                      >
-                        {i}
-                      </button>
-                    );
-                  }
-                  
-                  return showPages;
-                })()}
-              </div>
-
-              <button 
-                className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent" 
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))} 
-                disabled={page === totalPages}
-              >
-                Next
-              </button>
-              
-              <button 
-                className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent" 
-                onClick={() => setPage(totalPages)} 
-                disabled={page === totalPages}
-              >
-                Last
-              </button>
-            </div>
-
-            {/* Page Info */}
-            <div className="text-sm text-slate-600 dark:text-slate-400 text-center lg:text-right lg:flex-1">
-              Page <span className="font-medium text-slate-900 dark:text-slate-100">{page}</span> of <span className="font-medium text-slate-900 dark:text-slate-100">{totalPages}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Hover Card */}
-      {hoverCard.row && (
-        <div 
-          className="pointer-events-auto fixed z-[500] w-[320px] -translate-x-1/2 -translate-y-full rounded-2xl border border-slate-200 dark:border-slate-600 bg-white/95 dark:bg-slate-800/95 p-3 shadow-2xl backdrop-blur transition-all duration-200 animate-fade-in-up hover:scale-105" 
-          style={{ left: hoverCard.x, top: hoverCard.y - 10 }}
-          onMouseEnter={cancelHideTimer}
-          onMouseLeave={hideHoverCardImmediate}
-        >
-          <div className="mb-2 flex items-center gap-2">
-            <div className="h-9 w-9 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-700 ring-1 ring-slate-200 dark:ring-slate-600"><Car fontSize="small" className="text-slate-600 dark:text-slate-400" /></div>
-            <div className="min-w-0">
-              <div className="truncate font-semibold text-slate-900 dark:text-slate-100">{hoverCard.row.vehicleName}</div>
-              <div className="truncate text-[11px] text-slate-500 dark:text-slate-400">IMEI: <span className="font-mono">{hoverCard.row.imei}</span> · VIN: <span className="font-mono">{hoverCard.row.vin}</span></div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-[12px] text-slate-700 dark:text-slate-300">
-            <div className="rounded-xl bg-slate-50 dark:bg-slate-700 p-2"><div className="text-[11px] text-slate-500 dark:text-slate-400">Status</div><div className="flex items-center gap-1 font-medium"><Power fontSize="small" className={hoverCard.row.status === "running" ? "text-slate-900 dark:text-slate-100" : "text-slate-500 dark:text-slate-400"} />{hoverCard.row.status.toUpperCase()} [{hoverCard.row.statusDuration}]</div></div>
-            <div className="rounded-xl bg-slate-50 dark:bg-slate-700 p-2"><div className="text-[11px] text-slate-500 dark:text-slate-400">Speed</div><div className="flex items-center gap-1 font-medium"><Gauge fontSize="small" /> {hoverCard.row.speed} km/h</div></div>
-            <div className="rounded-xl bg-slate-50 dark:bg-slate-700 p-2"><div className="text-[11px] text-slate-500 dark:text-slate-400">Last Update</div><div className="font-medium">{hoverCard.row.lastUpdate}</div></div>
-            <div className="rounded-xl bg-slate-50 dark:bg-slate-700 p-2"><div className="text-[11px] text-slate-500 dark:text-slate-400">Expiry</div><div className="font-medium">{hoverCard.row.expiry}</div></div>
-          </div>
-        </div>
-      )}
-
-      {/* Drawer — Row Details (alt dataset) */}
-      <div className={`fixed inset-y-0 right-0 z-[520] w-full sm:w-[420px] transform border-l border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-2xl transition-all duration-500 ease-in-out ${drawerRow ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`} role="dialog" aria-hidden={!drawerRow}>
-        <div className="mb-3 flex items-center justify-between">
-          <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">Vehicle Details</div>
-          <button className="rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-2 py-1 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600" onClick={() => setDrawerRow(null)}>Close</button>
-        </div>
-        {drawerRow && (
-          <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-80px)]">
             <div className="flex items-center gap-3">
-              <div className="h-11 w-11 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-700 ring-1 ring-slate-200 dark:ring-slate-600"><Car fontSize="medium" className="text-slate-600 dark:text-slate-400" /></div>
-              <div>
-                <div className="text-base font-semibold text-slate-900 dark:text-slate-100">{drawerRow.vehicleName}</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">IMEI: <span className="font-mono">{drawerRow.imei}</span> · VIN: <span className="font-mono">{drawerRow.vin}</span></div>
-              </div>
+              <Button variant="outline">
+                <FileUploadIcon fontSize="small" />
+                Bulk Upload
+              </Button>
+              <Button onClick={() => {}}>
+                <PersonAddIcon fontSize="small" />
+                Add User
+              </Button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-              <div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</div><div className="mt-1 flex items-center gap-2 font-medium text-slate-900 dark:text-slate-100"><Power fontSize="small" className={drawerRow.status === "running" ? "text-emerald-600" : "text-amber-600"} />{drawerRow.status.toUpperCase()} <span className="opacity-70">[{drawerRow.statusDuration}]</span></div></div>
-              <div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Speed</div><div className="mt-1 flex items-center gap-2 font-medium text-slate-900 dark:text-slate-100"><Gauge fontSize="small" /> {drawerRow.speed} km/h</div></div>
-              <div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Primary User</div><div className="mt-1 flex items-center gap-2"><Avatar name={drawerRow.user.name} color={drawerRow.user.avatarColor} /><div className="font-medium text-slate-900 dark:text-slate-100">{drawerRow.user.name}</div></div></div>
-              <div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Update</div><div className="mt-1 font-medium text-slate-900 dark:text-slate-100">{drawerRow.lastUpdate}</div></div>
-              <div className="col-span-1 sm:col-span-2 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Device & SIM (Alt Dataset)</div>{(() => { const alt = ALT_DETAILS[drawerRow.id]; return (<div className="mt-1 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm"><div><div className="text-slate-500 dark:text-slate-400">Fuel Level</div><div className="font-semibold text-slate-900 dark:text-slate-100">{alt.fuelLevel}%</div></div><div><div className="text-slate-500 dark:text-slate-400">Odometer</div><div className="font-semibold text-slate-900 dark:text-slate-100">{alt.odometer.toLocaleString()} km</div></div><div><div className="text-slate-500 dark:text-slate-400">SIM</div><div className="font-semibold text-slate-900 dark:text-slate-100">{alt.sim}</div></div><div><div className="text-slate-500 dark:text-slate-400">Device Model</div><div className="font-semibold text-slate-900 dark:text-slate-100">{alt.deviceModel}</div></div><div className="col-span-1 sm:col-span-2"><div className="text-slate-500 dark:text-slate-400">Geo Fences</div><div className="mt-1 flex flex-wrap gap-1">{alt.geoFence.length ? (alt.geoFence.map((g, i) => (<span key={i} className="rounded-full bg-slate-100 dark:bg-slate-600 text-slate-700 dark:text-slate-300 px-2 py-0.5 text-xs">{g}</span>))) : (<span className="text-slate-400 dark:text-slate-500">No fences</span>)}</div></div></div>); })()}</div>
-            </div>
-            <div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3 text-sm"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Security</div><div className="mt-1 flex flex-wrap items-center gap-3 text-slate-700 dark:text-slate-300"><span className="inline-flex items-center gap-1"><Power fontSize="small" className={drawerRow.icons.ignition ? "text-slate-900 dark:text-slate-100" : "text-slate-400"} /> Ignition</span><span className="inline-flex items-center gap-1"><Satellite fontSize="small" className={drawerRow.icons.satellite ? "text-slate-900 dark:text-slate-100" : "text-slate-400"} /> GPS</span><span className="inline-flex items-center gap-1"><Lock fontSize="small" className={drawerRow.icons.lock ? "text-slate-900 dark:text-slate-100" : "text-slate-400"} /> Lock</span></div></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm"><div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Active</div><div className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{drawerRow.active ? "Yes" : "No"}</div></div><div className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400">Expiry</div><div className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{drawerRow.expiry}</div></div></div>
           </div>
-        )}
-      </div>
-
-      {/* Backdrop for drawer */}
-      {drawerRow && (<div className="fixed inset-0 z-[515] bg-slate-900/10 dark:bg-slate-900/30 backdrop-blur-[1px]" onClick={() => setDrawerRow(null)} />)}
-    </div>
+          <SmartCheckboxAutoTable<VehicleRow>
+            title="Vehicle Management"
+            data={VEHICLE_DATA}
+            getRowId={(r) => r.id}
+            displayOptions={displayOptions}
+            filterConfig={filterConfig}
+            multiSelectOptions={bulkActions}
+            onRowClick={(row) => {
+              console.log("Row Clicked →", row.id);
+              router.push("/superadmin/vehicles/" + row.id);
+            }}
+            showtoolbar={true}
+            showtoolbarInput={true}
+            showtoolbarFilter={true}
+            showtoolbarRefreshbtn={true}
+            showtoolbarRecords={true}
+            showtoolbarExport={true}
+            showtoolbarColumn={true}
+            showtoolbarFullScreen={true}
+            exportBrand={{
+              name: "Fleet Stack",
+              logoUrl: "/images/logo-light.png",
+              addressLine1: "Self-Hosted GPS Software",
+              addressLine2: "fleetstackglobal.com",
+              footerNote: "We make it easiest — just deploy.",
+            }}
+          />
+        </div>
+      </main>
+    </>
   );
 }
 
-// ---------------------------
-// Dev Self‑Tests (non‑blocking)
-// ---------------------------
-
-function runDevTests() {
-  // Skip dev tests in production or if not in browser environment
-  if (typeof window === 'undefined') return;
-  
-  try {
-    // Test 1: CSV newline join string is correct and no syntax error
-    const sample = makeRows(2);
-    const order: ColumnKey[] = ["vehicle", "status", "speed"]; // custom order
-    const csv = toCSV(sample, order);
-    const header = csv.split("\n")[0];
-    if (header.indexOf("Vehicle Name") >= header.indexOf("Status")) {
-      console.warn("[FleetStack Table] Header order test failed");
-    }
-
-    // Test 2: CSV lines >= header + rows
-    const lines = csv.split("\n");
-    if (lines.length < 3) {
-      console.warn("[FleetStack Table] CSV lines test failed");
-    }
-
-    // Test 3: JSON export shape (sanity)
-    const json = JSON.stringify({ id: sample[0].id, vehicleName: sample[0].vehicleName, imei: sample[0].imei, vin: sample[0].vin });
-    if (!json.includes("vehicleName")) {
-      console.warn("[FleetStack Table] JSON shape test failed");
-    }
-
-    // Test 4: Visible columns drive body cell count
-    const visible = DEFAULT_ORDER.filter((c) => c !== "icons" && c !== "select");
-    if (!visible.includes("vehicle") || !visible.includes("status")) {
-      console.warn("[FleetStack Table] Visible columns test failed");
-    }
-  } catch (e) {
-    console.warn("[FleetStack Table] Dev tests warning:", e);
-  }
-}
-
-// Only run tests in development and on client side
-if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') { 
-  runDevTests(); 
-}
-
-export { toCSV, makeRows, DEFAULT_ORDER };
+export default page;
