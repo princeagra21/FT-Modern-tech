@@ -15,6 +15,7 @@ import {
 } from "@/components/common/smartcheckboxautotable";
 import { Button } from "@/components/ui/button";
 import AddUserDialog from "@/components/admin/AddUserDialog";
+import BulkUploadUser from "@/components/admin/BulkUploadUser";
 
 export type UserRow = {
   id: string;
@@ -451,10 +452,7 @@ export default function Page() {
               </p> */}
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline">
-                <FileUploadIcon fontSize="small" />
-                Bulk Upload
-              </Button>
+              <BulkUploadUser />
               <Button onClick={() => setAddUserOpen(true)}>
                 <PersonAddIcon fontSize="small" />
                 Add User
