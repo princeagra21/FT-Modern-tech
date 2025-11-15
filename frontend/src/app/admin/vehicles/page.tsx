@@ -21,6 +21,8 @@ import { useRouter } from "next/navigation";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { Button } from "@/components/ui/button";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { AddEditVehicleDialog } from "@/components/common/AddEditVehicleModal";
+import BulkUploadVehicleModal from "@/components/admin/BulkUploadVehicleModal";
 
 // Core unions
 export type VehicleStatus = "running" | "stop" | "idle";
@@ -78,6 +80,13 @@ export interface VehicleRow {
   isActive: boolean;
 }
 
+const PLANS = [
+  "Basic Plan",
+  "Premium Plan",
+  "Enterprise Plan",
+  "Fleet Pro",
+  "Standard Plan",
+];
 export const VEHICLE_DATA: VehicleRow[] = [
   {
     id: "v-0001",
@@ -844,6 +853,13 @@ export const VEHICLE_DATA: VehicleRow[] = [
 // Minimal tooltip component for complete vehicle information
 
 function page() {
+  const [openAddModal, setOpenAddModal] = React.useState(false);
+  const [showBulkUpload, setShowBulkUpload] = React.useState(false);
+  const [bulkUploadForm, setBulkUploadForm] = React.useState({
+    plan: "",
+    file: null,
+  });
+
   const router = useRouter();
   // Helper function to calculate expiry status
   const calculateExpiry = (expiryStr: string) => {
@@ -1858,20 +1874,20 @@ function page() {
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-semibold tracking-tight">
-                User Management
+                Vehicle Management
               </h1>
               {/* <p className="text-sm text-neutral-500">
                 Self‑hosted GPS Software • FleetStack
               </p> */}
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => setShowBulkUpload(true)}>
                 <FileUploadIcon fontSize="small" />
                 Bulk Upload
               </Button>
-              <Button onClick={() => {}}>
+              <Button onClick={() => setOpenAddModal(true)}>
                 <PersonAddIcon fontSize="small" />
-                Add User
+                Add Vehicle
               </Button>
             </div>
           </div>
@@ -1904,6 +1920,22 @@ function page() {
           />
         </div>
       </main>
+      <AddEditVehicleDialog
+        open={openAddModal}
+        onOpenChange={setOpenAddModal}
+        onSave={() => {}}
+      />
+      <BulkUploadVehicleModal
+        show={showBulkUpload}
+        setShow={setShowBulkUpload}
+        plans={PLANS}
+        bulkUploadForm={bulkUploadForm}
+        setBulkUploadForm={setBulkUploadForm}
+        handleBulkUploadSubmit={(e) => {
+          e.preventDefault();
+          console.log(bulkUploadForm);
+        }}
+      />
     </>
   );
 }

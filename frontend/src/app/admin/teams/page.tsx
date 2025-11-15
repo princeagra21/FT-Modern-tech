@@ -15,6 +15,7 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import LockIcon from "@mui/icons-material/Lock";
 import { useRouter } from "next/navigation";
 import StatusBadge from "@/components/common/StatusBadge";
+import Add from "@mui/icons-material/Add";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -37,6 +38,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import RoleContent from "@/components/superadmin/administrators/roles/RolePreview";
+import AddTeamDialog from "@/components/admin/AddTeamDialog";
 // ------------------------------------------------------------------
 // Types
 // ------------------------------------------------------------------
@@ -183,6 +185,8 @@ export const teamBulkActions = [
 // ------------------------------------------------------------------
 
 export default function TeamsTable() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
   const teamDisplayOptions: DisplayMap<TeamRow> = {
     1: {
       title: () => (
@@ -195,7 +199,6 @@ export default function TeamsTable() {
         </div>
       ),
       content: (row) => {
-        const router = useRouter();
         return (
           <div
             onClick={() => router.push(`/admin/teams/${row.id}`)}
@@ -338,47 +341,66 @@ export default function TeamsTable() {
 
   return (
     <>
-      <SmartCheckboxAutoTable<TeamRow>
-        title="Teams Management"
-        data={teamData}
-        getRowId={(r) => r.id}
-        displayOptions={teamDisplayOptions}
-        filterConfig={teamFilterConfig}
-        multiSelectOptions={teamBulkActions}
-        onRowClick={(row) => {
-          console.log("Row Clicked →", row.name);
-          setSelectedTeamId(row.id);
-        }}
-        exportBrand={{
-          name: "Fleet Stack",
-          logoUrl: "/images/logo-light.png",
-          addressLine1: "Self-Hosted GPS Software",
-          addressLine2: "fleetstackglobal.com",
-          footerNote: "We make it easiest — just deploy.",
-        }}
-        showtoolbar={true}
-        showtoolbarInput={true}
-        showtoolbarFilter={true}
-        showtoolbarRefreshbtn={true}
-        showtoolbarRecords={true}
-        showtoolbarExport={true}
-        showtoolbarColumn={true}
-        showtoolbarFullScreen={true}
-      />
-      <Sheet open={permOpen} onOpenChange={setPermOpen}>
-        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle className="text-xl flex items-center gap-2">
-              <ShieldIcon /> Permissions
-            </SheetTitle>
-            <SheetDescription>
-              Assign the minimal access required. Use a preset, then tweak.
-            </SheetDescription>
-          </SheetHeader>
+      <main className="min-h-screen bg-background text-foreground">
+        <div className="mx-auto max-w-7xl px-6 pb-14 pt-8">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight">Teams</h1>
+              <p className="text-sm text-neutral-500">
+                Manage teammates and their permissions. Add members via the
+                modal, fine‑tune via the drawer.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button onClick={() => setOpen(true)}>
+                <Add className="h-4 w-4" /> Add Team
+              </Button>
+            </div>
+          </div>
+          <SmartCheckboxAutoTable<TeamRow>
+            title="Teams Management"
+            data={teamData}
+            getRowId={(r) => r.id}
+            displayOptions={teamDisplayOptions}
+            filterConfig={teamFilterConfig}
+            multiSelectOptions={teamBulkActions}
+            onRowClick={(row) => {
+              console.log("Row Clicked →", row.name);
+              setSelectedTeamId(row.id);
+            }}
+            exportBrand={{
+              name: "Fleet Stack",
+              logoUrl: "/images/logo-light.png",
+              addressLine1: "Self-Hosted GPS Software",
+              addressLine2: "fleetstackglobal.com",
+              footerNote: "We make it easiest — just deploy.",
+            }}
+            showtoolbar={true}
+            showtoolbarInput={true}
+            showtoolbarFilter={true}
+            showtoolbarRefreshbtn={true}
+            showtoolbarRecords={true}
+            showtoolbarExport={true}
+            showtoolbarColumn={true}
+            showtoolbarFullScreen={true}
+          />
+          <Sheet open={permOpen} onOpenChange={setPermOpen}>
+            <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle className="text-xl flex items-center gap-2">
+                  <ShieldIcon /> Permissions
+                </SheetTitle>
+                <SheetDescription>
+                  Assign the minimal access required. Use a preset, then tweak.
+                </SheetDescription>
+              </SheetHeader>
 
-          <RoleContent />
-        </SheetContent>
-      </Sheet>
+              <RoleContent />
+            </SheetContent>
+          </Sheet>
+        </div>
+      </main>
+      <AddTeamDialog open={open} setOpen={setOpen} onSubmit={() => {}} />
     </>
   );
 }
