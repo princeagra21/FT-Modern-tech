@@ -474,6 +474,14 @@ export default function Page() {
               addressLine2: "fleetstackglobal.com",
               footerNote: "We make it easiest — just deploy.",
             }}
+            showtoolbar={true}
+            showtoolbarInput={true}
+            showtoolbarFilter={true}
+            showtoolbarRefreshbtn={true}
+            showtoolbarRecords={true}
+            showtoolbarExport={true}
+            showtoolbarColumn={true}
+            showtoolbarFullScreen={true}
           />
         </div>
       </main>

@@ -68,13 +68,9 @@ export default function FleetStackDashboard() {
 
         {/* KPI Row */}
         <KpiStats isSuperadmin={false} />
-
         {/* Chart + Vehicle Status */}
         <AdoptionAndVehicleSection />
         
-
-         
-
         {/* Lists Row (Scrollable) - First Row */}
 
         <RecentActivities />
