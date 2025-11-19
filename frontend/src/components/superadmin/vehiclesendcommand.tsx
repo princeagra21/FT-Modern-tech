@@ -107,7 +107,7 @@ export default function VehicleSendCommand() {
       <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between ">
         <div>
           <h1 className="typo-h1">Send Command</h1>
-          <p className="mt-1 text-xs text-muted">{DEVICE.vehicleNo} • IMEI <span className="font-mono">{DEVICE.imei}</span> • {DEVICE.protocol}</p>
+          <p className="mt-1 typo-subtitle">{DEVICE.vehicleNo} • IMEI <span className="font-mono">{DEVICE.imei}</span> • {DEVICE.protocol}</p>
         </div>
         <select className="rounded-lg border  bg-background px-2 py-2 text-sm text-foreground" value={transport} onChange={e => setTransport(e.target.value as Transport)}>
           <option>SMS</option>x
@@ -123,7 +123,7 @@ export default function VehicleSendCommand() {
           <div className="rounded-2xl border border-border bg-card p-4 dark:bg-foreground/5">
             {/* 1. Command */}
             <label className="text-sm">
-              <div className="mb-1 text-xs text-muted">Command</div>
+              <div className="mb-1 typo-subtitle">Command</div>
               <div className="flex items-center gap-2">
                 <span className="grid h-8 w-8 place-items-center rounded-md border border-border text-foreground">{def.icon}</span>
                 <select className="w-full rounded-lg border border-border bg-background px-2 py-2 text-sm text-foreground" value={cmd} onChange={e => setCmd(e.target.value as CommandType)}>
@@ -131,7 +131,7 @@ export default function VehicleSendCommand() {
                 </select>
               </div>
             </label>
-            {def.hint && <div className="mt-1 text-xs text-muted">{def.hint}</div>}
+            {def.hint && <div className="mt-1 typo-subtitle">{def.hint}</div>}
             {def.danger && <div className="mt-2 inline-flex items-center gap-1 rounded-sm border border-border px-1.5 py-0.5 text-[10px] text-destructive">DANGER</div>}
 
             {/* 2. Payload (editable only) */}
@@ -141,7 +141,7 @@ export default function VehicleSendCommand() {
                 <button className="inline-flex items-center gap-1 rounded border border-border bg-background px-2 py-0.5 text-muted" onClick={() => copy(payload)} disabled={!payload}><ContentCopyIcon style={{ fontSize: 14 }} />Copy</button>
               </div>
               <textarea className="h-28 w-full resize-none rounded-lg border border-border  p-3 font-mono text-sm text-foreground dark:bg-background" value={payload} onChange={e => setPayload(e.target.value)} placeholder="Type exact payload to send…" />
-              <details className="mt-2 text-xs text-muted">
+              <details className="mt-2 typo-subtitle">
                 <summary className="cursor-pointer select-none">Request JSON</summary>
                 <pre className="mt-2 max-h-32 overflow-auto rounded-lg border border-border  p-2 text-muted">{JSON.stringify(requestJson, null, 2)}</pre>
               </details>
@@ -149,7 +149,7 @@ export default function VehicleSendCommand() {
 
             {/* 3. Send */}
             <div className="mt-4 flex items-center justify-between">
-              <label className="flex items-center gap-2 text-xs text-foreground"><input type="checkbox" className="h-4 w-4" checked={confirm} onChange={e => setConfirm(e.target.checked)} /> Confirm before send</label>
+              <label className="flex items-center gap-2 typo-p12n"><input type="checkbox" className="h-4 w-4" checked={confirm} onChange={e => setConfirm(e.target.checked)} /> Confirm before send</label>
               <button onClick={send} disabled={validate().length > 0} className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs ${validate().length ? "cursor-not-allowed border border-border text-muted" : "bg-primary text-white hover:opacity-90"}`}>
                 <SendIcon style={{ fontSize: 16 }} />
                 <span>Send</span>
@@ -172,7 +172,7 @@ export default function VehicleSendCommand() {
                         <span className="text-foreground">{COMMANDS.find(c => c.key === h.command)?.label}</span>
                         <span className={`rounded-sm px-1.5 py-0.5 text-[10px] ${h.status === "success" ? "bg-primary text-white" : "border border-border text-destructive"}`}>{h.status.toUpperCase()}</span>
                       </div>
-                      <div className="mt-1 truncate font-mono text-xs text-muted">{h.payload}</div>
+                      <div className="mt-1 truncate font-mono typo-subtitle">{h.payload}</div>
                     </div>
                     <div className="ml-2 w-24 shrink-0 text-right text-[10px] text-muted">{new Date(h.ts).toLocaleTimeString()}</div>
                   </li>
@@ -193,7 +193,7 @@ export default function VehicleSendCommand() {
                 <div className="flex items-center justify-between"><span>Status</span><span className={`rounded-sm px-1.5 py-0.5 text-[10px] ${response.ok ? "bg-primary text-white" : "border border-border text-destructive"}`}>{response.ok ? "SUCCESS" : "FAILED"}</span></div>
                 <div className="flex items-center justify-between"><span>HTTP Code</span><span className="font-mono">{response.code}</span></div>
                 <div className="flex items-center justify-between"><span>Message</span><span>{response.message}</span></div>
-                <details className="text-xs text-muted">
+                <details className="typo-subtitle">
                   <summary className="cursor-pointer select-none">Echo</summary>
                   <pre className="mt-2 max-h-40 overflow-auto rounded-lg border border-border  p-2 text-muted">{JSON.stringify(response.echo, null, 2)}</pre>
                 </details>

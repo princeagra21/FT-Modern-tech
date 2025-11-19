@@ -140,7 +140,7 @@ const KV = ({
   mono?: boolean;
 }) => (
   <div className="flex items-start justify-between gap-4 py-2">
-    <span className="text-xs text-neutral-500 dark:text-neutral-400">
+    <span className="typo-subtitle">
       {label}
     </span>
     <span
@@ -190,7 +190,7 @@ const SectionTitle = ({
       <h3 className="text-sm font-semibold dark:text-neutral-100">{title}</h3>
     </div>
     {hint ? (
-      <span className="text-xs text-neutral-400 dark:text-neutral-500">
+      <span className="typo-subtitle">
         {hint}
       </span>
     ) : null}
@@ -263,7 +263,7 @@ export default function VehicleDetailsPreview({
                     {v.vehicleType.name}
                   </span>
                 </div>
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <div className="mt-1 flex flex-wrap items-center gap-2 typo-subtitle">
                   <span>Last: {timeAgo(v.lastUpdate)}</span>
                   <span className="text-muted-foreground/50">•</span>
                   <span>
@@ -286,10 +286,10 @@ export default function VehicleDetailsPreview({
             </div>
             <div className="flex gap-2">
               <Button onClick={() => setOpen(true)}>Edit Vehicle</Button>
-              {/* <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground">
+              {/* <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 typo-p12n">
               <DownloadOutlinedIcon style={{ fontSize: 16 }} /> Download
             </button>
-            <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground">
+            <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 typo-p12n">
               <EmailOutlinedIcon style={{ fontSize: 16 }} /> Email
             </button> */}
             </div>
@@ -328,7 +328,7 @@ export default function VehicleDetailsPreview({
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="rounded-lg border border-border p-3 dark:bg-background">
-              <div className="text-xs text-muted-foreground">VIN</div>
+              <div className="typo-subtitle">VIN</div>
               <div className="mt-1 flex items-center justify-between font-mono text-sm text-foreground">
                 {v.vin}
                 <button
@@ -340,7 +340,7 @@ export default function VehicleDetailsPreview({
               </div>
             </div>
             <div className="rounded-lg border border-border p-3 dark:bg-background">
-              <div className="text-xs text-muted-foreground">IMEI</div>
+              <div className="typo-subtitle">IMEI</div>
               <div className="mt-1 flex items-center justify-between font-mono text-sm text-foreground">
                 {v.imei}
                 <button
@@ -352,7 +352,7 @@ export default function VehicleDetailsPreview({
               </div>
             </div>
             <div className="rounded-lg border border-border p-3 dark:bg-background">
-              <div className="text-xs text-muted-foreground">Timezone</div>
+              <div className="typo-subtitle">Timezone</div>
               <div className="mt-1 text-sm text-foreground">{v.gmt}</div>
             </div>
           </div>
@@ -393,7 +393,7 @@ export default function VehicleDetailsPreview({
                 key={i}
                 className="rounded-lg border border-border dark:bg-background p-3"
               >
-                <div className="text-xs text-muted-foreground mb-1">
+                <div className="typo-subtitle mb-1">
                   {item.label}
                 </div>
                 <div className="text-sm font-medium text-foreground uppercase">
@@ -506,7 +506,7 @@ export default function VehicleDetailsPreview({
                 transition={{ duration: 0.6 }}
               />
             </div>
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 typo-subtitle">
               {primaryDaysLeft} days remaining
             </div>
             <div className="mt-4 mb-2 flex items-center justify-between text-xs">
@@ -523,7 +523,7 @@ export default function VehicleDetailsPreview({
                 transition={{ duration: 0.6, delay: 0.1 }}
               />
             </div>
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 typo-subtitle">
               {secondaryDaysLeft} days remaining
             </div>
           </div>
@@ -539,7 +539,7 @@ export default function VehicleDetailsPreview({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {[v.primaryUser, v.addedBy].map((user, i) => (
                 <div key={i} className="rounded-xl border border-border p-3">
-                  <div className="mb-2 text-xs text-muted-foreground">
+                  <div className="mb-2 typo-subtitle">
                     {i === 0 ? "Primary User" : "Added By"}
                   </div>
                   <div className="flex items-center gap-3">
@@ -557,10 +557,10 @@ export default function VehicleDetailsPreview({
                           <VerifiedIcon fontSize="small" />
                         )}
                       </div>
-                      <div className="truncate text-xs text-muted-foreground">
+                      <div className="truncate typo-subtitle">
                         {user.email}
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="typo-subtitle">
                         {user.mobilePrefix} {user.mobile} • @{user.username}
                       </div>
                     </div>
@@ -578,7 +578,7 @@ export default function VehicleDetailsPreview({
             <ul className="space-y-2 text-sm">
               <li className="flex items-center justify-between">
                 <span className="text-foreground">Location ping</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="typo-subtitle">
                   {timeAgo(v.lastUpdate)}
                 </span>
               </li>
@@ -586,11 +586,11 @@ export default function VehicleDetailsPreview({
                 <span className="text-foreground">
                   Ignition {v.ignition ? "ON" : "OFF"}
                 </span>
-                <span className="text-xs text-muted-foreground">~</span>
+                <span className="typo-subtitle">~</span>
               </li>
               <li className="flex items-center justify-between">
                 <span className="text-foreground">Speed updated</span>
-                <span className="text-xs text-muted-foreground">~</span>
+                <span className="typo-subtitle">~</span>
               </li>
             </ul>
           </div>

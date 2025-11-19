@@ -6,7 +6,7 @@ export default function HeaderWithoutInfo() {
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-2 mt-3 px-3 py-3 [padding-top:env(safe-area-inset-top)]">
         <div className="flex min-w-0 items-center gap-2">
           <div className="grid h-8 w-8 place-content-center rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900">
-            <span className="text-[13px] font-extrabold tracking-tight">FS</span>
+            <span className="text-[13px] font-extrabold ">FS</span>
           </div>
           <span className="truncate font-semibold text-slate-800 dark:text-slate-100">Fleet Stack</span>
         </div>

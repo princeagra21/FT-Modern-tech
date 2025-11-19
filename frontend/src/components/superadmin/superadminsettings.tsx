@@ -155,7 +155,7 @@ export default function SuperAdminSettings() {
             <div className="text-sm text-foreground/70">
               Current Configuration
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="typo-subtitle">
               Demo: {settings.demoLoginEnabled ? "ON" : "OFF"} • Geocoding:{" "}
               {settings.reverseGeocodingDigits} Digits • Signup:{" "}
               {settings.signupAllowed ? "ALLOWED" : "DISABLED"}
@@ -166,14 +166,14 @@ export default function SuperAdminSettings() {
 
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
-              <div className="text-xs text-muted-foreground">Demo Login</div>
+              <div className="typo-subtitle">Demo Login</div>
               <div className="text-lg font-medium text-foreground">
                 {settings.demoLoginEnabled ? "Active" : "Inactive"}
               </div>
             </div>
 
             <div>
-              <div className="text-xs text-muted-foreground">
+              <div className="typo-subtitle">
                 Backup Retention
               </div>
               <div className="text-sm font-medium text-foreground">
@@ -184,7 +184,7 @@ export default function SuperAdminSettings() {
             </div>
 
             <div>
-              <div className="text-xs text-muted-foreground">
+              <div className="typo-subtitle">
                 Free Signup Credits
               </div>
               <div className="text-lg font-medium text-foreground">
@@ -204,7 +204,7 @@ export default function SuperAdminSettings() {
               <span className="text-sm font-medium text-foreground">
                 Enable Demo Login
               </span>
-              <div className="text-xs text-muted-foreground mt-0.5">
+              <div className="typo-subtitle mt-0.5">
                 {settings.demoLoginEnabled
                   ? "Users can access demo mode"
                   : "Demo login is disabled"}
@@ -261,7 +261,7 @@ export default function SuperAdminSettings() {
               ))}
             </SelectContent>
           </Select>
-          <div className="mt-2 text-xs text-muted-foreground">
+          <div className="mt-2 typo-subtitle">
             Backups will be retained for the selected period
           </div>
         </Card>
@@ -279,7 +279,7 @@ export default function SuperAdminSettings() {
                 <span className="text-sm font-medium text-foreground">
                   Allow New Signups
                 </span>
-                <div className="text-xs text-muted-foreground mt-0.5">
+                <div className="typo-subtitle mt-0.5">
                   {settings.signupAllowed
                     ? "New users can register"
                     : "Signup is temporarily disabled"}
@@ -317,7 +317,7 @@ export default function SuperAdminSettings() {
                   className="rounded-xl border-border bg-background text-foreground"
                   placeholder="100"
                 />
-                <div className="mt-2 text-xs text-muted-foreground">
+                <div className="mt-2 typo-subtitle">
                   Number of free credits awarded to new users upon signup
                 </div>
               </motion.div>
@@ -328,7 +328,7 @@ export default function SuperAdminSettings() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-xs text-muted-foreground italic"
+                className="typo-subtitle italic"
               >
                 Enable signups to configure free credits for new users
               </motion.div>

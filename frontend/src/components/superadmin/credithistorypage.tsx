@@ -528,7 +528,7 @@ export default function CreditHistoryPage() {
                   {/* Credit Summary */}
                   <div className="md:pl-10">
                     <div className="flex items-center justify-between">
-                      <div className="text-xl font-semibold text-foreground">
+                      <div className="typo-h2">
                         Today ( {today} )
                       </div>
                     </div>
@@ -601,7 +601,7 @@ export default function CreditHistoryPage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base tracking-tight text-foreground">
+                  <CardTitle className="text-base  text-foreground">
                     History
                   </CardTitle>
                   <div className="flex items-center gap-2">
@@ -641,7 +641,7 @@ export default function CreditHistoryPage() {
                             {t.description}
                           </div>
                           {t.deviceRef && (
-                            <div className="text-xs text-muted-foreground">
+                            <div className="typo-subtitle">
                               Device: {t.deviceRef}
                             </div>
                           )}

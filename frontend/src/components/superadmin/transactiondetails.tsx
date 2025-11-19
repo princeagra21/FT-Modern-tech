@@ -154,13 +154,13 @@ function TransactionDetailsDrawer({ transaction, open, onClose }: TransactionDet
             <div className="flex items-center gap-3 mb-3">
               <ReceiptIcon className="text-neutral-400 dark:text-neutral-500" />
               <div className="flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Transaction ID</p>
+                <p className="typo-subtitle">Transaction ID</p>
                 <p className="text-sm font-semibold font-mono text-neutral-900 dark:text-neutral-100">{transaction.transactionId}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <span 
-                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold
+                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md typo-h6
                   ${transaction.status === 'success' 
                     ? 'bg-black text-white dark:bg-green-500/10 dark:text-green-500 dark:border dark:border-green-500' 
                     : transaction.status === 'failed'
@@ -192,7 +192,7 @@ function TransactionDetailsDrawer({ transaction, open, onClose }: TransactionDet
                 >
                   {transaction.customer.name}
                 </Link>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">ID: {transaction.customer.id}</p>
+                <p className="typo-subtitle">ID: {transaction.customer.id}</p>
               </div>
             </div>
 
@@ -215,13 +215,13 @@ function TransactionDetailsDrawer({ transaction, open, onClose }: TransactionDet
                 <LocationOnIcon fontSize="small" className="text-neutral-400 dark:text-neutral-500 w-4 h-4 mt-1 flex-shrink-0" />
                 <div className="flex-1 min-w-0 space-y-1">
                   <div className="flex items-start gap-2">
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400 min-w-[60px]">Address</span>
+                    <span className="typo-subtitle min-w-[60px]">Address</span>
                     <span className="text-sm text-neutral-700 dark:text-neutral-300 break-words flex-1">
                       {transaction.customer.address.address}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400 min-w-[60px]">Country</span>
+                    <span className="typo-subtitle min-w-[60px]">Country</span>
                     <span className="text-sm text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
                       <span className={`fi fi-${transaction.customer.address.countryCode.toLowerCase()}`} style={{ fontSize: "14px" }} />
                       {transaction.customer.address.countryCode}
@@ -259,7 +259,7 @@ function TransactionDetailsDrawer({ transaction, open, onClose }: TransactionDet
                 {/* Social Links */}
                 {transaction.customer.company.attributes && Object.keys(transaction.customer.company.attributes).filter(k => ['linkedin', 'facebook', 'twitter'].includes(k)).length > 0 && (
                   <div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Social Links</p>
+                    <p className="typo-subtitle mb-2">Social Links</p>
                     <div className="flex flex-wrap gap-2">
                       {transaction.customer.company.attributes.linkedin && (
                         <a

@@ -306,7 +306,7 @@ function AdminVehiclesList() {
       <div className="p-3 max-w-xs">
         {/* Header Section */}
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-8 h-8 bw-gradient-primary rounded-lg flex items-center justify-center bw-text-primary-fg font-semibold text-xs">
+          <div className="w-8 h-8 bw-gradient-primary rounded-lg flex items-center justify-center bw-text-primary-fg typo-h6">
             {row.vehicleName
               .split(" ")
               .slice(0, 2)
@@ -318,7 +318,7 @@ function AdminVehiclesList() {
             <div className="font-semibold bw-text-primary dark:text-neutral-100">
               {row.vehicleName}
             </div>
-            <div className="text-xs bw-text-muted dark:text-neutral-400">
+            <div className="typo-subtitle dark:text-neutral-400">
               {row.VehicleType} • {row.status}
             </div>
           </div>
@@ -426,7 +426,7 @@ function AdminVehiclesList() {
 
         {/* Last Activity */}
         <div className="mt-2 pt-2 border-t bw-border dark:border-neutral-700">
-          <div className="flex items-center gap-1 text-xs bw-text-muted dark:text-neutral-400">
+          <div className="flex items-center gap-1 typo-subtitle dark:text-neutral-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-3 w-3"
@@ -455,7 +455,7 @@ function AdminVehiclesList() {
     // Column 1: Vehicle Info (Name + Type + Status) - WITH PREMIUM TOOLTIP
     0: {
       title: () => (
-        <div className="font-bold tracking-wide uppercase text-xs bw-text-muted dark:text-neutral-400">
+        <div className="font-bold tracking-wide uppercase typo-subtitle dark:text-neutral-400">
           Vehicle Information
         </div>
       ),
@@ -511,7 +511,7 @@ function AdminVehiclesList() {
     // Column 2: Device Details (IMEI + VIN + Device Type)
     1: {
       title: () => (
-        <div className="font-bold tracking-wide uppercase text-xs bw-text-muted dark:text-neutral-400">
+        <div className="font-bold tracking-wide uppercase typo-subtitle dark:text-neutral-400">
           Device Details
         </div>
       ),
@@ -551,12 +551,12 @@ function AdminVehiclesList() {
                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
               />
             </svg>
-            <span className="font-mono text-xs bw-text-muted dark:text-neutral-400">
+            <span className="font-mono typo-subtitle dark:text-neutral-400">
               {row.vin}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="px-2 py-0.5 rounded-md bw-bg-secondary bw-text-primary dark:bg-neutral-700 dark:text-neutral-300 text-xs font-medium">
+            <div className="px-2 py-0.5 rounded-md bw-bg-secondary bw-text-primary dark:bg-neutral-700 dark:text-neutral-300 typo-h6">
               {row.DeviceType}
             </div>
           </div>
@@ -567,7 +567,7 @@ function AdminVehiclesList() {
     // Column 3: Activity (Last Update + Timezone)
     2: {
       title: () => (
-        <div className="font-bold tracking-wide uppercase text-xs bw-text-muted dark:text-neutral-400">
+        <div className="font-bold tracking-wide uppercase typo-subtitle dark:text-neutral-400">
           Activity
         </div>
       ),
@@ -595,11 +595,11 @@ function AdminVehiclesList() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs bw-text-muted dark:text-neutral-400">
+              <span className="typo-subtitle dark:text-neutral-400">
                 {time}
               </span>
               <span className="bw-text-muted dark:text-neutral-500">•</span>
-              <span className="font-mono text-xs bw-text-muted dark:text-neutral-400">
+              <span className="font-mono typo-subtitle dark:text-neutral-400">
                 {row.GMT}
               </span>
             </div>
@@ -611,7 +611,7 @@ function AdminVehiclesList() {
     // Column 4: License Status (Both Expiries Combined)
     3: {
       title: () => (
-        <div className="font-bold tracking-wide uppercase text-xs bw-text-muted dark:text-neutral-400">
+        <div className="font-bold tracking-wide uppercase typo-subtitle dark:text-neutral-400">
           License Status
         </div>
       ),
@@ -634,18 +634,18 @@ function AdminVehiclesList() {
             {/* Primary License */}
             <div className="px-3 py-2 rounded-lg border bw-border dark:border-neutral-700 bw-bg-secondary dark:bg-neutral-800">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium bw-text-muted dark:text-neutral-400">
+                <span className="typo-h6 bw-text-muted dark:text-neutral-400">
                   Primary
                 </span>
                 <span className="text-sm bw-text-primary dark:text-neutral-300">
                   {getStatusIcon(primary)}
                 </span>
               </div>
-              <div className="text-xs font-semibold bw-text-primary dark:text-neutral-200">
+              <div className="typo-h6 bw-text-primary dark:text-neutral-200">
                 {row.PrimaryExpiry}
               </div>
               {(primary.isExpired || primary.isExpiringSoon) && (
-                <div className="text-xs font-medium mt-1 bw-text-muted dark:text-neutral-400">
+                <div className="typo-h6 mt-1 bw-text-muted dark:text-neutral-400">
                   {primary.isExpired
                     ? "Expired"
                     : `${primary.daysUntilExpiry}d left`}
@@ -656,18 +656,18 @@ function AdminVehiclesList() {
             {/* Secondary License */}
             <div className="px-3 py-2 rounded-lg border bw-border dark:border-neutral-700 bw-bg-secondary dark:bg-neutral-800">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium bw-text-muted dark:text-neutral-400">
+                <span className="typo-h6 bw-text-muted dark:text-neutral-400">
                   Secondary
                 </span>
                 <span className="text-sm bw-text-primary dark:text-neutral-300">
                   {getStatusIcon(secondary)}
                 </span>
               </div>
-              <div className="text-xs font-semibold bw-text-primary dark:text-neutral-200">
+              <div className="typo-h6 bw-text-primary dark:text-neutral-200">
                 {row.SacendoryExpiry}
               </div>
               {(secondary.isExpired || secondary.isExpiringSoon) && (
-                <div className="text-xs font-medium mt-1 bw-text-muted dark:text-neutral-400">
+                <div className="typo-h6 mt-1 bw-text-muted dark:text-neutral-400">
                   {secondary.isExpired
                     ? "Expired"
                     : `${secondary.daysUntilExpiry}d left`}
@@ -819,7 +819,7 @@ function AdminVehiclesList() {
               <div className="mb-1 typo-h1 font-semibold text-foreground">
                 1,200
               </div>
-              <div className="text-xs text-muted">currently tracked</div>
+              <div className="typo-subtitle">currently tracked</div>
             </div>
 
             {/* Moving */}
@@ -851,7 +851,7 @@ function AdminVehiclesList() {
               <div className="mb-1 typo-h1 font-semibold text-foreground">
                 215
               </div>
-              <div className="mt-2 inline-flex items-center rounded-full bg-foreground/5 px-2 py-0.5 text-xs text-foreground">
+              <div className="mt-2 inline-flex items-center rounded-full bg-foreground/5 px-2 py-0.5 typo-p12n">
                 ▼ 1.2%
               </div>
             </div>
@@ -869,7 +869,7 @@ function AdminVehiclesList() {
               <div className="mb-1 typo-h1 font-semibold text-foreground">
                 190
               </div>
-              <div className="mt-2 inline-flex items-center rounded-full bg-foreground/5 px-2 py-0.5 text-xs text-foreground">
+              <div className="mt-2 inline-flex items-center rounded-full bg-foreground/5 px-2 py-0.5 typo-p12n">
                 ▼ 0.6%
               </div>
             </div>
@@ -933,7 +933,7 @@ function KpiCard({
         {typeof value === "number" ? value.toLocaleString() : value}
       </div>
       {hint && (
-        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+        <div className="typo-subtitle">
           {hint}
         </div>
       )}

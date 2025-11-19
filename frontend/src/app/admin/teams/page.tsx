@@ -213,7 +213,7 @@ export default function TeamsTable() {
                 <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
                   {row.name}
                 </div>
-                <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                <div className="typo-subtitle">
                   @{row.username}
                 </div>
               </div>
@@ -242,7 +242,7 @@ export default function TeamsTable() {
             />
             {row.mobile}
           </div>
-          <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="flex items-center gap-1 typo-subtitle">
             <EmailIcon
               style={{ fontSize: "12px" }}
               className="text-neutral-400"
@@ -388,7 +388,7 @@ export default function TeamsTable() {
           <Sheet open={permOpen} onOpenChange={setPermOpen}>
             <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
               <SheetHeader>
-                <SheetTitle className="text-xl flex items-center gap-2">
+                <SheetTitle className="typo-h2 flex items-center gap-2">
                   <ShieldIcon /> Permissions
                 </SheetTitle>
                 <SheetDescription>

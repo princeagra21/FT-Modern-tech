@@ -78,7 +78,7 @@ export default function AddTeamDialog({
     >
       <DialogContent className="sm:max-w-4xl bg-background text-foreground border border-border rounded-2xl shadow-xl">
         <DialogHeader>
-          <DialogTitle className="text-xl text-foreground">
+          <DialogTitle className="typo-h2">
             Add Team Member
           </DialogTitle>
           <DialogDescription className="text-muted">

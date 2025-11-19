@@ -153,11 +153,11 @@ const FirebaseConfigComponent = () => {
   <div className="flex items-center justify-between mb-4">
     <div className="flex items-center gap-2">
       <FireplaceRoundedIcon className="text-muted" fontSize="small" />
-      <div className="text-sm font-medium tracking-tight text-foreground">
+      <div className="text-sm font-medium  text-foreground">
         Firebase Configuration
       </div>
       {configs.firebase.enabled && (
-        <Badge className="bg-primary text-white text-xs">Active</Badge>
+        <Badge className="bg-primary typo-p12n text-white">Active</Badge>
       )}
     </div>
     <Switch
@@ -170,7 +170,7 @@ const FirebaseConfigComponent = () => {
     <>
       <Alert className="mb-4 border-border dark:bg-background">
         <InfoRoundedIcon className="h-4 w-4 text-foreground" />
-        <AlertDescription className="text-xs text-muted">
+        <AlertDescription className="typo-subtitle">
           <strong>Setup Instructions:</strong> Go to{" "}
           <a
             href="https://console.firebase.google.com"

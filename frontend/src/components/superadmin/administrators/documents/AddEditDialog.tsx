@@ -149,7 +149,7 @@ const AddEditDialog = ({
         <div className="text-sm text-neutral-800 dark:text-neutral-200">
           Drag & drop your file here
         </div>
-        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+        <div className="typo-subtitle">
           PDF, Images, DOCX — up to 50 MB
         </div>
 
@@ -174,7 +174,7 @@ const AddEditDialog = ({
                   <div className="text-sm font-medium text-neutral-800 truncate max-w-[150px] dark:text-neutral-200">
                     {formFile.name}
                   </div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                  <div className="typo-subtitle">
                     {formatBytes(formFile.size)}
                   </div>
                 </div>

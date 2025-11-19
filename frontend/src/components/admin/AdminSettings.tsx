@@ -145,7 +145,7 @@ export default function AdminSettings() {
                 <span className="font-medium text-foreground text-sm">
                   Allow New Signups
                 </span>
-                <p className="text-xs text-muted">
+                <p className="typo-subtitle">
                   {settings.signupAllowed
                     ? "New users can register"
                     : "Signup is currently disabled"}
@@ -182,7 +182,7 @@ export default function AdminSettings() {
                   className="rounded-lg"
                   placeholder="100"
                 />
-                <p className="mt-2 text-xs text-muted">
+                <p className="mt-2 typo-subtitle">
                   Credits awarded to new users when they register
                 </p>
               </motion.div>
@@ -193,7 +193,7 @@ export default function AdminSettings() {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-xs text-muted italic"
+                className="typo-subtitle italic"
               >
                 Enable signups to configure free credits for new users.
               </motion.p>

@@ -160,11 +160,11 @@ const ReverseCoding = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <LocationOnRoundedIcon className="text-muted" fontSize="small" />
-          <div className="text-sm font-medium tracking-tight text-foreground">
+          <div className="text-sm font-medium  text-foreground">
             Reverse Geocoding Service
           </div>
           {configs.reverseGeocoding.enabled && (
-            <Badge className="bg-primary text-white text-xs">Active</Badge>
+            <Badge className="bg-primary typo-p12n text-white">Active</Badge>
           )}
         </div>
         <Switch
@@ -179,7 +179,7 @@ const ReverseCoding = () => {
         <>
           <Alert className="mb-4 border-border dark:bg-background ">
             <InfoRoundedIcon className="h-4 w-4 text-muted" />
-            <AlertDescription className="text-xs text-muted">
+            <AlertDescription className="typo-subtitle">
               <div className="font-semibold mb-1">
                 Configure Your Geocoding Provider
               </div>
@@ -229,7 +229,7 @@ const ReverseCoding = () => {
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted mt-1.5">
+              <p className="typo-subtitle mt-1.5">
                 Selected:{" "}
                 <strong className="text-foreground">
                   {configs.reverseGeocoding.provider === "google"
@@ -254,7 +254,7 @@ const ReverseCoding = () => {
                   <div className="text-sm font-medium text-foreground">
                     Activate Provider
                   </div>
-                  <div className="text-xs text-muted mt-0.5">
+                  <div className="typo-subtitle mt-0.5">
                     {configs.reverseGeocoding.providerActive
                       ? `${configs.reverseGeocoding.provider} is currently active and in use`
                       : "Activate this provider to start using it for reverse geocoding"}
@@ -279,7 +279,7 @@ const ReverseCoding = () => {
 
             {/* Provider Setup Links */}
             <div className="p-3  border border-border rounded-lg dark:bg-background">
-              <div className="text-xs font-medium mb-2 text-foreground">
+              <div className="typo-h6 mb-2 text-foreground">
                 Provider Documentation & Setup
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
@@ -511,7 +511,7 @@ const ReverseCoding = () => {
             <div className="space-y-4">
               <Alert className="border-border bg-background">
                 <InfoRoundedIcon className="h-4 w-4 text-foreground" />
-                <AlertDescription className="text-xs text-foreground">
+                <AlertDescription className="typo-p12n">
                   <div className="font-semibold mb-1">
                     OpenStreetMap Nominatim - Free Service
                   </div>
@@ -535,7 +535,7 @@ const ReverseCoding = () => {
                   className="rounded-lg mt-1.5 border-border bg-background text-foreground placeholder:text-muted"
                   placeholder="YourApp/1.0"
                 />
-                <p className="text-xs text-muted mt-1">
+                <p className="typo-subtitle mt-1">
                   Required by OSM usage policy
                 </p>
               </div>
@@ -549,7 +549,7 @@ const ReverseCoding = () => {
           {configs.reverseGeocoding.provider === "google" && (
             <Alert className="border-border bg-background">
               <InfoRoundedIcon className="h-4 w-4 text-foreground" />
-              <AlertDescription className="text-xs text-foreground">
+              <AlertDescription className="typo-p12n">
                 <div className="font-semibold mb-1">
                   Google Maps Geocoding API Endpoint
                 </div>

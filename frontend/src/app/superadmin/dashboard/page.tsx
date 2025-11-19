@@ -18,7 +18,7 @@ const Lastsync =()=>{
   }, []);
 
   return (
-     <div className="flex items-center gap-2 text-xs text-muted">
+     <div className="flex items-center gap-2 typo-subtitle">
             <span className="hidden sm:inline">Last sync:</span>
             <span>{secondsSinceSync}s ago</span>
             <button
@@ -71,7 +71,7 @@ export default function FleetStackDashboard() {
         {/* Quick Actions */}
         <div className="mb-6 flex items-end justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <button className="rounded-xl border border-border px-3 py-2 text-xs text-muted  hover:bg-neutral-100 " onClick={() => setIsAddAdminOpen(true)}>
+            <button className="rounded-xl border border-border px-3 py-2 typo-subtitle  hover:bg-neutral-100 " onClick={() => setIsAddAdminOpen(true)}>
               + Create Admin
             </button>
           </div>

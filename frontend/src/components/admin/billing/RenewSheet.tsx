@@ -78,7 +78,7 @@ export default function RenewSheet({ open, onOpenChange, selection }: any) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-2">
         <SheetHeader>
-          <SheetTitle className="text-xl">
+          <SheetTitle className="typo-h2">
             Renew{" "}
             {count > 1
               ? `${count} devices`
@@ -151,7 +151,7 @@ export default function RenewSheet({ open, onOpenChange, selection }: any) {
               Align expiries to a single date (co‑term)
             </Label>
           </div>
-          <p className="text-xs text-zinc-500">
+          <p className="typo-destructive">
             Co‑term will prorate shorter/longer cycles so all selected devices
             share one renewal date.
           </p>
@@ -273,7 +273,7 @@ export default function RenewSheet({ open, onOpenChange, selection }: any) {
           <div className="rounded-xl border p-4 bg-zinc-50">
             <div className="flex items-start gap-2">
               <Info sx={{ fontSize: 16 }} className="mt-0.5" />
-              <p className="text-xs text-zinc-600">
+              <p className="typo-subtitle">
                 In production, this creates invoices per device (or one
                 consolidated invoice), updates each device's term, and
                 reconciles payment.

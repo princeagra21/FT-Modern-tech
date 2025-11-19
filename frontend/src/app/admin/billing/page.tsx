@@ -220,7 +220,7 @@ export default function RenewalsBillingAdmin() {
         selection={resolveSelection(selected, activeRow)}
       />
 
-      <footer className="mx-auto max-w-7xl px-4 py-12 text-xs text-zinc-400">
+      <footer className="mx-auto max-w-7xl px-4 py-12 typo-subtitle">
         FleetStack • Renewals & Billing UI — v2.1 (Customers → Devices)
       </footer>
     </div>

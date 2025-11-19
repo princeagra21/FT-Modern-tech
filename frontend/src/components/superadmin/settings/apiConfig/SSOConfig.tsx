@@ -151,11 +151,11 @@ const SSOConfigComponent = () => {
   <div className="flex items-center justify-between mb-4">
     <div className="flex items-center gap-2">
       <LoginRoundedIcon className="text-muted-foreground" fontSize="small" />
-      <div className="text-sm font-medium tracking-tight text-foreground">
+      <div className="text-sm font-medium  text-foreground">
         SSO - Google OAuth 2.0
       </div>
       {configs.sso.enabled && (
-        <Badge className="bg-primary text-white text-xs">Active</Badge>
+        <Badge className="bg-primary typo-p12n text-white">Active</Badge>
       )}
     </div>
     <Switch
@@ -168,7 +168,7 @@ const SSOConfigComponent = () => {
     <>
       <Alert className="mb-4 border-border dark:bg-background">
         <InfoRoundedIcon className="h-4 w-4 text-foreground" />
-        <AlertDescription className="text-xs space-y-2 text-muted">
+        <AlertDescription className="typo-subtitle space-y-2">
           <div>
             <strong>Setup Instructions:</strong>
           </div>
@@ -260,7 +260,7 @@ const SSOConfigComponent = () => {
               Copy
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="typo-subtitle mt-1">
             Add this URL to authorized redirect URIs in Google Console
           </p>
         </div>

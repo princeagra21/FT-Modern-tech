@@ -270,7 +270,7 @@ function TimePicker({
 
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-medium text-neutral-600 dark:text-neutral-300">
+      <label className="block typo-h6 text-neutral-600 dark:text-neutral-300">
         {label}
       </label>
       <div className="flex items-center gap-2">
@@ -474,7 +474,7 @@ export function MultiDateTimeRangePicker({
         >
           <span className="inline-flex items-center gap-2 truncate">
             <AccessTimeIcon sx={{ fontSize: 18 }} />
-            <span className="truncate text-xs sm:text-sm">{label}</span>
+            <span className="truncate typo-p12n">{label}</span>
           </span>
           <KeyboardArrowDownIcon
             sx={{ fontSize: 18 }}
@@ -494,7 +494,7 @@ export function MultiDateTimeRangePicker({
               {draft?.from && draft?.to ? (
                 <span className="flex items-center gap-2 flex-wrap">
                   {selectedPreset !== "custom" && (
-                    <span className="rounded bg-neutral-100 px-2 py-0.5 text-xs font-semibold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
+                    <span className="rounded bg-neutral-100 px-2 py-0.5 typo-h6 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
                       {presets.find((p) => p.key === selectedPreset)?.label}
                     </span>
                   )}
@@ -612,7 +612,7 @@ export function MultiDateTimeRangePicker({
               <div className="flex items-center justify-between pt-2 border-t border-neutral-200 dark:border-neutral-700">
                 <button
                   onClick={onClear}
-                  className="text-xs font-medium text-neutral-600 hover:text-neutral-900 underline-offset-2 hover:underline dark:text-neutral-400 dark:hover:text-neutral-200"
+                  className="typo-h6 text-neutral-600 hover:text-neutral-900 underline-offset-2 hover:underline dark:text-neutral-400 dark:hover:text-neutral-200"
                 >
                   Clear
                 </button>

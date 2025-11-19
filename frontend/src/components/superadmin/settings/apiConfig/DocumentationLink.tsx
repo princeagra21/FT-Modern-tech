@@ -6,7 +6,7 @@ const DocumentationLink = () => {
    <div className="rounded-2xl border border-border bg-card p-5 dark:bg-foreground/5">
   <div className="flex items-center gap-2 mb-3">
     <LinkRoundedIcon className="text-muted" fontSize="small" />
-    <div className="text-sm font-medium tracking-tight text-foreground">
+    <div className="text-sm font-medium  text-foreground">
       Useful Documentation
     </div>
   </div>

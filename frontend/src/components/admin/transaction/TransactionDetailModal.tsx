@@ -94,7 +94,7 @@ const TransactionDetailModal = ({
 
                 {active.meta && Object.keys(active.meta).length > 0 && (
                   <div className="pt-2 space-y-1">
-                    <div className="text-xs text-muted">Metadata</div>
+                    <div className="typo-subtitle">Metadata</div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {Object.entries(active.meta).map(([k, v]) => (
                         <div
@@ -150,7 +150,7 @@ const InfoCard = ({
 }) => (
   <Card className="border-border bg-background shadow-sm">
     <CardContent className="px-3">
-      <div className="text-xs text-muted">{label}</div>
+      <div className="typo-subtitle">{label}</div>
       <div
         className={`mt-1 text-sm ${mono ? "font-mono" : "font-medium"} ${
           capitalize ? "capitalize" : ""

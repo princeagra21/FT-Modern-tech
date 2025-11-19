@@ -67,7 +67,7 @@ export default function ExtendDialog({ open, onOpenChange, selection }: any) {
               onChange={(e) => setMonths(Number(e.target.value || 1))}
             />
           </div>
-          <div className="sm:col-span-2 text-xs text-zinc-600">
+          <div className="sm:col-span-2 typo-subtitle">
             This extends selected device(s) expiry. Use{" "}
             <span className="font-medium">Renew</span> to take payment.
           </div>

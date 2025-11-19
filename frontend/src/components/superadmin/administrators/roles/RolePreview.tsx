@@ -76,7 +76,7 @@ export default function RoleContent() {
               </div>
 
               <div className="flex-1 flex flex-col">
-                <div className="grid grid-cols-12 border-y border-border text-xs font-semibold uppercase tracking-wider">
+                <div className="grid grid-cols-12 border-y border-border typo-h6 uppercase tracking-wider">
                   <div className="col-span-6 px-3 py-3">Module</div>
                   <div className="col-span-6 px-3 py-3">Access</div>
                 </div>

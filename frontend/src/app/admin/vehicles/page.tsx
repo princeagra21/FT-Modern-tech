@@ -1014,7 +1014,7 @@ function page() {
         <div className="flex items-center gap-2 mb-2">
           <Avatar className="w-8 h-8">
             <AvatarImage src={user.profileUrl} alt={user.name} />
-            <AvatarFallback className="bw-gradient-primary bw-text-primary-fg text-xs font-semibold">
+            <AvatarFallback className="bw-gradient-primary bw-text-primary-fg typo-h6">
               {user.name
                 .split(" ")
                 .map((n) => n[0])
@@ -1024,7 +1024,7 @@ function page() {
           </Avatar>
           <div>
             <div className="font-semibold bw-text-primary">{user.name}</div>
-            <div className="text-xs bw-text-muted">@{user.username}</div>
+            <div className="typo-subtitle">@{user.username}</div>
           </div>
         </div>
 

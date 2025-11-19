@@ -35,9 +35,9 @@ const NotificationsAndActivitySection = () => {
               <li key={idx} className="flex items-center justify-between py-3">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-foreground">{n.title}</p>
-                  <p className="truncate text-xs text-muted">{n.detail}</p>
+                  <p className="truncate typo-subtitle">{n.detail}</p>
                 </div>
-                <span className="shrink-0 text-xs text-muted">{n.time}</span>
+                <span className="shrink-0 typo-subtitle">{n.time}</span>
               </li>
             ))}
           </ul>
@@ -56,9 +56,9 @@ const NotificationsAndActivitySection = () => {
               <li key={idx} className="flex items-center justify-between py-3">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-foreground">{a.who}</p>
-                  <p className="truncate text-xs text-muted">{a.what}</p>
+                  <p className="truncate typo-subtitle">{a.what}</p>
                 </div>
-                <span className="shrink-0 text-xs text-muted">{a.when}</span>
+                <span className="shrink-0 typo-subtitle">{a.when}</span>
               </li>
             ))}
           </ul>

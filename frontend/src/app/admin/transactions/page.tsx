@@ -310,7 +310,7 @@ export default function TransactionsPage() {
       content: (row) => (
         <div>
           <div className="font-medium">{formatDate(row.date)}</div>
-          <div className="text-xs text-muted">
+          <div className="typo-subtitle">
             {row.invoiceNo ? `Invoice ${row.invoiceNo}` : row.reference || "—"}
           </div>
         </div>
@@ -322,7 +322,7 @@ export default function TransactionsPage() {
       content: (row) => (
         <div>
           <div className="font-mono text-sm">{row.id}</div>
-          <div className="text-xs text-muted max-w-[26ch] truncate">
+          <div className="typo-subtitle max-w-[26ch] truncate">
             {row.notes || "—"}
           </div>
         </div>
@@ -530,7 +530,7 @@ export default function TransactionsPage() {
       {/* View Details Modal (compact) */}
       <TransactionDetailModal open={open} setOpen={setOpen} active={active} />
 
-      <footer className="mx-auto max-w-7xl px-4 py-12 text-xs text-zinc-400">
+      <footer className="mx-auto max-w-7xl px-4 py-12 typo-subtitle">
         FleetStack • Transactions UI — v1.1.1 (online‑only)
       </footer>
     </div>

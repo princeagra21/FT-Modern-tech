@@ -40,7 +40,7 @@ export default function BulkUploadVehicleModal({
       <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-background text-foreground p-6 shadow-2xl animate-fade-in-up">
         {/* TITLE BAR */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Bulk Upload</h2>
+          <h2 className="typo-h2">Bulk Upload</h2>
           <div
             onClick={() => setShow(false)}
             className="rounded-lg p-1 text-muted hover:bg-muted/20 hover:text-foreground transition"

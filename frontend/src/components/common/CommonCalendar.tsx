@@ -166,7 +166,7 @@ export default function EventsCalendar({
             >
               <ChevronLeftIcon />
             </button>
-            <div className="min-w-[12rem] text-xl font-semibold tracking-tight text-foreground text-center">
+            <div className="min-w-[12rem] typo-h2 text-center">
               {fmtMonthLabel(cursor)}
             </div>
             <button
@@ -183,7 +183,7 @@ export default function EventsCalendar({
               <TodayIcon style={{ fontSize: 16 }} /> Today
             </button>
           </div>
-          <p className="mt-1 text-xs text-muted">
+          <p className="mt-1 typo-subtitle">
             Monochrome calendar • Admin/User/Vehicle lifecycle events • Scales
             to 30+/day
           </p>
@@ -413,7 +413,7 @@ export default function EventsCalendar({
                     })()}
                   </div>
 
-                  <div className="mb-2 text-xs text-muted">
+                  <div className="mb-2 typo-subtitle">
                     {focusEvents.length} events • Latest first
                   </div>
 
@@ -464,7 +464,7 @@ export default function EventsCalendar({
 
                               {ev.note && (
                                 <div
-                                  className="mt-1 text-xs text-muted truncate"
+                                  className="mt-1 typo-subtitle truncate"
                                   title={ev.note}
                                 >
                                   {ev.note}
@@ -475,7 +475,7 @@ export default function EventsCalendar({
                         </ul>
 
                         {focusEvents.length > PAGE_SIZE && (
-                          <div className="mt-2 flex items-center justify-between text-xs text-foreground">
+                          <div className="mt-2 flex items-center justify-between typo-p12n">
                             <button
                               disabled={safePage <= 1}
                               onClick={() =>
@@ -559,7 +559,7 @@ export default function EventsCalendar({
                   )}
 
                   {selectedEvent.meta && (
-                    <details className="text-xs text-muted">
+                    <details className="typo-subtitle">
                       <summary className="cursor-pointer select-none">
                         Metadata
                       </summary>

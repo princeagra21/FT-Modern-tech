@@ -457,7 +457,7 @@ export default function VehicleDocumentsPage() {
 
   const StatusBadge = ({ status, expiry }: { status: DocumentItem["status"]; expiry?: Date | null }) => {
     const left = daysUntil(expiry ?? undefined);
-    const base = "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium tracking-wide";
+    const base = "inline-flex items-center gap-1 rounded-full border px-2 py-1 typo-h6 tracking-wide";
     if (status === "valid") {
       return (
         <span className={cn(base, "border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900/30 dark:text-green-200")}>
@@ -520,7 +520,7 @@ export default function VehicleDocumentsPage() {
       >
         <CloudUploadIcon className="h-7 w-7 text-neutral-900 dark:text-neutral-100"/>
         <div className="text-sm text-neutral-800 dark:text-neutral-200">Drag & drop your file here</div>
-        <div className="text-xs text-neutral-500 dark:text-neutral-400">PDF, Images, DOCX — up to 50 MB</div>
+        <div className="typo-subtitle">PDF, Images, DOCX — up to 50 MB</div>
         
         {!formFile ? (
           <div className="mt-1 flex items-center justify-center">
@@ -541,7 +541,7 @@ export default function VehicleDocumentsPage() {
                 </div>
                 <div className="text-left">
                   <div className="text-sm font-medium text-neutral-800 dark:text-neutral-100 truncate max-w-[150px]">{formFile.name}</div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">{formatBytes(formFile.size)}</div>
+                  <div className="typo-subtitle">{formatBytes(formFile.size)}</div>
                 </div>
               </div>
               <button
@@ -599,7 +599,7 @@ export default function VehicleDocumentsPage() {
         </div>
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="text-sm text-neutral-500 dark:text-neutral-400">Health Status</div>
-          <div className="mt-2 flex flex-wrap gap-2 text-xs sm:text-sm">
+          <div className="mt-2 flex flex-wrap gap-2 typo-p12n">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -655,7 +655,7 @@ export default function VehicleDocumentsPage() {
             <span className="text-neutral-900 dark:text-neutral-100 font-medium">{formatBytes(storageUsed)} / {formatBytes(storageQuota)}</span>
           </div>
           <Progress value={storagePct} className="mt-3 h-2 bg-neutral-100 dark:bg-neutral-700" />
-          <div className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">{storagePct.toFixed(1)}% used</div>
+          <div className="mt-2 typo-subtitle">{storagePct.toFixed(1)}% used</div>
         </div>
       </div>
 
@@ -681,7 +681,7 @@ export default function VehicleDocumentsPage() {
             <PopoverContent align="start" className="z-[99999] w-96 rounded-2xl border-neutral-200 dark:border-neutral-700 p-4">
               <div className="space-y-4">
                 <div>
-                  <div className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">File Kind</div>
+                  <div className="mb-2 typo-h6 uppercase tracking-wide text-neutral-500 dark:text-neutral-400">File Kind</div>
                   <div className="flex flex-wrap gap-2 text-sm">
                     {["all","pdf","image","doc","other"].map((t)=> (
                       <button
@@ -693,7 +693,7 @@ export default function VehicleDocumentsPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Status</div>
+                  <div className="mb-2 typo-h6 uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Status</div>
                   <div className="flex flex-wrap gap-2 text-sm">
                     {["all","valid","expiring","expired"].map((s)=> (
                       <button
@@ -705,7 +705,7 @@ export default function VehicleDocumentsPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Document Type</div>
+                  <div className="mb-2 typo-h6 uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Document Type</div>
                   <div className="flex flex-wrap gap-2 text-sm">
                     <button
                       onClick={()=> { setDocTypeFilter("all"); setPage(1); }}
@@ -818,13 +818,13 @@ export default function VehicleDocumentsPage() {
                     <span className="truncate font-medium text-neutral-900 dark:text-neutral-100">{d.name}</span>
                     <Badge variant="outline" className="rounded-full border-neutral-300 dark:border-neutral-600 text-[10px] dark:text-neutral-300">v{d.version}</Badge>
                   </div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">{formatBytes(d.size)}</div>
+                  <div className="typo-subtitle">{formatBytes(d.size)}</div>
                 </TableCell>
                 <TableCell className="text-sm text-neutral-900 dark:text-neutral-100">{d.docType}</TableCell>
                 <TableCell className="hidden sm:table-cell">
                   <div className="flex flex-wrap gap-1">
                     {d.tags.map((t) => (
-                      <span key={t} className="rounded-full border border-neutral-300 dark:border-neutral-600 px-2 py-0.5 text-xs text-neutral-700 dark:text-neutral-300">{t}</span>
+                      <span key={t} className="rounded-full border border-neutral-300 dark:border-neutral-600 px-2 py-0.5 typo-subtitle">{t}</span>
                     ))}
                   </div>
                 </TableCell>

@@ -252,7 +252,7 @@ function DateRangeField({
   const prefersReduced = useReducedMotion();
   return (
     <div className="space-y-2">
-      <div className="text-xs text-slate-500 dark:text-slate-400">
+      <div className="typo-subtitle">
         {value?.from || value?.to
           ? `${
               value?.from ? format(new Date(value.from), "dd-MMM-yyyy") : "…"
@@ -631,14 +631,14 @@ export function SmartAutoTable<T extends Record<string, any>>(
 
               <div className="flex items-center justify-center gap-1 flex-wrap">
                 <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all duration-200 disabled:opacity-50"
+                  className="px-3 py-2 typo-p12n font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all duration-200 disabled:opacity-50"
                   onClick={() => setPage(1)}
                   disabled={page === 1}
                 >
                   First
                 </button>
                 <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
+                  className="px-3 py-2 typo-p12n font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
                 >
@@ -670,14 +670,14 @@ export function SmartAutoTable<T extends Record<string, any>>(
                 </div>
 
                 <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
+                  className="px-3 py-2 typo-p12n font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
                   Next
                 </button>
                 <button
-                  className="px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
+                  className="px-3 py-2 typo-p12n font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
                   onClick={() => setPage(totalPages)}
                   disabled={page === totalPages}
                 >

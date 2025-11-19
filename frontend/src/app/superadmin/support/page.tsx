@@ -305,7 +305,7 @@ export default function SupportSplitView() {
   >
     <div className="flex items-center justify-between px-4 py-3 bg-background border-b border-border bg-foreground/10">
       <div className="text-sm font-medium uppercase tracking-wider text-foreground">Inbox</div>
-      <div className="text-xs text-muted">{filtered.length} tickets</div>
+      <div className="typo-subtitle">{filtered.length} tickets</div>
     </div>
 
     <div className="h-[calc(100%-92px">
@@ -389,7 +389,7 @@ export default function SupportSplitView() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="text-sm uppercase tracking-wider text-muted">{active.id}</div>
-              <h2 className="mt-1 text-xl font-semibold leading-snug text-foreground">{active.title}</h2>
+              <h2 className="mt-1 typo-h2">{active.title}</h2>
               <div className="mt-1 flex items-center flex-wrap gap-2 text-sm text-foreground">
                 <PersonOutlineIcon fontSize="small" />
                 <span>{active.name}</span>
@@ -455,7 +455,7 @@ export default function SupportSplitView() {
                   <div className="px-5 py-5 space-y-4">
                     {threadPublic.map((msg) => (
                       <div key={msg.id} className="group">
-                        <div className="text-xs text-muted mb-1">
+                        <div className="typo-subtitle mb-1">
                           {msg.name} • {msg.createdAt}
                         </div>
                         <div
@@ -487,7 +487,7 @@ export default function SupportSplitView() {
                       className="min-h-[112px] resize-y border-border focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                      <div className="text-xs text-muted">Public reply</div>
+                      <div className="typo-subtitle">Public reply</div>
                       <div className="flex items-center gap-2">
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -521,7 +521,7 @@ export default function SupportSplitView() {
                     )}
                     {threadInternal.map((msg) => (
                       <div key={msg.id} className="group">
-                        <div className="text-xs text-muted mb-1">
+                        <div className="typo-subtitle mb-1">
                           {msg.name} • {msg.createdAt} (internal)
                         </div>
                         <div className="rounded-xl border border-border px-4 py-3 bg-background">
@@ -626,7 +626,7 @@ function CustomerCombobox({
               >
                 <div className="flex flex-col">
                   <span className="font-medium text-foreground">{c.name}</span>
-                  <span className="text-xs text-muted">{c.email}</span>
+                  <span className="typo-subtitle">{c.email}</span>
                 </div>
               </CommandItem>
             ))}

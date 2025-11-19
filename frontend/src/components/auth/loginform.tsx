@@ -220,7 +220,7 @@ function LoginForm() {
 
           {/* Divider */}
           <div className="flex items-center my-4 before:flex-1 before:border-t before:border-border after:flex-1 after:border-t after:border-border">
-            <span className="relative bg-background px-3 text-xs text-muted leading-none">OR</span>
+            <span className="relative bg-background px-3 typo-subtitle leading-none">OR</span>
           </div>
 
           {/* Google Button */}

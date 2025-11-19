@@ -152,9 +152,9 @@ const OpenAiIntegration = () => {
   <div className="flex items-center justify-between mb-4 ">
     <div className="flex items-center gap-2">
       <SmartToyRoundedIcon className="text-muted" fontSize="small" />
-      <div className="text-sm font-medium tracking-tight text-foreground">OpenAI Integration</div>
+      <div className="text-sm font-medium  text-foreground">OpenAI Integration</div>
       {configs.openai.enabled && (
-        <Badge className="bg-primary text-white text-xs">Active</Badge>
+        <Badge className="bg-primary typo-p12n text-white">Active</Badge>
       )}
     </div>
     <Switch
@@ -167,7 +167,7 @@ const OpenAiIntegration = () => {
     <>
       <Alert className="mb-4 border-border dark:bg-background">
         <InfoRoundedIcon className="h-4 w-4 text-foreground" />
-        <AlertDescription className="text-xs space-y-2 text-muted">
+        <AlertDescription className="typo-subtitle space-y-2">
           <div><strong>Setup Instructions:</strong></div>
           <ol className="list-decimal list-inside ml-2 space-y-1">
             <li>
@@ -283,7 +283,7 @@ const OpenAiIntegration = () => {
               min="1"
               max="4096"
             />
-            <p className="text-xs text-muted mt-1">Range: 1–4096 tokens</p>
+            <p className="typo-subtitle mt-1">Range: 1–4096 tokens</p>
           </div>
         </div>
       </div>

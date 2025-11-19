@@ -154,7 +154,7 @@ export default function AdminDocumentsPage() {
           <Badge variant="outline" className="ml-2">
             v{row.version}
           </Badge>
-          <div className="text-xs text-muted">{formatBytes(row.size)}</div>
+          <div className="typo-subtitle">{formatBytes(row.size)}</div>
         </div>
       ),
     },
@@ -194,7 +194,7 @@ export default function AdminDocumentsPage() {
           return (
             <span
               className={cn(
-                "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium",
+                "inline-flex items-center gap-1 rounded-full border px-2 py-1 typo-h6",
                 "border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-400"
               )}
             >
@@ -207,7 +207,7 @@ export default function AdminDocumentsPage() {
           return (
             <span
               className={cn(
-                "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium",
+                "inline-flex items-center gap-1 rounded-full border px-2 py-1 typo-h6",
                 "border-amber-200 bg-amber-50 text-amber-800 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-400"
               )}
             >
@@ -219,7 +219,7 @@ export default function AdminDocumentsPage() {
         return (
           <span
             className={cn(
-              "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium",
+              "inline-flex items-center gap-1 rounded-full border px-2 py-1 typo-h6",
               "border-red-200 bg-red-500 text-white dark:border-red-800 dark:bg-red-950 dark:text-red-400"
             )}
           >
@@ -618,7 +618,7 @@ export default function AdminDocumentsPage() {
   }) => {
     const left = daysUntil(expiry ?? undefined);
     const base =
-      "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium tracking-wide";
+      "inline-flex items-center gap-1 rounded-full border px-2 py-1 typo-h6 tracking-wide";
     if (status === "valid") {
       return (
         <span
@@ -709,7 +709,7 @@ export default function AdminDocumentsPage() {
             </span>
             <Badge
               variant="outline"
-              className="rounded-full border-border text-xs text-foreground"
+              className="rounded-full border-border typo-p12n"
             >
               v{docs.reduce((a, b) => a + b.version, 0)}
             </Badge>
@@ -718,7 +718,7 @@ export default function AdminDocumentsPage() {
 
         <div className="rounded-2xl border border-border bg-card p-4 dark:bg-foreground/5">
           <div className="text-sm text-muted">Health Status</div>
-          <div className="mt-2 flex flex-wrap gap-2 text-xs sm:text-sm">
+          <div className="mt-2 flex flex-wrap gap-2 typo-p12n">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -788,7 +788,7 @@ export default function AdminDocumentsPage() {
             </span>
           </div>
           <Progress value={storagePct} className="mt-3 h-2 bg-foreground/5" />
-          <div className="mt-2 text-xs text-muted">
+          <div className="mt-2 typo-subtitle">
             {storagePct.toFixed(1)}% used
           </div>
         </div>

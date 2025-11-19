@@ -60,7 +60,7 @@ export default function DetailSheet({
             )}
             <div className="text-left">
               <div className="font-semibold">{title}</div>
-              {subTitle && <div className="text-xs text-muted">{subTitle}</div>}
+              {subTitle && <div className="typo-subtitle">{subTitle}</div>}
             </div>
           </SheetTitle>
           <SheetDescription />
@@ -75,7 +75,7 @@ export default function DetailSheet({
                 sec.fullWidth ? "md:col-span-2" : ""
               }`}
             >
-              <div className="mb-2 text-xs text-muted">{sec.title}</div>
+              <div className="mb-2 typo-subtitle">{sec.title}</div>
 
               {/* Key-value rows */}
               {sec.items && sec.items.length > 0 && (
@@ -102,7 +102,7 @@ export default function DetailSheet({
           {/* JSON SECTION */}
           {rawJSON && (
             <div className="md:col-span-2 rounded-lg border bg-background p-4">
-              <div className="mb-2 flex items-center justify-between text-xs text-muted">
+              <div className="mb-2 flex items-center justify-between typo-subtitle">
                 <span>Raw JSON</span>
                 {onCopyJSON && (
                   <Button

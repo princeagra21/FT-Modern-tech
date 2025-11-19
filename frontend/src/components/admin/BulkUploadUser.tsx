@@ -287,7 +287,7 @@ function ImportWizard({
             </div>
             <div>
               <div className="font-medium text-foreground">Configure</div>
-              <div className="text-xs text-muted-foreground">
+              <div className="typo-subtitle">
                 Set role & download sample
               </div>
             </div>
@@ -326,7 +326,7 @@ function ImportWizard({
             </div>
             <div>
               <div className="font-medium text-foreground">Upload</div>
-              <div className="text-xs text-muted-foreground">
+              <div className="typo-subtitle">
                 Import CSV file
               </div>
             </div>
@@ -363,7 +363,7 @@ function ImportWizard({
             </div>
             <div>
               <div className="font-medium text-foreground">Review</div>
-              <div className="text-xs text-muted-foreground">
+              <div className="typo-subtitle">
                 Validate & import
               </div>
             </div>
@@ -380,7 +380,7 @@ function ImportWizard({
                 <PersonAddIcon className="text-primary" fontSize="large" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="typo-h2">
                   Bulk Import Users
                 </h3>
                 <p className="text-muted-foreground">

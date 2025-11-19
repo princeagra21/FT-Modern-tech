@@ -253,10 +253,10 @@ export default function ServerStatusPage() {
                   <ErrorOutlineIcon className="text-error" />
                 )}
                 <div>
-                  <div className="text-xs uppercase tracking-wider text-muted">
+                  <div className="typo-subtitle">
                     Overall
                   </div>
-                  <div className="text-xl font-semibold text-foreground">
+                  <div className="typo-h2">
                     {overall}
                   </div>
                 </div>
@@ -293,7 +293,7 @@ export default function ServerStatusPage() {
               />
             </div>
 
-            <div className="mt-3 text-xs text-muted">
+            <div className="mt-3 typo-subtitle">
               Load avg: {metrics?.load1 ?? "—"} / {metrics?.load5 ?? "—"} /{" "}
               {metrics?.load15 ?? "—"}
             </div>
@@ -402,7 +402,7 @@ export default function ServerStatusPage() {
                     </Badge>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-muted">
+                  <div className="flex items-center justify-between typo-subtitle">
                     <div>since {new Date(s.sinceISO).toLocaleString()}</div>
                     <Button
                       variant="outline"
@@ -619,7 +619,7 @@ export default function ServerStatusPage() {
                   </AlertDialogContent>
                 </AlertDialog>
                 {deleting && (
-                  <div className="mt-2 text-xs text-muted">Deleting…</div>
+                  <div className="mt-2 typo-subtitle">Deleting…</div>
                 )}
               </MiniCard>
             </div>

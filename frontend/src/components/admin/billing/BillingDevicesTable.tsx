@@ -25,7 +25,7 @@ export function BillingDevicesTable({ devices, onAction }: BillingDevicesTablePr
       content: (row) => (
         <div>
           <div className="font-medium">{row.vehicle}</div>
-          <div className="text-xs text-gray-500">IMEI {row.imei}</div>
+          <div className="typo-subtitle">IMEI {row.imei}</div>
         </div>
       ),
     },
@@ -42,7 +42,7 @@ export function BillingDevicesTable({ devices, onAction }: BillingDevicesTablePr
       content: (row) => (
         <div>
           <div>{formatDate(row.expiryAt)}</div>
-          <div className="text-xs text-gray-500">
+          <div className="typo-subtitle">
             {row.daysLeft < 0
               ? `${Math.abs(row.daysLeft)} days overdue`
               : `${row.daysLeft} days left`}

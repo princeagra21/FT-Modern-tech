@@ -427,7 +427,7 @@ const MultiSelect = ({
           )}
         </div>
         <div className="mb-2 flex items-center justify-between">
-          <div className="text-xs text-neutral-500">
+          <div className="typo-subtitle">
             {filtered.length} match(es)
           </div>
           <div className="flex items-center gap-2">
@@ -466,7 +466,7 @@ const MultiSelect = ({
                   {o.label}
                 </div>
                 {o.sub && (
-                  <div className="truncate text-xs text-neutral-500">
+                  <div className="truncate typo-subtitle">
                     {o.sub}
                   </div>
                 )}
@@ -677,7 +677,7 @@ export default function LogsPage() {
           })}
           <div className="flex flex-col leading-tight">
             <span className="font-medium">{r.entityLabel}</span>
-            <span className="text-xs text-muted">{r.entityId}</span>
+            <span className="typo-subtitle">{r.entityId}</span>
           </div>
         </div>
       ),
@@ -770,7 +770,7 @@ export default function LogsPage() {
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 rounded-2xl border border-neutral-200 bg-white px-3 py-2">
-              <span className="text-xs text-neutral-600">Live Tail</span>
+              <span className="typo-subtitle">Live Tail</span>
               <Toggle checked={live} onChange={setLive} />
             </div>
             <Button variant="outline" onClick={() => setPaused((p) => !p)}>
@@ -885,7 +885,7 @@ export default function LogsPage() {
                 onChange={(e) => setFromTs(e.target.value)}
                 className="rounded-xl border border-neutral-300 bg-white px-2 py-1 text-xs"
               />
-              <span className="text-xs text-neutral-500">to</span>
+              <span className="typo-subtitle">to</span>
               <input
                 type="datetime-local"
                 value={toTs}
@@ -895,7 +895,7 @@ export default function LogsPage() {
             </div> */}
 
             <div className="ml-auto flex items-center gap-2">
-              <div className="text-xs text-neutral-500">
+              <div className="typo-subtitle">
                 {filtered.length} result(s)
               </div>
               <Button variant="outline" onClick={clearAll}>

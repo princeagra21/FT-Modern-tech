@@ -81,7 +81,7 @@ export default function AddPaymentSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-4">
         <SheetHeader>
-          <SheetTitle className="text-xl">Add Payment</SheetTitle>
+          <SheetTitle className="typo-h2">Add Payment</SheetTitle>
           <SheetDescription>
             Record a received payment for a device renewal.
           </SheetDescription>

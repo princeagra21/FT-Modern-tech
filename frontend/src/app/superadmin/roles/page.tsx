@@ -201,7 +201,7 @@ export default function RoleManager() {
                           />
                         </div>
                         {r.description ? (
-                          <div className="text-xs text-muted truncate mt-0.5">
+                          <div className="typo-subtitle truncate mt-0.5">
                             {r.description}
                           </div>
                         ) : null}
@@ -250,7 +250,7 @@ export default function RoleManager() {
                         Set a price for this role and choose the currency.
                       </TooltipContent>
                     </Tooltip>
-                    <div className="hidden md:flex items-center gap-2 text-xs text-muted">
+                    <div className="hidden md:flex items-center gap-2 typo-subtitle">
                       <InfoOutlinedIcon className="h-4 w-4" /> Levels: None /
                       View / Edit / Manage / Full
                     </div>
@@ -277,7 +277,7 @@ export default function RoleManager() {
 
                 {/* Presets */}
                 <div className="px-4 py-3 border-b border-border">
-                  <div className="text-xs uppercase tracking-wide text-muted mb-2">
+                  <div className="typo-subtitle uppercase tracking-wide mb-2">
                     Quick Presets
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -320,7 +320,7 @@ export default function RoleManager() {
 
                 {/* Permissions Grid */}
                 <div className="px-2 flex-1 min-h-0 flex flex-col">
-                  <div className="grid grid-cols-12  border-y border-border text-xs font-semibold uppercase tracking-wider">
+                  <div className="grid grid-cols-12  border-y border-border typo-h6 uppercase tracking-wider">
                     <div className="col-span-6 px-3 py-3">Module</div>
                     <div className="col-span-6 px-3 py-3">Access</div>
                   </div>
@@ -355,7 +355,7 @@ export default function RoleManager() {
                     Updated {selected?.audit.updatedAt} by{" "}
                     {selected?.audit.updatedBy}
                   </div>
-                  <div className="text-xs text-muted">
+                  <div className="typo-subtitle">
                     Unsaved changes: {dirty ? "Yes" : "No"}
                   </div>
                 </div>

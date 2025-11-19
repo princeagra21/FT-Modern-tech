@@ -63,7 +63,7 @@ function MenuItem({
     <button
       onClick={onClick}
       className={[
-        "group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all border text-sm font-medium tracking-tight",
+        "group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all border text-sm font-medium ",
         danger
           ? "border-border/60 text-destructive"
           : `border-transparent ${!active ? "hover:bg-foreground/10" :  ""} `,
@@ -77,7 +77,7 @@ function MenuItem({
         fontSize="small"
       />
       <span className="truncate">{label}</span>
-      <span className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-xs text-muted-foreground">
+      <span className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity typo-subtitle">
         ↗
       </span>
     </button>
@@ -111,7 +111,7 @@ export function UserIdentityCard({ user }: UserIdentityCardProps) {
                 <VerifiedRoundedIcon className="text-primary" fontSize="small" />
               )}
             </div>
-            <div className="text-xs text-muted-foreground truncate">
+            <div className="typo-subtitle truncate">
               @{user.username}
             </div>
           </div>
@@ -135,7 +135,7 @@ export function NavigationMenu({
   return (
     <Card className="rounded-2xl border border-border dark:bg-foreground/5 shadow-sm ">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-semibold text-foreground tracking-tight">
+        <CardTitle className="text-sm font-semibold text-foreground ">
           Navigation
         </CardTitle>
       </CardHeader>

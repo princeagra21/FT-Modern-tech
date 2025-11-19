@@ -110,7 +110,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       </div>
 
       <footer className="border-t border-border bg-background">
-        <div className="py-3 flex justify-center text-center text-xs text-muted">
+        <div className="py-3 flex justify-center text-center typo-subtitle">
           © {new Date().getFullYear()} Fleet Stack. All rights reserved.
         </div>
       </footer>

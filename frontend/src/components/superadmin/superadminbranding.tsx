@@ -150,7 +150,7 @@ function SuperAdminBranding() {
             <div className="text-[11px] uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
               Theme Customization
             </div>
-            <CardTitle className="typo-h1 tracking-tight dark:text-neutral-100">
+            <CardTitle className="typo-h1  dark:text-neutral-100">
               Branding & Colors
             </CardTitle>
             <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
@@ -212,7 +212,7 @@ function SuperAdminBranding() {
             </div>
             <div>
               <div className="font-semibold text-sm dark:text-neutral-100">Active Preview</div>
-              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+              <div className="typo-subtitle">
                 Switch between light and dark theme preview
               </div>
             </div>
@@ -273,7 +273,7 @@ function SuperAdminBranding() {
               </h4>
               <div className="flex gap-2">
                 <span 
-                  className="px-3 py-1 rounded-full text-xs font-medium"
+                  className="px-3 py-1 rounded-full typo-h6"
                   style={{ 
                     backgroundColor: currentTheme.primary,
                     color: activeTheme === 'light' ? '#ffffff' : '#000000'
@@ -282,7 +282,7 @@ function SuperAdminBranding() {
                   Primary
                 </span>
                 <span 
-                  className="px-3 py-1 rounded-full text-xs font-medium"
+                  className="px-3 py-1 rounded-full typo-h6"
                   style={{ 
                     backgroundColor: currentTheme.accent,
                     color: currentTheme.foreground
@@ -591,7 +591,7 @@ function ColorInput({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <Label className="text-xs font-medium dark:text-neutral-300">{label}</Label>
+        <Label className="typo-h6 dark:text-neutral-300">{label}</Label>
         {description && (
           <span className="text-[10px] text-neutral-500 dark:text-neutral-400">{description}</span>
         )}

@@ -34,7 +34,7 @@ const variantClasses: Record<TypographyVariant, string> = {
   h3: "text-lg font-semibold",
   h4: "text-base font-medium",
   h5: "text-sm font-medium",
-  h6: "text-xs font-medium",
+  h6: "typo-h6",
 
   p: "text-sm font-normal leading-relaxed",
   p500: "text-sm font-medium",

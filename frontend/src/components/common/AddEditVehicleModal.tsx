@@ -119,7 +119,7 @@ export const AddEditVehicleDialog: React.FC<VehicleDialogProps> = ({
                   {...register("vehicleNo")}
                 />
                 {errors.vehicleNo && (
-                  <p className="text-xs text-red-500">
+                  <p className="typo-destructive">
                     {errors.vehicleNo.message}
                   </p>
                 )}
@@ -205,7 +205,7 @@ export const AddEditVehicleDialog: React.FC<VehicleDialogProps> = ({
               </SelectContent>
             </Select>
             {errors.deviceType && (
-              <p className="text-xs text-red-500">
+              <p className="typo-destructive">
                 {errors.deviceType.message}
               </p>
             )}
@@ -230,7 +230,7 @@ export const AddEditVehicleDialog: React.FC<VehicleDialogProps> = ({
               </SelectContent>
             </Select>
             {errors.vehicleType && (
-              <p className="text-xs text-red-500">
+              <p className="typo-destructive">
                 {errors.vehicleType.message}
               </p>
             )}

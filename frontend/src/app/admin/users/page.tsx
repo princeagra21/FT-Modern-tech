@@ -278,7 +278,7 @@ export default function Page() {
   const displayOptions: DisplayMap<UserRow> = {
     0: {
       title: () => (
-        <div className="flex items-center gap-1 font-semibold tracking-wide uppercase text-xs">
+        <div className="flex items-center gap-1 typo-h6">
           <HomeIcon fontSize="small" /> Name
         </div>
       ),
@@ -293,7 +293,7 @@ export default function Page() {
           <p className="font-semibold text-slate-900 dark:text-slate-100">
             {row.name}
           </p>
-          <p className=" text-xs text-slate-500 dark:text-slate-400">
+          <p className=" typo-subtitle">
             {row.role} · {row.country}
           </p>
         </div>
@@ -336,7 +336,7 @@ export default function Page() {
       title: () => <>Status</>,
       content: (row) => (
         <span
-          className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+          className={`inline-flex items-center rounded-full px-2 py-0.5 typo-h6 ${
             row.active
               ? "bg-emerald-100 text-emerald-700"
               : "bg-amber-100 text-amber-700"
@@ -349,7 +349,7 @@ export default function Page() {
     3: {
       title: () => <>Last Login</>,
       content: (row) => (
-        <span className="text-xs text-slate-600 dark:text-slate-400">
+        <span className="typo-subtitle">
           {row.lastLogin}
         </span>
       ),

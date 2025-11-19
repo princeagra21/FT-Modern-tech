@@ -225,7 +225,7 @@ export default function VehicleLogsPage() {
     </div>
 
     {/* Footer */}
-    <div className="flex items-center justify-between border-t border-border p-3 text-xs text-muted dark:bg-foreground/5">
+    <div className="flex items-center justify-between border-t border-border p-3 typo-subtitle dark:bg-foreground/5">
       <div>
         Showing {(safePage - 1) * PAGE_SIZE + 1}–
         {Math.min(filtered.length, safePage * PAGE_SIZE)} of {filtered.length}

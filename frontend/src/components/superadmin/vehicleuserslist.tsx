@@ -125,7 +125,7 @@ function ProfileCard({
         </span>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="text-xs font-medium bg-foreground">Verified</p>
+        <p className="typo-h6 bg-foreground">Verified</p>
       </TooltipContent>
     </Tooltip>
   ) : (
@@ -136,7 +136,7 @@ function ProfileCard({
         </span>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="text-xs font-medium bg-foreground">Unverified</p>
+        <p className="typo-h6 bg-foreground">Unverified</p>
       </TooltipContent>
     </Tooltip>
   );
@@ -164,7 +164,7 @@ function ProfileCard({
             </div>
             {VerifiedBadge}
           </div>
-          <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted">
+          <div className="mt-0.5 flex flex-wrap items-center gap-2 typo-subtitle">
             <span className="inline-flex items-center gap-1">
               @{p.username}
             </span>
@@ -249,7 +249,7 @@ export default function VehicleUsersListItem() {
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="typo-h1">List of Users</h1>
-            <p className="mt-1 text-xs text-muted">
+            <p className="mt-1 typo-subtitle">
               Card-based directory (3 per row on desktop, clean black & white).
             </p>
           </div>

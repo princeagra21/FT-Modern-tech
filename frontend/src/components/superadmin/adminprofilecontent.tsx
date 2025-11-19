@@ -137,7 +137,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
             <div className="text-[11px] uppercase tracking-[0.2em] text-muted">
               Profile
             </div>
-            <CardTitle className="typo-h1 tracking-tight text-foreground">
+            <CardTitle className="typo-h1  text-foreground">
               User Overview
             </CardTitle>
           </div>
@@ -192,7 +192,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
 
           <div className="min-w-[220px]">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xl font-semibold tracking-tight text-foreground">
+              <span className="typo-h2">
                 {user.name}
               </span>
               <Badge
@@ -270,7 +270,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
               </button>
             )}
 
-            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+            <div className="typo-subtitle-foreground mb-2">
               Company
             </div>
 
@@ -288,7 +288,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
               )}
 
               <div>
-                <div className="font-semibold tracking-tight text-foreground">
+                <div className="font-semibold  text-foreground">
                   {user.company.name}
                 </div>
                 {user.company.website && (
@@ -305,7 +305,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
 
             {user.company.socials && (
               <div className="mt-4">
-                <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+                <div className="typo-subtitle-foreground mb-2">
                   Socials
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -338,7 +338,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
 
           {/* Address block */}
           <div className="rounded-2xl border border-border p-5 bg-card dark:bg-foreground/5">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+            <div className="typo-subtitle-foreground mb-2">
               Address
             </div>
             <div className="space-y-2 text-sm">
@@ -381,7 +381,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
 
         {/* Contact */}
         <div className="mt-6 rounded-2xl border border-border p-5 dark:bg-foreground/5">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+          <div className="typo-subtitle-foreground mb-2">
             Contact
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -420,21 +420,21 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
 
         {/* Activity */}
         <div className="mt-6 rounded-2xl border border-border bg-card overflow-hidden">
-          <div className="px-5 py-4 border-b border-border text-sm font-medium tracking-tight text-foreground bg-foreground/5">
+          <div className="px-5 py-4 border-b border-border text-sm font-medium  text-foreground bg-foreground/5">
             Recent Activity
           </div>
           <ScrollArea className="h-56">
             <div className="p-5 space-y-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className="h-8 w-8 rounded-lg border border-border grid place-items-center text-xs text-muted-foreground">
+                  <div className="h-8 w-8 rounded-lg border border-border grid place-items-center typo-subtitle">
                     {i}
                   </div>
                   <div>
                     <div className="text-sm font-medium text-foreground">
                       Updated vehicle status
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="typo-subtitle">
                       2 hours ago · VIN 9BG116GW04C400001
                     </div>
                   </div>
@@ -492,7 +492,7 @@ function KPITile({
 }) {
   return (
     <div className="rounded-xl border border-border p-3 h-full bg-card dark:bg-foreground/5">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">
+      <div className="typo-subtitle-foreground">
         {label}
       </div>
       <div className="mt-0.5 text-lg font-semibold leading-tight text-foreground">

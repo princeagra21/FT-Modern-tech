@@ -169,14 +169,14 @@ const AdoptionAndVehicleSection = () => {
               adoptionSeries.length > 0 ? (
                 <ApexChart options={adoptionOptions} series={adoptionSeries} type="area" height={300} />
               ) : (
-                <div className="flex h-[300px] items-center justify-center rounded-xl border border-dashed border-border bg-muted text-xs text-muted">
+                <div className="flex h-[300px] items-center justify-center rounded-xl border border-dashed border-border bg-muted typo-subtitle">
                   Enable at least one series.
                 </div>
               )
             ) : (
               <div className="relative h-[300px] w-full overflow-hidden rounded-xl border border-border bg-muted">
                 <div className="absolute inset-0 animate-pulse bg-muted" />
-                <div className="relative z-10 m-4 text-center text-xs text-muted">
+                <div className="relative z-10 m-4 text-center typo-subtitle">
                   {chartError ? <p>{chartError}</p> : <span>Loading chart…</span>}
                 </div>
               </div>
@@ -229,7 +229,7 @@ const AdoptionAndVehicleSection = () => {
                   <CloseRoundedIcon fontSize="small" />
                 </button>
               </div>
-              <p className="mb-2 text-xs text-muted">
+              <p className="mb-2 typo-subtitle">
                 Select all and press <strong>Ctrl/⌘ + C</strong>.
               </p>
               <textarea
@@ -240,7 +240,7 @@ const AdoptionAndVehicleSection = () => {
               />
               <div className="mt-3 flex justify-end">
                 <button
-                  className="rounded-xl border border-border px-3 py-1.5 text-xs text-foreground hover:bg-muted"
+                  className="rounded-xl border border-border px-3 py-1.5 typo-p12n hover:bg-muted"
                   onClick={() => setCopyModalOpen(false)}
                 >
                   Close

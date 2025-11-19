@@ -34,7 +34,7 @@ export default function SuspendDialog({ open, onOpenChange, selection }: any) {
             <Toggle checked={notify} onChange={setNotify} />
             <Label htmlFor="notify">Notify customer</Label>
           </div>
-          <div className="rounded-xl border p-3 text-xs text-zinc-600 bg-zinc-50">
+          <div className="rounded-xl border p-3 typo-subtitle bg-zinc-50">
             Suspended devices will stop data access until renewed. You can
             unsuspend after payment.
           </div>

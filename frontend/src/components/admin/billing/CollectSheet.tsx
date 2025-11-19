@@ -72,7 +72,7 @@ export default function CollectSheet({ open, onOpenChange, selection }: any) {
               onChange={(e) => setRef(e.target.value)}
             />
           </div>
-          <div className="rounded-xl border p-4 bg-zinc-50 text-xs text-zinc-600">
+          <div className="rounded-xl border p-4 bg-zinc-50 typo-subtitle">
             Attach receipts per device and allocate splits in the full flow.
           </div>
         </div>

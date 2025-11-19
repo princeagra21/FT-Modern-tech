@@ -329,7 +329,7 @@ export default function UserPolicyManagement() {
                 Policy Content
               </Label>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">
+                <span className="typo-subtitle">
                   {getWordCount(currentPolicy.content)} words
                 </span>
                 <Button
@@ -352,7 +352,7 @@ export default function UserPolicyManagement() {
               placeholder="Enter your policy content here..."
             />
 
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 typo-subtitle">
               Plain text format. Updates will be reflected immediately for
               users.
             </div>

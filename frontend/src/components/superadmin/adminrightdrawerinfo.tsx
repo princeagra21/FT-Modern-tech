@@ -331,7 +331,7 @@ function AdminRightDrawerInfo({ userId, isOpen, onClose }: AdminRightDrawerInfoP
                 {/* Social Links */}
                 {Object.keys(adminData.company.socials).length > 0 && (
                   <div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Social Links</p>
+                    <p className="typo-subtitle mb-2">Social Links</p>
                     <div className="flex flex-wrap gap-2">
                       {Object.entries(adminData.company.socials).map(([platform, url]) => (
                         url && (

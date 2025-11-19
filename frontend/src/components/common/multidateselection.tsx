@@ -283,11 +283,11 @@ export function MultiDateRangePicker({
               {draft?.from && draft?.to ? (
                 <span className="flex items-center gap-2">
                   {selectedPreset !== "custom" && (
-                    <span className="rounded bg-neutral-100 px-2 py-0.5 text-xs font-semibold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
+                    <span className="rounded bg-neutral-100 px-2 py-0.5 typo-h6 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
                       {presets.find((p) => p.key === selectedPreset)?.label}
                     </span>
                   )}
-                  <span className="text-xs sm:text-sm">
+                  <span className="typo-p12n">
                     {formatDate(draft.from)} → {formatDate(draft.to)}
                   </span>
                 </span>
@@ -400,7 +400,7 @@ export function MultiDateRangePicker({
               <div className="flex items-center justify-between">
                 <button
                   onClick={onClear}
-                  className="text-xs font-medium text-neutral-600 hover:text-neutral-900 underline-offset-2 hover:underline dark:text-neutral-400 dark:hover:text-neutral-200"
+                  className="typo-h6 text-neutral-600 hover:text-neutral-900 underline-offset-2 hover:underline dark:text-neutral-400 dark:hover:text-neutral-200"
                 >
                   Clear
                 </button>

@@ -117,7 +117,7 @@ export default function VehicleConfig({ initial, loading, onSave, onReset, class
       {/* Title */}
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold tracking-tight">Vehicle Setting Configuration</h2>
+          <h2 className="text-base font-semibold ">Vehicle Setting Configuration</h2>
           <p className="text-[12px] text-muted-foreground">Condensed layout • 2 per row on desktop</p>
         </div>
         <div className="flex gap-2">

@@ -438,7 +438,7 @@ export default function PaymentGatewayConfig() {
             <div className="text-sm font-medium text-foreground">
               Active Configuration
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="typo-subtitle">
               {enabledCount} gateway{enabledCount !== 1 ? "s" : ""} enabled
             </div>
           </div>
@@ -447,7 +447,7 @@ export default function PaymentGatewayConfig() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <div className="text-xs text-muted-foreground mb-1">
+              <div className="typo-subtitle mb-1">
                 Enabled Gateways
               </div>
               <div className="typo-h1 font-semibold text-foreground">
@@ -455,7 +455,7 @@ export default function PaymentGatewayConfig() {
               </div>
             </div>
             <div>
-              <div className="text-xs text-muted-foreground mb-1">
+              <div className="typo-subtitle mb-1">
                 Primary Gateway
               </div>
               <div className="text-lg font-medium text-foreground">
@@ -463,7 +463,7 @@ export default function PaymentGatewayConfig() {
               </div>
             </div>
             <div>
-              <div className="text-xs text-muted-foreground mb-1">
+              <div className="typo-subtitle mb-1">
                 Total Available
               </div>
               <div className="typo-h1 font-semibold text-foreground">
@@ -520,7 +520,7 @@ export default function PaymentGatewayConfig() {
                         <div className="font-semibold text-foreground">
                           {gateway.name}
                         </div>
-                        <div className="text-xs text-muted">
+                        <div className="typo-subtitle">
                           {gateway.regions.join(", ")}
                         </div>
                       </div>
@@ -535,7 +535,7 @@ export default function PaymentGatewayConfig() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-muted-foreground mb-3">
+                  <p className="typo-subtitle mb-3">
                     {gateway.description}
                   </p>
 
@@ -577,7 +577,7 @@ export default function PaymentGatewayConfig() {
                   <div className="flex items-center gap-3 mb-2">
                     <div className="text-4xl">{gateway.logo}</div>
                     <div>
-                      <DialogTitle className="text-xl font-semibold text-foreground">
+                      <DialogTitle className="typo-h2">
                         {gateway.name}
                       </DialogTitle>
                       <DialogDescription className="text-sm text-muted-foreground">
@@ -654,7 +654,7 @@ export default function PaymentGatewayConfig() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="text-xs text-muted-foreground hover:bg-foreground/5"
+                                className="typo-subtitle hover:bg-foreground/5"
                               >
                                 <InfoIcon className="w-4 h-4 mr-1" /> Security
                                 Info
@@ -736,7 +736,7 @@ export default function PaymentGatewayConfig() {
                                 [gateway.id]: !prev[gateway.id],
                               }))
                             }
-                            className="text-xs text-muted-foreground hover:bg-foreground/5"
+                            className="typo-subtitle hover:bg-foreground/5"
                           >
                             {showSecrets[gateway.id] ? (
                               <>
@@ -791,7 +791,7 @@ export default function PaymentGatewayConfig() {
                         <div className="text-sm font-medium text-foreground">
                           Set as Primary Gateway
                         </div>
-                        <div className="text-xs text-muted-foreground mt-0.5">
+                        <div className="typo-subtitle mt-0.5">
                           {config.isPrimary
                             ? "This is your default payment processor"
                             : "Make this the default payment processor"}
@@ -817,7 +817,7 @@ export default function PaymentGatewayConfig() {
                             key={currency}
                             onClick={() => toggleCurrency(gateway.id, currency)}
                             className={classNames(
-                              "rounded-lg border px-2 py-1.5 text-xs font-medium transition-all",
+                              "rounded-lg border px-2 py-1.5 typo-h6 transition-all",
                               config.supportedCurrencies.includes(currency)
                                 ? "border-primary bg-primary text-white"
                                 : "border-border text-foreground/80 hover:bg-foreground/5"
@@ -827,7 +827,7 @@ export default function PaymentGatewayConfig() {
                           </button>
                         ))}
                       </div>
-                      <div className="mt-2 text-xs text-muted-foreground">
+                      <div className="mt-2 typo-subtitle">
                         Selected: {config.supportedCurrencies.length}{" "}
                         {config.supportedCurrencies.length === 1
                           ? "currency"
@@ -848,7 +848,7 @@ export default function PaymentGatewayConfig() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="text-xs text-muted-foreground hover:bg-foreground/5"
+                              className="typo-subtitle hover:bg-foreground/5"
                             >
                               <InfoIcon className="w-4 h-4 mr-1" /> Feature Info
                             </Button>
@@ -867,12 +867,12 @@ export default function PaymentGatewayConfig() {
                                   <h4 className="font-semibold text-sm text-foreground mb-1">
                                     📋 Feature Availability
                                   </h4>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="typo-subtitle">
                                     The features listed are the core
                                     capabilities of {gateway.name}. Availability
                                     may vary based on:
                                   </p>
-                                  <ul className="text-xs text-muted-foreground mt-2 space-y-1 list-disc list-inside ml-2">
+                                  <ul className="typo-subtitle mt-2 space-y-1 list-disc list-inside ml-2">
                                     <li>
                                       Your geographic region and business
                                       location
@@ -897,7 +897,7 @@ export default function PaymentGatewayConfig() {
                                   <h4 className="font-semibold text-sm text-foreground mb-1">
                                     🌍 Regional Differences
                                   </h4>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="typo-subtitle">
                                     Payment methods and features can differ
                                     significantly by region. Some local payment
                                     methods are only available in specific
@@ -912,10 +912,10 @@ export default function PaymentGatewayConfig() {
                                   <h4 className="font-semibold text-sm text-foreground mb-1">
                                     💡 Getting Started
                                   </h4>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="typo-subtitle">
                                     Contact {gateway.name} support to:
                                   </p>
-                                  <ul className="text-xs text-muted-foreground mt-2 space-y-1 list-disc list-inside ml-2">
+                                  <ul className="typo-subtitle mt-2 space-y-1 list-disc list-inside ml-2">
                                     <li>
                                       Verify which features are available for
                                       your account

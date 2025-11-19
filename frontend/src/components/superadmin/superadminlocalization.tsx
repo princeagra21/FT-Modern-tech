@@ -158,7 +158,7 @@ export default function SuperAdminLocalization() {
         <div className="rounded-2xl border border-border bg-background p-5 transition-colors">
           <div className="mb-3 flex items-center justify-between">
             <div className="text-sm text-muted">Live Preview</div>
-            <div className="text-xs text-muted">
+            <div className="typo-subtitle">
               Lang: {settings.language.toUpperCase()} • Dir:{" "}
               {settings.direction.toUpperCase()} • TZ: {settings.timezone}
             </div>
@@ -169,23 +169,23 @@ export default function SuperAdminLocalization() {
             className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3"
           >
             <div>
-              <div className="text-xs text-muted">Date</div>
+              <div className="typo-subtitle">Date</div>
               <div className="text-lg font-medium text-foreground">
                 {preview.dateStr}
               </div>
             </div>
             <div>
-              <div className="text-xs text-muted">Time</div>
+              <div className="typo-subtitle">Time</div>
               <div className="text-lg font-medium text-foreground">
                 {preview.timeStr}
               </div>
             </div>
             <div>
-              <div className="text-xs text-muted">Map Center</div>
+              <div className="typo-subtitle">Map Center</div>
               <div className="text-sm font-medium font-mono text-foreground">
                 {settings.mapLat.toFixed(4)}, {settings.mapLng.toFixed(4)}
               </div>
-              <div className="text-xs text-muted">Zoom: {settings.mapZoom}</div>
+              <div className="typo-subtitle">Zoom: {settings.mapZoom}</div>
             </div>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function SuperAdminLocalization() {
               onCheckedChange={(v) => set("timeFormat", v ? "24h" : "12h")}
             />
           </div>
-          <div className="mt-2 text-xs text-muted">
+          <div className="mt-2 typo-subtitle">
             Example: {settings.timeFormat === "24h" ? "14:30" : "02:30 PM"}
           </div>
         </ResuableCard>
@@ -351,7 +351,7 @@ export default function SuperAdminLocalization() {
                 className="rounded-xl border-border bg-background text-foreground"
                 placeholder="0.000000"
               />
-              <div className="mt-2 text-xs text-muted">Range: -90 to 90</div>
+              <div className="mt-2 typo-subtitle">Range: -90 to 90</div>
             </div>
             <div>
               <Label className="mb-2 block text-foreground">
@@ -365,7 +365,7 @@ export default function SuperAdminLocalization() {
                 className="rounded-xl border-border bg-background text-foreground"
                 placeholder="0.000000"
               />
-              <div className="mt-2 text-xs text-muted">Range: -180 to 180</div>
+              <div className="mt-2 typo-subtitle">Range: -180 to 180</div>
             </div>
             <div>
               <Label className="mb-2 block text-foreground">Zoom Level</Label>
@@ -378,7 +378,7 @@ export default function SuperAdminLocalization() {
                 className="rounded-xl border-border bg-background text-foreground"
                 placeholder="2"
               />
-              <div className="mt-2 text-xs text-muted">
+              <div className="mt-2 typo-subtitle">
                 Range: 1 (world) to 20 (street)
               </div>
             </div>
@@ -396,7 +396,7 @@ export default function SuperAdminLocalization() {
               <button
                 key={preset.name}
                 onClick={() => applyLocationPreset(preset)}
-                className="rounded-xl border border-border px-3 py-2 text-xs text-foreground transition-all hover:border-primary hover:bg-foreground/5"
+                className="rounded-xl border border-border px-3 py-2 typo-p12n transition-all hover:border-primary hover:bg-foreground/5"
               >
                 <div className="font-medium">{preset.name}</div>
                 <div className="text-[10px] text-muted mt-0.5">

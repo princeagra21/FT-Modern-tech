@@ -155,7 +155,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
     <div className="flex items-start justify-between gap-4">
       <div>
         <div className="text-[11px] uppercase tracking-[0.2em] text-muted">Super Admin</div>
-        <CardTitle className="typo-h1 tracking-tight text-foreground">Profile Overview</CardTitle>
+        <CardTitle className="typo-h1  text-foreground">Profile Overview</CardTitle>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Button
@@ -200,7 +200,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
       </Avatar>
       <div className="min-w-[220px]">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xl font-semibold tracking-tight text-foreground">{superAdmin.name}</span>
+          <span className="typo-h2">{superAdmin.name}</span>
           <Badge className="rounded-full bg-primary text-white">Super Admin</Badge>
           <StatusBadge status={superAdmin.status} />
           {superAdmin.isEmailVerified && (
@@ -234,7 +234,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Company */}
       <div className="rounded-2xl border border-border p-5 bg-background flex flex-col h-full dark:bg-foreground/5">
-        <div className="text-xs uppercase tracking-widest text-muted mb-4">Company</div>
+        <div className="typo-subtitle mb-4">Company</div>
         <div className="flex flex-col items-center gap-3 mb-6">
           {superAdmin.company.logolight || superAdmin.company.logodark ? (
             <img
@@ -248,7 +248,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
             </div>
           )}
           <div className="text-center">
-            <div className="font-semibold tracking-tight text-foreground">{superAdmin.company.name}</div>
+            <div className="font-semibold  text-foreground">{superAdmin.company.name}</div>
             {superAdmin.company.website && (
               <a
                 className="text-sm text-muted underline-offset-4 hover:underline"
@@ -264,7 +264,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
 
         {superAdmin.company.socials && (
           <div className="mt-auto">
-            <div className="text-xs uppercase tracking-widest text-muted mb-3">Socials</div>
+            <div className="typo-subtitle mb-3">Socials</div>
             <div className="flex flex-wrap gap-2">
               {Object.entries(superAdmin.company.socials).map(([k, v]) => {
                 const map: Record<string, React.ElementType> = {
@@ -296,7 +296,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
 
       {/* Address */}
       <div className="rounded-2xl border border-border p-5 bg-background flex flex-col h-full dark:bg-foreground/5">
-        <div className="text-xs uppercase tracking-widest text-muted mb-4">Address</div>
+        <div className="typo-subtitle mb-4">Address</div>
         <div className="space-y-3 flex-1">
           {[
             ["Line", superAdmin.address.line1],
@@ -322,7 +322,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
 
     {/* Contact */}
     <div className="mt-6 rounded-2xl border border-border p-5 bg-background dark:bg-foreground/5">
-      <div className="text-xs uppercase tracking-widest text-muted mb-2">Contact</div>
+      <div className="typo-subtitle mb-2">Contact</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-foreground/80">
         <div className="space-y-3">
           <div className="flex items-center gap-3">
@@ -356,7 +356,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
 
     {/* Activity */}
     <div className="mt-6 rounded-2xl border border-border bg-background dark:bg-foreground/5">
-      <div className="px-5 py-4 border-b border-border text-sm font-medium tracking-tight text-foreground">
+      <div className="px-5 py-4 border-b border-border text-sm font-medium  text-foreground">
         Recent Activity
       </div>
       <ScrollArea className="h-56">
@@ -372,12 +372,12 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
             { action: "System maintenance", time: "1 week ago", detail: "Database optimization" },
           ].map((activity, i) => (
             <div key={i} className="flex items-start gap-3">
-              <div className="h-8 w-8 rounded-lg border border-border bg-foreground/5 grid place-items-center text-xs font-medium text-foreground/80">
+              <div className="h-8 w-8 rounded-lg border border-border bg-foreground/5 grid place-items-center typo-h6 text-foreground/80">
                 {i + 1}
               </div>
               <div>
                 <div className="text-sm font-medium text-foreground">{activity.action}</div>
-                <div className="text-xs text-muted">
+                <div className="typo-subtitle">
                   {activity.time} · {activity.detail}
                 </div>
               </div>
@@ -398,7 +398,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
 function KPITile({ label, value, sub }: { label: string; value: React.ReactNode; sub?: React.ReactNode }) {
   return (
 <div className="rounded-xl border border-border p-3 h-full bg-background dark:bg-foreground/5">
-  <div className="text-xs uppercase tracking-widest text-muted">{label}</div>
+  <div className="typo-subtitle">{label}</div>
   <div className="mt-0.5 text-lg font-semibold leading-tight text-foreground">{value}</div>
   {sub ? (
     <div className="mt-0.5 text-[11px] text-muted">{sub}</div>

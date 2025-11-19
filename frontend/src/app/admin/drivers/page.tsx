@@ -149,7 +149,7 @@ export default function DriversPage() {
               <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
                 {row.name}
               </div>
-              <div className="text-xs text-neutral-500 dark:text-neutral-400">
+              <div className="typo-subtitle">
                 @{row.username}
               </div>
             </div>
@@ -176,7 +176,7 @@ export default function DriversPage() {
             />
             {row.mobile_prefix} {row.mobile}
           </div>
-          <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="flex items-center gap-1 typo-subtitle">
             <EmailIcon
               style={{ fontSize: "12px" }}
               className="text-neutral-400"
@@ -201,7 +201,7 @@ export default function DriversPage() {
           <div className="text-sm text-neutral-700 dark:text-neutral-300">
             {row.city}, {row.stateCode}
           </div>
-          <div className="text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="typo-subtitle">
             {row.countryCode}
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function DriversPage() {
           <div className="text-sm text-neutral-700 dark:text-neutral-300">
             {row.totalTrips} trips
           </div>
-          <div className="text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="typo-subtitle">
             ⭐ {row.rating}/5
           </div>
         </div>
@@ -515,7 +515,7 @@ function AddDriverForm({
                   className={errors.name ? "border-red-500" : ""}
                 />
                 {errors.name && (
-                  <p className="text-xs text-red-500">{errors.name}</p>
+                  <p className="typo-destructive">{errors.name}</p>
                 )}
               </div>
 
@@ -532,7 +532,7 @@ function AddDriverForm({
                   className={errors.email ? "border-red-500" : ""}
                 />
                 {errors.email && (
-                  <p className="text-xs text-red-500">{errors.email}</p>
+                  <p className="typo-destructive">{errors.email}</p>
                 )}
               </div>
             </div>
@@ -574,7 +574,7 @@ function AddDriverForm({
                   className={errors.mobile ? "border-red-500" : ""}
                 />
                 {errors.mobile && (
-                  <p className="text-xs text-red-500">{errors.mobile}</p>
+                  <p className="typo-destructive">{errors.mobile}</p>
                 )}
               </div>
             </div>
@@ -602,7 +602,7 @@ function AddDriverForm({
                   className={errors.username ? "border-red-500" : ""}
                 />
                 {errors.username && (
-                  <p className="text-xs text-red-500">{errors.username}</p>
+                  <p className="typo-destructive">{errors.username}</p>
                 )}
               </div>
 
@@ -622,7 +622,7 @@ function AddDriverForm({
                   className={errors.password ? "border-red-500" : ""}
                 />
                 {errors.password && (
-                  <p className="text-xs text-red-500">{errors.password}</p>
+                  <p className="typo-destructive">{errors.password}</p>
                 )}
               </div>
             </div>
@@ -683,7 +683,7 @@ function AddDriverForm({
                   className={errors.city ? "border-red-500" : ""}
                 />
                 {errors.city && (
-                  <p className="text-xs text-red-500">{errors.city}</p>
+                  <p className="typo-destructive">{errors.city}</p>
                 )}
               </div>
             </div>
@@ -701,7 +701,7 @@ function AddDriverForm({
                 rows={3}
               />
               {errors.address && (
-                <p className="text-xs text-red-500">{errors.address}</p>
+                <p className="typo-destructive">{errors.address}</p>
               )}
             </div>
           </div>

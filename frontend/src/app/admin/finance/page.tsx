@@ -517,7 +517,7 @@ export default function AnalyticsDashboard() {
                       </Badge>
                       <div>
                         <div className="font-medium">{name}</div>
-                        <div className="text-xs text-zinc-500">
+                        <div className="typo-destructive">
                           Potential: {INR(amt)}
                         </div>
                       </div>
@@ -574,7 +574,7 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
 
-      <footer className="mx-auto max-w-7xl px-4 py-12 text-xs text-zinc-400">
+      <footer className="mx-auto max-w-7xl px-4 py-12 typo-subtitle">
         FleetStack • Analytics UI — v1.2
       </footer>
     </div>
@@ -626,7 +626,7 @@ function MiniStat({
   return (
     <div className="flex items-center justify-between rounded-xl border p-3">
       <div>
-        <div className="text-xs text-zinc-500">{label}</div>
+        <div className="typo-destructive">{label}</div>
         <div className="text-lg font-semibold">{value}</div>
       </div>
       <div className="p-2 rounded-lg border bg-white">

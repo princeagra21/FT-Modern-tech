@@ -30,7 +30,7 @@ export function PaymentsTable({
       content: (row) => (
         <div>
           <div className="font-medium">{formatDate(row.date)}</div>
-          <div className="text-xs text-zinc-500">{row.plan}</div>
+          <div className="typo-destructive">{row.plan}</div>
         </div>
       ),
     },
@@ -43,7 +43,7 @@ export function PaymentsTable({
       content: (row) => (
         <div>
           <div className="font-medium">{row.vehicle}</div>
-          <div className="text-xs text-zinc-500">IMEI {row.imei}</div>
+          <div className="typo-destructive">IMEI {row.imei}</div>
         </div>
       ),
     },
@@ -81,7 +81,7 @@ export function PaymentsTable({
       content: (row) => (
         <div>
           <div className="text-sm">{row.reference}</div>
-          <div className="text-xs text-zinc-500">{row.invoiceNo}</div>
+          <div className="typo-destructive">{row.invoiceNo}</div>
         </div>
       ),
     },

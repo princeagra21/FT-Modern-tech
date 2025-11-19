@@ -367,7 +367,7 @@ export default function AdminSettingPage() {
     >
       <div className="mb-3 flex items-center justify-between">
         <div className="text-sm text-muted">Live Preview</div>
-        <div className="text-xs text-muted">
+        <div className="typo-subtitle">
           Theme: {settings.theme.toUpperCase()} • Dir:{" "}
           {settings.direction.toUpperCase()} • Units:{" "}
           {settings.units.toUpperCase()}
@@ -379,17 +379,17 @@ export default function AdminSettingPage() {
         className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2"
       >
         <div>
-          <div className="text-xs text-muted">Date</div>
+          <div className="typo-subtitle">Date</div>
           <div className="text-lg font-medium text-foreground">
             {preview.dateStr}
           </div>
         </div>
         <div>
-          <div className="text-xs text-muted">Time</div>
+          <div className="typo-subtitle">Time</div>
           <div className="text-lg font-medium text-foreground">
             {preview.timeStr}
           </div>
-          <div className="text-xs text-muted mt-1 font-mono">
+          <div className="typo-subtitle mt-1 font-mono">
             UTC {settings.timezone}
           </div>
         </div>

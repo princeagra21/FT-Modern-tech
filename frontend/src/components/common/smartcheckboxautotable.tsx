@@ -587,7 +587,7 @@ function DateRangeField({
   const prefersReduced = useReducedMotion();
   return (
     <div className="space-y-2">
-      <div className="text-xs text-neutral-500 dark:text-neutral-400">
+      <div className="typo-subtitle">
         {value?.from || value?.to
           ? `${
               value?.from ? format(new Date(value.from), "dd-MMM-yyyy") : "…"
@@ -1375,7 +1375,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                                         }}
                                         className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3 bg-white/70 dark:bg-neutral-800/70"
                                       >
-                                        <Label className="mb-2 block text-xs text-neutral-700 dark:text-neutral-300">
+                                        <Label className="mb-2 block typo-subtitle">
                                           {conf.label ?? key}
                                         </Label>
 
@@ -1550,7 +1550,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="text-xs text-neutral-500"
+                                className="typo-subtitle"
                                 onClick={() => {
                                   updateFilterValues({});
                                 }}
@@ -1719,7 +1719,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                         variant="ghost"
                         size="sm"
                         onClick={resetPreferences}
-                        className="h-7 px-2 text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+                        className="h-7 px-2 typo-subtitle hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
                         title="Reset all table preferences"
                       >
                         Reset
@@ -2005,14 +2005,14 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
 
                 <div className="flex items-center justify-center gap-1 flex-wrap">
                   <button
-                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200 disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200 disabled:opacity-50"
                     onClick={() => setPage(1)}
                     disabled={page === 1}
                   >
                     First
                   </button>
                   <button
-                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
                   >
@@ -2044,14 +2044,14 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                   </div>
 
                   <button
-                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
                   >
                     Next
                   </button>
                   <button
-                    className="px-3 py-2 text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
                     onClick={() => setPage(totalPages)}
                     disabled={page === totalPages}
                   >
@@ -2167,7 +2167,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                           }}
                           className="rounded-xl border border-neutral-200 dark:border-neutral-600 p-3 bg-white/70 dark:bg-neutral-800/70"
                         >
-                          <Label className="mb-2 block text-xs text-neutral-700 dark:text-neutral-300">
+                          <Label className="mb-2 block typo-subtitle">
                             {conf.label ?? key}
                           </Label>
 
@@ -2313,7 +2313,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-xs text-neutral-500"
+                    className="typo-subtitle"
                     onClick={() => {
                       updateFilterValues({});
                     }}
