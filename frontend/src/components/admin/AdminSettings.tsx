@@ -111,7 +111,7 @@ export default function AdminSettings() {
             <SettingsIcon className="text-foreground/90" />
           </motion.div>
           <div>
-            <h1 className="text-2xl font-semibold text-foreground tracking-tight">
+            <h1 className="typo-h1">
               Application Settings
             </h1>
             <p className="text-sm text-muted">

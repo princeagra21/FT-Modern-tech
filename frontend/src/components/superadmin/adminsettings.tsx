@@ -329,7 +329,7 @@ export default function AdminSettingPage() {
         <SettingsIcon className="text-muted" />
       </motion.div>
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+        <h1 className="typo-h1">
           Admin Setting
         </h1>
         <p className="text-sm text-muted">

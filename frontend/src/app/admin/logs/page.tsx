@@ -763,7 +763,7 @@ export default function LogsPage() {
       <div className="mx-auto max-w-7xl px-6 py-6">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Logs</h1>
+            <h1 className="typo-h1">Logs</h1>
             <p className="text-sm text-neutral-500">
               Vehicles • Users • Drivers
             </p>

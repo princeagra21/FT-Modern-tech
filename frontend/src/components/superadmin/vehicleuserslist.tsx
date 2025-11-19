@@ -110,7 +110,13 @@ function timeAgo(iso?: string) {
   return `${d}d ago`;
 }
 
-function ProfileCard({ p, onLogin }: { p: Profile; onLogin: (u: string) => void }) {
+function ProfileCard({
+  p,
+  onLogin,
+}: {
+  p: Profile;
+  onLogin: (u: string) => void;
+}) {
   const VerifiedBadge = p.isEmailVerified ? (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -140,7 +146,11 @@ function ProfileCard({ p, onLogin }: { p: Profile; onLogin: (u: string) => void 
       <div className="flex items-center gap-3">
         <div className="relative h-12 w-12 overflow-hidden rounded-full border border-border">
           {p.profileUrl ? (
-            <img src={p.profileUrl} alt={p.name} className="h-full w-full object-cover" />
+            <img
+              src={p.profileUrl}
+              alt={p.name}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="grid h-full w-full place-items-center text-sm font-semibold text-foreground">
               {initials(p.name)}
@@ -149,11 +159,15 @@ function ProfileCard({ p, onLogin }: { p: Profile; onLogin: (u: string) => void 
         </div>
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <div className="truncate text-sm font-semibold text-foreground">{p.name}</div>
+            <div className="truncate text-sm font-semibold text-foreground">
+              {p.name}
+            </div>
             {VerifiedBadge}
           </div>
           <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted">
-            <span className="inline-flex items-center gap-1">@{p.username}</span>
+            <span className="inline-flex items-center gap-1">
+              @{p.username}
+            </span>
             <span className="text-muted/50">•</span>
             <span className="inline-flex items-center gap-1">
               <AccessTimeIcon style={{ fontSize: 12 }} />
@@ -215,9 +229,16 @@ export default function VehicleUsersListItem() {
 
   if (typeof window !== "undefined") {
     try {
-      console.assert(Array.isArray(PROFILES) && PROFILES.length >= 3, "Need at least 3 profiles for 3-up grid");
+      console.assert(
+        Array.isArray(PROFILES) && PROFILES.length >= 3,
+        "Need at least 3 profiles for 3-up grid"
+      );
       for (const p of PROFILES) {
-        console.assert(!!p.name && !!p.email && !!p.username, "Profile missing key fields", p);
+        console.assert(
+          !!p.name && !!p.email && !!p.username,
+          "Profile missing key fields",
+          p
+        );
       }
     } catch {}
   }
@@ -227,16 +248,17 @@ export default function VehicleUsersListItem() {
       <div className="mx-auto max-w-6xl p-4 md:p-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-xl font-semibold tracking-tight text-foreground">
-              List of Users
-            </h1>
+            <h1 className="typo-h1">List of Users</h1>
             <p className="mt-1 text-xs text-muted">
               Card-based directory (3 per row on desktop, clean black & white).
             </p>
           </div>
           <div className="flex w-full items-center gap-2 sm:w-80">
             <div className="flex w-full items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 dark:bg-foreground/5">
-              <SearchIcon style={{ fontSize: 16 }} className="text-muted-foreground" />
+              <SearchIcon
+                style={{ fontSize: 16 }}
+                className="text-muted-foreground"
+              />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}

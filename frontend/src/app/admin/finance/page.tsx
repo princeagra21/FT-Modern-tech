@@ -295,7 +295,7 @@ export default function AnalyticsDashboard() {
         <div className="mx-auto max-w-7xl px-4 py-4 md:py-5">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+              <h1 className="typo-h1">
                 Analytics
               </h1>
               <p className="text-sm text-zinc-500 mt-1">

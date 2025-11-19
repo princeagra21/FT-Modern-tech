@@ -680,7 +680,7 @@ export default function AdminDocumentsPage() {
             <UploadFileIcon className="text-foreground" />
           </motion.div>
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            <h1 className="typo-h1">
               Admin Documents
             </h1>
             <p className="text-sm text-muted">

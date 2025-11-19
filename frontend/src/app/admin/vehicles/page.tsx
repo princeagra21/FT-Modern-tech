@@ -1876,7 +1876,7 @@ function page() {
         <div className="mx-auto max-w-7xl px-6 pb-14 pt-8">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight">
+              <h1 className="typo-h1">
                 Vehicle Management
               </h1>
               {/* <p className="text-sm text-neutral-500">

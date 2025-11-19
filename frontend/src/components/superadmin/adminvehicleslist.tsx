@@ -796,7 +796,7 @@ function AdminVehiclesList() {
               <div className="text-[11px] uppercase tracking-[0.18em] text-muted">
                 Vehicles
               </div>
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              <h1 className="typo-h1">
                 Vehicles List
               </h1>
             </div>

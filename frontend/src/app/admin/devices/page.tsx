@@ -247,7 +247,7 @@ function page() {
         {/* Top Bar */}
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Devices</h1>
+            <h1 className="typo-h1">Devices</h1>
             <p className="text-sm text-neutral-500">
               Manage and monitor your fleet devices
             </p>

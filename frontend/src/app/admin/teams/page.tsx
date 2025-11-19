@@ -346,7 +346,7 @@ export default function TeamsTable() {
         <div className="mx-auto max-w-7xl px-6 pb-14 pt-8">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight">Teams</h1>
+              <h1 className="typo-h1">Teams</h1>
               <p className="text-sm text-neutral-500">
                 Manage teammates and their permissions. Add members via the
                 modal, fine‑tune via the drawer.

@@ -393,7 +393,7 @@ export default function CreditHistoryPage() {
                 <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                   Billing
                 </div>
-                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                <h1 className="typo-h1">
                   Credit History
                 </h1>
               </div>

@@ -106,7 +106,7 @@ export default function VehicleSendCommand() {
       {/* Top bar */}
       <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between ">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Send Command</h1>
+          <h1 className="typo-h1">Send Command</h1>
           <p className="mt-1 text-xs text-muted">{DEVICE.vehicleNo} • IMEI <span className="font-mono">{DEVICE.imei}</span> • {DEVICE.protocol}</p>
         </div>
         <select className="rounded-lg border  bg-background px-2 py-2 text-sm text-foreground" value={transport} onChange={e => setTransport(e.target.value as Transport)}>

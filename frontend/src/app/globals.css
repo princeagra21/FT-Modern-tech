@@ -5,163 +5,210 @@
 
 @custom-variant dark (&:is(.dark *));
 
-  /* Define core theme variables — dynamically updated by your theme logic */
-  :root {
-    --primary: #ff4d4d;
-    --secondary: #1a1a1a;
-    --accent: #cccccc;
-    --background: #121212;
-    --foreground: #f9f9f9;
-    --muted: #999999;
-    --border: #333333;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --error: #ef4444;
-    --radius: 0.625rem;
+/* Define core theme variables — dynamically updated by your theme logic */
+:root {
+  --primary: #ff4d4d;
+  --secondary: #1a1a1a;
+  --accent: #cccccc;
+  --background: #121212;
+  --foreground: #f9f9f9;
+  --muted: #999999;
+  --border: #333333;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --radius: 0.625rem;
+}
+
+/* Tailwind variable mapping */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+.typo-h1 {
+  @apply text-2xl font-semibold;
+}
+.typo-h2 {
+  @apply text-xl font-semibold;
+}
+.typo-h3 {
+  @apply text-lg font-semibold;
+}
+.typo-h4 {
+  @apply text-base font-medium;
+}
+.typo-h5 {
+  @apply text-sm font-medium;
+}
+.typo-h6 {
+  @apply text-xs font-medium;
+}
+
+.typo-p {
+  @apply text-sm font-normal leading-relaxed;
+}
+.typo-p500 {
+  @apply text-sm font-medium;
+}
+.typo-p600 {
+  @apply text-sm font-semibold;
+}
+
+.typo-body1 {
+  @apply text-sm font-normal;
+}
+.typo-subtitle {
+  @apply text-xs font-normal text-muted;
+}
+
+.typo-p12m {
+  @apply text-[12px] font-medium;
+}
+.typo-p14m {
+  @apply text-[14px] font-medium;
+}
+.typo-p10Muted {
+  @apply text-[10px] text-muted;
+}
+.typo-p12Muted {
+  @apply text-[12px] text-muted;
+}
+
+/* ============================
+    BASE LAYER
+    ============================ */
+@layer base {
+  /* Base elements */
+  * {
+    @apply border-border outline-border/50;
   }
 
-  /* Tailwind variable mapping */
-  @theme inline {
-    --color-primary: var(--primary);
-    --color-secondary: var(--secondary);
-    --color-accent: var(--accent);
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --color-muted: var(--muted);
-    --color-border: var(--border);
-    --color-success: var(--success);
-    --color-warning: var(--warning);
-    --color-error: var(--error);
+  body {
+    @apply bg-background text-foreground;
+  }
 
-    --radius-sm: calc(var(--radius) - 4px);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) + 4px);
+  /* Form element styling */
+  :is(
+      input[type="checkbox"],
+      input[type="radio"],
+      [class*="checkbox" i],
+      [data-slot="checkbox"]
+    ) {
+    accent-color: var(--primary) !important;
+    background-color: var(--background) !important;
+    border: 2px solid var(--border) !important;
+  }
+
+  /* Checked/Active state */
+  :is(
+      input[type="checkbox"]:checked,
+      input[type="radio"]:checked,
+      [class*="checkbox" i]:checked,
+      [data-slot="checkbox"][data-state="checked"]
+    ) {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: var(--foreground) !important;
+  }
+
+  /* Dropdowns & menu highlights */
+  :is(
+      select,
+      select > option,
+      [data-slot="select-item"],
+      [data-radix-select-content] [data-highlighted],
+      [data-radix-dropdown-menu-content] [data-highlighted]
+    ) {
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+  }
+
+  /* Hover/focus/checked states */
+  :is(
+      select > option:is(:checked, :hover, :focus),
+      [data-slot="select-item"]:is(
+          :focus,
+          [data-highlighted],
+          [data-state="checked"]
+        ),
+      [data-radix-select-content] [data-highlighted],
+      [data-radix-dropdown-menu-content] [data-highlighted]
+    ) {
+    background-color: var(--primary) !important;
+    color: var(--secondary) !important;
+  }
+
+  :is(
+      select > option:is(:checked, :hover, :focus),
+      [data-slot="select-item"]:is(:hover, ),
+      [data-radix-select-content] [data-highlighted],
+      [data-radix-dropdown-menu-content] [data-highlighted]
+    ) {
+    background-color: var(--muted) !important;
+    color: var(--secondary) !important;
+  }
+
+  /* Focus ring for all inputs/buttons */
+  :is(input, select, textarea, button):focus {
+    outline-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    /* box-shadow: 0px 0px 1px var(--primary) !important; */
   }
 
   /* ============================
-    BASE LAYER
-    ============================ */
-  @layer base {
-    /* Base elements */
-    * {
-      @apply border-border outline-border/50;
-    }
-
-    body {
-      @apply bg-background text-foreground;
-    }
-
-    /* Form element styling */
-    :is(
-        input[type="checkbox"],
-        input[type="radio"],
-        [class*="checkbox" i],
-        [data-slot="checkbox"]
-      ) {
-      accent-color: var(--primary) !important;
-      background-color: var(--background) !important;
-      border: 2px solid var(--border) !important;
-    }
-
-    /* Checked/Active state */
-    :is(
-        input[type="checkbox"]:checked,
-        input[type="radio"]:checked,
-        [class*="checkbox" i]:checked,
-        [data-slot="checkbox"][data-state="checked"]
-      ) {
-      background-color: var(--primary) !important;
-      border-color: var(--primary) !important;
-      color: var(--foreground) !important;
-    }
-
-    /* Dropdowns & menu highlights */
-    :is(
-        select,
-        select > option,
-        [data-slot="select-item"],
-        [data-radix-select-content] [data-highlighted],
-        [data-radix-dropdown-menu-content] [data-highlighted]
-      ) {
-      background-color: var(--background) !important;
-      color: var(--foreground) !important;
-      border-color: var(--border) !important;
-    }
-
-    /* Hover/focus/checked states */
-    :is(
-        select > option:is(:checked, :hover, :focus),
-        [data-slot="select-item"]:is(
-            :focus,
-            [data-highlighted],
-            [data-state="checked"]
-          ),
-        [data-radix-select-content] [data-highlighted],
-        [data-radix-dropdown-menu-content] [data-highlighted]
-      ) {
-      background-color: var(--primary) !important;
-      color: var(--secondary) !important;
-    }
-
-        :is(
-        select > option:is(:checked, :hover, :focus),
-        [data-slot="select-item"]:is(
-            :hover,
-          ),
-        [data-radix-select-content] [data-highlighted],
-        [data-radix-dropdown-menu-content] [data-highlighted]
-      ) {
-      background-color: var(--muted) !important;
-      color: var(--secondary) !important;
-    }
-
-    /* Focus ring for all inputs/buttons */
-    :is(input, select, textarea, button):focus {
-      outline-color: var(--primary) !important;
-      border-color: var(--primary) !important;
-      /* box-shadow: 0px 0px 1px var(--primary) !important; */
-    }
-
-    /* ============================
       SCROLLBAR STYLING
       ============================ */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-    ::-webkit-scrollbar-thumb {
-      background-color: var(--border);
-      border-radius: 10px;
-      transition: background-color 0.2s ease;
-    }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+  }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: var(--muted);
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted);
+  }
 
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
 
-    /* ============================
+  /* ============================
       TEXT SELECTION
       ============================ */
-    ::selection {
-      background-color: var(--primary);
-      color: var(--foreground);
-    }
+  ::selection {
+    background-color: var(--primary);
+    color: var(--foreground);
+  }
 
-    /* ============================
+  /* ============================
       UTILITY CLASSES
       ============================ */
-    /* .bg-primary {
+  /* .bg-primary {
       background-color: var(--primary) !important;
     }
     .bg-secondary {
@@ -180,7 +227,7 @@
       background-color: var(--error) !important;
     } */
 
-    /* .text-primary {
+  /* .text-primary {
       color: var(--primary) !important;
     }
     .text-secondary {
@@ -198,7 +245,7 @@
     .text-error {
       color: var(--error) !important;
     } */
-/* 
+  /* 
     .border-primary {
       border-color: var(--primary) !important;
     }
@@ -218,25 +265,24 @@
       border-color: var(--error) !important;
     } */
 
-    /* Gradient Utilities */
-    .gradient-primary {
-      background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--accent)
-      ) !important;
-    }
-    .gradient-secondary {
-      background: linear-gradient(
-        135deg,
-        var(--secondary),
-        var(--muted)
-      ) !important;
-    }
+  /* Gradient Utilities */
+  .gradient-primary {
+    background: linear-gradient(
+      135deg,
+      var(--primary),
+      var(--accent)
+    ) !important;
   }
-
-
-  .PhoneInputCountry img{
-    max-height: 10px;
-    max-width: 10px;
+  .gradient-secondary {
+    background: linear-gradient(
+      135deg,
+      var(--secondary),
+      var(--muted)
+    ) !important;
   }
+}
+
+.PhoneInputCountry img {
+  max-height: 10px;
+  max-width: 10px;
+}

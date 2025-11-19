@@ -576,7 +576,7 @@ export default function VehicleDocumentsPage() {
             <UploadFileIcon/>
           </motion.div>
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">Vehicle Documents</h1>
+            <h1 className="typo-h1">Vehicle Documents</h1>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">Black & white. Pixel-perfect. View, add, track, and export vehicle documents.</p>
           </div>
         </div>

@@ -255,7 +255,7 @@ export default function UserPolicyManagement() {
             <DescriptionIcon className="text-foreground" />
           </motion.div>
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            <h1 className="typo-h1">
               User Policy Management
             </h1>
             <p className="text-sm text-muted-foreground">

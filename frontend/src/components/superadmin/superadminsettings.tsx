@@ -129,7 +129,7 @@ export default function SuperAdminSettings() {
           </motion.div>
 
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            <h1 className="typo-h1">
               Application Settings
             </h1>
             <p className="text-sm text-muted-foreground">
