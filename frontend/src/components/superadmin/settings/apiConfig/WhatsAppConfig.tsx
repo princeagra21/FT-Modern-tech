@@ -186,7 +186,7 @@ const WhatsAppConfigComponent = () => {
         <div>
           <Label
             htmlFor="whatsapp-provider"
-            className="text-sm font-medium text-foreground"
+            className="typo-p500
           >
             Select Provider
           </Label>
@@ -218,7 +218,7 @@ const WhatsAppConfigComponent = () => {
         <div className="p-4 dark:bg-background border border-border rounded-xl">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <div className="text-sm font-medium text-foreground">
+              <div className="typo-p500>
                 Activate Provider
               </div>
               <div className="typo-subtitle mt-0.5">

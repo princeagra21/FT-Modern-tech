@@ -435,7 +435,7 @@ export default function PaymentGatewayConfig() {
       <div className="mb-6">
         <div className="rounded-2xl border border-border bg-background p-5 dark:bg-foreground/5">
           <div className="mb-3 flex items-center justify-between">
-            <div className="text-sm font-medium text-foreground">
+            <div className="typo-p500>
               Active Configuration
             </div>
             <div className="typo-subtitle">
@@ -613,7 +613,7 @@ export default function PaymentGatewayConfig() {
                   <TabsContent value="credentials" className="space-y-4">
                     {/* Environment Selection */}
                     <div>
-                      <Label className="mb-2 block text-sm font-medium text-foreground">
+                      <Label className="mb-2 block typo-p500>
                         Environment
                       </Label>
                       <div className="flex gap-2">
@@ -645,7 +645,7 @@ export default function PaymentGatewayConfig() {
                     {/* Credential Fields */}
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <Label className="text-sm font-medium text-foreground">
+                        <Label className="typo-p500>
                           API Credentials
                         </Label>
                         <div className="flex items-center gap-2">
@@ -788,7 +788,7 @@ export default function PaymentGatewayConfig() {
                     {/* Primary Gateway */}
                     <div className="flex items-center justify-between rounded-xl border border-border bg-card p-4">
                       <div>
-                        <div className="text-sm font-medium text-foreground">
+                        <div className="typo-p500>
                           Set as Primary Gateway
                         </div>
                         <div className="typo-subtitle mt-0.5">
@@ -808,7 +808,7 @@ export default function PaymentGatewayConfig() {
 
                     {/* Supported Currencies */}
                     <div>
-                      <Label className="mb-2 block text-sm font-medium text-foreground">
+                      <Label className="mb-2 block typo-p500>
                         Supported Currencies
                       </Label>
                       <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
@@ -840,7 +840,7 @@ export default function PaymentGatewayConfig() {
                   <TabsContent value="features" className="space-y-4">
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <Label className="text-sm font-medium text-foreground">
+                        <Label className="typo-p500>
                           Supported Features
                         </Label>
                         <Dialog>
@@ -959,7 +959,7 @@ export default function PaymentGatewayConfig() {
 
                     {/* Regional Coverage */}
                     <div>
-                      <Label className="mb-3 block text-sm font-medium text-foreground">
+                      <Label className="mb-3 block typo-p500>
                         Regional Coverage
                       </Label>
                       <div className="flex flex-wrap gap-2">

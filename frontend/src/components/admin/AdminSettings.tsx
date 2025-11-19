@@ -167,7 +167,7 @@ export default function AdminSettings() {
               >
                 <div className="flex items-center gap-2 mb-3">
                   <AccountBalanceWalletIcon className="text-foreground/80 h-5 w-5" />
-                  <Label className="text-sm font-medium text-foreground">
+                  <Label className="typo-p500>
                     Free Signup Credits
                   </Label>
                 </div>

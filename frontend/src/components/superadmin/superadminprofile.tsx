@@ -217,11 +217,11 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 items-stretch">
       <KPITile
         label="Created"
-        value={<span className="text-sm font-medium text-foreground">15 Jan 2024, 10:00 am</span>}
+        value={<span className="typo-p500>15 Jan 2024, 10:00 am</span>}
       />
       <KPITile
         label="Last Login"
-        value={<span className="text-sm font-medium text-foreground">18 Oct 2025, 2:45 pm</span>}
+        value={<span className="typo-p500>18 Oct 2025, 2:45 pm</span>}
         sub={
           <span className="inline-block rounded-full border border-border px-1.5 py-[1px] text-muted">just now</span>
         }
@@ -376,7 +376,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
                 {i + 1}
               </div>
               <div>
-                <div className="text-sm font-medium text-foreground">{activity.action}</div>
+                <div className="typo-p500>{activity.action}</div>
                 <div className="typo-subtitle">
                   {activity.time} · {activity.detail}
                 </div>

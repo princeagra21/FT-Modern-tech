@@ -185,7 +185,7 @@ function SuperAdminWhiteLabel() {
 
   <div className="space-y-4">
     <div>
-      <Label htmlFor="baseURL" className="text-sm font-medium text-foreground">
+      <Label htmlFor="baseURL" className="typo-p500>
         Base URL
       </Label>
       <Input
@@ -295,7 +295,7 @@ function SuperAdminWhiteLabel() {
           />
           <label htmlFor="favicon-upload" className="cursor-pointer">
             <CloudUploadRoundedIcon className="mx-auto text-muted mb-2" fontSize="large" />
-            <div className="text-sm font-medium text-foreground">Click to upload</div>
+            <div className="typo-p500>Click to upload</div>
             <div className="typo-subtitle mt-1">ICO, PNG (max 2MB)</div>
           </label>
         </div>
@@ -352,7 +352,7 @@ function SuperAdminWhiteLabel() {
           />
           <label htmlFor="dark-logo-upload" className="cursor-pointer">
             <CloudUploadRoundedIcon className="mx-auto text-muted mb-2" fontSize="large" />
-            <div className="text-sm font-medium text-foreground">Click to upload</div>
+            <div className="typo-p500>Click to upload</div>
             <div className="typo-subtitle mt-1">SVG, PNG, JPG (max 5MB)</div>
           </label>
         </div>
@@ -409,7 +409,7 @@ function SuperAdminWhiteLabel() {
           />
           <label htmlFor="light-logo-upload" className="cursor-pointer">
             <CloudUploadRoundedIcon className="mx-auto text-muted mb-2" fontSize="large" />
-            <div className="text-sm font-medium text-foreground">Click to upload</div>
+            <div className="typo-p500>Click to upload</div>
             <div className="typo-subtitle mt-1">SVG, PNG, JPG (max 5MB)</div>
           </label>
         </div>

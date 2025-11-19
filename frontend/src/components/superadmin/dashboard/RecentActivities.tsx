@@ -56,7 +56,7 @@ const RecentActivities = () => {
                     <DirectionsCarOutlinedIcon className="h-4 w-4 text-foreground" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-foreground">{v.name}</p>
+                    <p className="truncate typo-p500>{v.name}</p>
                     <p className="truncate typo-subtitle">{v.model}</p>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ const RecentActivities = () => {
               <li key={idx} className="py-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-foreground">{t.id}</p>
+                    <p className="truncate typo-p500>{t.id}</p>
                     <p className="truncate typo-subtitle">
                       {t.admin} • {t.type}
                     </p>
@@ -126,7 +126,7 @@ const RecentActivities = () => {
                       .join("")}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-foreground">{u.name}</p>
+                    <p className="truncate typo-p500>{u.name}</p>
                     <p className="truncate typo-subtitle">{u.email}</p>
                   </div>
                 </div>

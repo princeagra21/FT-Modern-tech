@@ -249,12 +249,12 @@ export default function SupportSplitView() {
           <div className="grid gap-4 py-2">
             {/* Customer combobox */}
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-foreground">Customer</label>
+              <label className="typo-p500>Customer</label>
               <CustomerCombobox value={newCustomer} onChange={setNewCustomer} />
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-foreground">Title</label>
+              <label className="typo-p500>Title</label>
               <Input
                 value={newTitle}
                 onChange={e => setNewTitle(e.target.value)}
@@ -264,7 +264,7 @@ export default function SupportSplitView() {
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-foreground">Description</label>
+              <label className="typo-p500>Description</label>
               <Textarea
                 value={newDesc}
                 onChange={e => setNewDesc(e.target.value)}

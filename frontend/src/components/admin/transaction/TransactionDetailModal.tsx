@@ -46,7 +46,7 @@ const TransactionDetailModal = ({
             {/* Amount Section */}
             <Card className="border-border bg-background shadow-sm">
               <CardHeader className="pb-1">
-                <CardTitle className="text-sm font-medium text-foreground">
+                <CardTitle className="typo-p500>
                   Amount & Credits
                 </CardTitle>
               </CardHeader>
@@ -83,7 +83,7 @@ const TransactionDetailModal = ({
             {/* Gateway Section */}
             <Card className="border-border bg-background shadow-sm">
               <CardHeader className="pb-1">
-                <CardTitle className="text-sm font-medium text-foreground">
+                <CardTitle className="typo-p500>
                   Gateway
                 </CardTitle>
               </CardHeader>

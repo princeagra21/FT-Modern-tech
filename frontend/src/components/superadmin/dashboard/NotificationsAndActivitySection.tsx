@@ -34,7 +34,7 @@ const NotificationsAndActivitySection = () => {
             {notifications.map((n, idx) => (
               <li key={idx} className="flex items-center justify-between py-3">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-foreground">{n.title}</p>
+                  <p className="truncate typo-p500>{n.title}</p>
                   <p className="truncate typo-subtitle">{n.detail}</p>
                 </div>
                 <span className="shrink-0 typo-subtitle">{n.time}</span>
@@ -55,7 +55,7 @@ const NotificationsAndActivitySection = () => {
             {activities.map((a, idx) => (
               <li key={idx} className="flex items-center justify-between py-3">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-foreground">{a.who}</p>
+                  <p className="truncate typo-p500>{a.who}</p>
                   <p className="truncate typo-subtitle">{a.what}</p>
                 </div>
                 <span className="shrink-0 typo-subtitle">{a.when}</span>

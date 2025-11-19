@@ -74,7 +74,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <TopHeader mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} role="SUPER_ADMIN" />
 
         <nav className="relative hidden border-t border-border bg-background shadow-lg md:block">
-          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 text-sm font-medium text-foreground">
+          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 typo-p500>
             {navData.map((nav) => (
               <DesktopNavItem key={nav.label} label={nav.label} icon={nav.icon} route={nav.route} items={nav.items} />
             ))}

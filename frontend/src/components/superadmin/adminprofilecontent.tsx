@@ -229,7 +229,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
           <KPITile
             label="Last Login"
             value={
-              <span className="text-sm font-medium text-foreground">
+              <span className="typo-p500>
                 15 Oct 2025, 8:35 pm
               </span>
             }
@@ -242,7 +242,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
           <KPITile
             label="Created"
             value={
-              <span className="text-sm font-medium text-foreground">
+              <span className="typo-p500>
                 12 Sept 2025, 2:00 pm
               </span>
             }
@@ -431,7 +431,7 @@ function AdminProfileContent({ adminId }: { adminId: string }) {
                     {i}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-foreground">
+                    <div className="typo-p500>
                       Updated vehicle status
                     </div>
                     <div className="typo-subtitle">

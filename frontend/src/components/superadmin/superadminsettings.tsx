@@ -176,7 +176,7 @@ export default function SuperAdminSettings() {
               <div className="typo-subtitle">
                 Backup Retention
               </div>
-              <div className="text-sm font-medium text-foreground">
+              <div className="typo-p500>
                 {BACKUP_RETENTION_OPTIONS.find(
                   (opt) => opt.value === settings.databaseBackupRetention
                 )?.label || "N/A"}
@@ -201,7 +201,7 @@ export default function SuperAdminSettings() {
         <Card title="Demo Login" icon={<LoginIcon />}>
           <div className="flex items-center justify-between rounded-xl border border-border p-3">
             <div>
-              <span className="text-sm font-medium text-foreground">
+              <span className="typo-p500>
                 Enable Demo Login
               </span>
               <div className="typo-subtitle mt-0.5">
@@ -276,7 +276,7 @@ export default function SuperAdminSettings() {
             {/* Allow Signup Toggle */}
             <div className="flex items-center justify-between rounded-xl border border-border bg-foreground/5 p-4">
               <div>
-                <span className="text-sm font-medium text-foreground">
+                <span className="typo-p500>
                   Allow New Signups
                 </span>
                 <div className="typo-subtitle mt-0.5">
@@ -302,7 +302,7 @@ export default function SuperAdminSettings() {
               >
                 <div className="flex items-center gap-2 mb-3">
                   <AccountBalanceWalletIcon className="text-foreground h-5 w-5" />
-                  <Label className="text-sm font-medium text-foreground">
+                  <Label className="typo-p500>
                     Free Signup Credits
                   </Label>
                 </div>

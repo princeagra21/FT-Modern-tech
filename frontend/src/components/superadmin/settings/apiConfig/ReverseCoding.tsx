@@ -195,7 +195,7 @@ const ReverseCoding = () => {
             <div>
               <Label
                 htmlFor="geocoding-provider"
-                className="text-sm font-medium text-foreground"
+                className="typo-p500
               >
                 Select Provider
               </Label>
@@ -251,7 +251,7 @@ const ReverseCoding = () => {
             <div className="p-4  border border-border rounded-xl dark:bg-background">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="typo-p500>
                     Activate Provider
                   </div>
                   <div className="typo-subtitle mt-0.5">
@@ -324,7 +324,7 @@ const ReverseCoding = () => {
               <div>
                 <Label
                   htmlFor="google-apiKey"
-                  className="text-sm font-medium text-foreground"
+                  className="typo-p500
                 >
                   Google API Key
                 </Label>
@@ -361,7 +361,7 @@ const ReverseCoding = () => {
               <div>
                 <Label
                   htmlFor="here-apiKey"
-                  className="text-sm font-medium text-foreground"
+                  className="typo-p500
                 >
                   HERE API Key
                 </Label>
@@ -398,7 +398,7 @@ const ReverseCoding = () => {
               <div>
                 <Label
                   htmlFor="tomtom-apiKey"
-                  className="text-sm font-medium text-foreground"
+                  className="typo-p500
                 >
                   TomTom API Key
                 </Label>
@@ -435,7 +435,7 @@ const ReverseCoding = () => {
               <div>
                 <Label
                   htmlFor="mapbox-accessToken"
-                  className="text-sm font-medium text-foreground"
+                  className="typo-p500
                 >
                   Mapbox Access Token
                 </Label>
@@ -475,7 +475,7 @@ const ReverseCoding = () => {
               <div>
                 <Label
                   htmlFor="locationiq-apiKey"
-                  className="text-sm font-medium text-foreground"
+                  className="typo-p500
                 >
                   LocationIQ API Key
                 </Label>
@@ -521,7 +521,7 @@ const ReverseCoding = () => {
               <div>
                 <Label
                   htmlFor="osm-userAgent"
-                  className="text-sm font-medium text-foreground"
+                  className="typo-p500
                 >
                   User Agent String
                 </Label>

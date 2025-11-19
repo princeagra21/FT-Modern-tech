@@ -812,7 +812,7 @@ function AdminVehiclesList() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border ">
                   <DirectionsCarIcon />
                 </div>
-                <div className="text-sm font-medium text-foreground">
+                <div className="typo-p500>
                   Total Vehicles
                 </div>
               </div>
@@ -828,7 +828,7 @@ function AdminVehiclesList() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border">
                   <SignalCellularAltIcon />
                 </div>
-                <div className="text-sm font-medium text-foreground">
+                <div className="typo-p500>
                   Moving
                 </div>
               </div>
@@ -846,7 +846,7 @@ function AdminVehiclesList() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border ">
                   <SignalCellularAltIcon />
                 </div>
-                <div className="text-sm font-medium text-foreground">Idle</div>
+                <div className="typo-p500>Idle</div>
               </div>
               <div className="mb-1 typo-h1 font-semibold text-foreground">
                 215
@@ -862,7 +862,7 @@ function AdminVehiclesList() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border ">
                   <SignalCellularAltIcon  />
                 </div>
-                <div className="text-sm font-medium text-foreground">
+                <div className="typo-p500>
                   Stopped
                 </div>
               </div>

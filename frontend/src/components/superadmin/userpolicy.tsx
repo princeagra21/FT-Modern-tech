@@ -325,7 +325,7 @@ export default function UserPolicyManagement() {
           {/* Content Editor */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <Label className="text-sm font-medium text-foreground">
+              <Label className="typo-p500>
                 Policy Content
               </Label>
               <div className="flex items-center gap-2">
