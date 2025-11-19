@@ -133,7 +133,7 @@ function DeleteAccountContent() {
   return (
     <div className="p-8 space-y-6 bg-background text-foreground">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight mb-2 text-destructive">
+        <h2 className="typo-h1 mb-2 text-destructive">
           Delete Account
         </h2>
         <p className="text-muted-foreground">

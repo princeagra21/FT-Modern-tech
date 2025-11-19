@@ -117,7 +117,7 @@ function LoginForm() {
 
       <Card className="w-full lg:max-w-md bg-background text-foreground border border-border shadow-md rounded-xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-foreground">
+          <CardTitle className="typo-h1 font-bold text-center text-foreground">
             Sign In
           </CardTitle>
           <CardDescription className="text-center text-muted">

@@ -816,7 +816,7 @@ function AdminVehiclesList() {
                   Total Vehicles
                 </div>
               </div>
-              <div className="mb-1 text-2xl font-semibold text-foreground">
+              <div className="mb-1 typo-h1 font-semibold text-foreground">
                 1,200
               </div>
               <div className="text-xs text-muted">currently tracked</div>
@@ -832,7 +832,7 @@ function AdminVehiclesList() {
                   Moving
                 </div>
               </div>
-              <div className="mb-1 text-2xl font-semibold text-foreground">
+              <div className="mb-1 typo-h1 font-semibold text-foreground">
                 432
               </div>
               <div className="mt-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs text-white">
@@ -848,7 +848,7 @@ function AdminVehiclesList() {
                 </div>
                 <div className="text-sm font-medium text-foreground">Idle</div>
               </div>
-              <div className="mb-1 text-2xl font-semibold text-foreground">
+              <div className="mb-1 typo-h1 font-semibold text-foreground">
                 215
               </div>
               <div className="mt-2 inline-flex items-center rounded-full bg-foreground/5 px-2 py-0.5 text-xs text-foreground">
@@ -866,7 +866,7 @@ function AdminVehiclesList() {
                   Stopped
                 </div>
               </div>
-              <div className="mb-1 text-2xl font-semibold text-foreground">
+              <div className="mb-1 typo-h1 font-semibold text-foreground">
                 190
               </div>
               <div className="mt-2 inline-flex items-center rounded-full bg-foreground/5 px-2 py-0.5 text-xs text-foreground">
@@ -929,7 +929,7 @@ function KpiCard({
           {title}
         </div>
       </div>
-      <div className="mb-1 text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+      <div className="mb-1 typo-h1 font-semibold text-neutral-900 dark:text-neutral-100">
         {typeof value === "number" ? value.toLocaleString() : value}
       </div>
       {hint && (

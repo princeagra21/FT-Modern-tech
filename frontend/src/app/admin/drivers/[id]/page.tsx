@@ -114,7 +114,7 @@ function RoleContent() {
   return (
     <div className="p-8 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight mb-2">Role Management</h2>
+        <h2 className="typo-h1 mb-2">Role Management</h2>
         <p className="text-neutral-600">Manage user roles and permissions.</p>
       </div>
       <div className="text-center py-12 text-neutral-500">
@@ -129,7 +129,7 @@ function DeleteAccountContent() {
   return (
     <div className="p-8 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight mb-2 text-red-600">Delete Account</h2>
+        <h2 className="typo-h1 mb-2 text-red-600">Delete Account</h2>
         <p className="text-neutral-600">Permanently delete this user account and all associated data.</p>
       </div>
       <div className="bg-red-50 border border-red-200 rounded-xl p-6">

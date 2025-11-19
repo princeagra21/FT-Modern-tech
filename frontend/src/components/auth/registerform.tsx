@@ -97,7 +97,7 @@ export default function RegisterForm() {
       <Toaster position="top-right" />
       <Card className="w-full max-w-7xl mx-auto">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
+          <CardTitle className="typo-h1 font-bold">Sign Up</CardTitle>
           <CardDescription>Create an account to get started</CardDescription>
         </CardHeader>
 

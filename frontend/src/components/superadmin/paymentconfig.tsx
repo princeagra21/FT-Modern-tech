@@ -450,7 +450,7 @@ export default function PaymentGatewayConfig() {
               <div className="text-xs text-muted-foreground mb-1">
                 Enabled Gateways
               </div>
-              <div className="text-2xl font-semibold text-foreground">
+              <div className="typo-h1 font-semibold text-foreground">
                 {enabledCount}
               </div>
             </div>
@@ -466,7 +466,7 @@ export default function PaymentGatewayConfig() {
               <div className="text-xs text-muted-foreground mb-1">
                 Total Available
               </div>
-              <div className="text-2xl font-semibold text-foreground">
+              <div className="typo-h1 font-semibold text-foreground">
                 {PAYMENT_GATEWAYS.length}
               </div>
             </div>

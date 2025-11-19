@@ -67,7 +67,7 @@ export default function RoleContent() {
           {draft ? (
             <>
               <div className="border-b border-border pb-3 mb-4">
-                <h2 className="text-2xl font-bold text-foreground">
+                <h2 className="typo-h1 font-bold text-foreground">
                   {draft.title}
                 </h2>
                 <p className="text-sm text-muted-foreground">

@@ -704,7 +704,7 @@ export default function AdminDocumentsPage() {
         <div className="rounded-2xl border border-border bg-card p-4 dark:bg-foreground/5">
           <div className="text-sm text-muted">Total documents</div>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold text-foreground">
+            <span className="typo-h1 font-semibold text-foreground">
               {docs.length}
             </span>
             <Badge

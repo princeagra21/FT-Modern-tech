@@ -198,7 +198,7 @@ function SuperAdminAPIConfig() {
   if (loading) {
     return (
       <div className="p-8">
-        <h2 className="text-2xl font-bold tracking-tight mb-2 dark:text-neutral-100">Saving...</h2>
+        <h2 className="typo-h1 mb-2 dark:text-neutral-100">Saving...</h2>
       </div>
     );
   }
@@ -211,7 +211,7 @@ function SuperAdminAPIConfig() {
       <div className="text-[11px] uppercase tracking-[0.2em] text-muted">
         API Configuration
       </div>
-      <CardTitle className="text-2xl tracking-tight text-foreground">
+      <CardTitle className="typo-h1 tracking-tight text-foreground">
         Third-Party Integrations
       </CardTitle>
     </div>

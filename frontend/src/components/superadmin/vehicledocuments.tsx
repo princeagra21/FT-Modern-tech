@@ -593,7 +593,7 @@ export default function VehicleDocumentsPage() {
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="text-sm text-neutral-500 dark:text-neutral-400">Total documents</div>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{docs.length}</span>
+            <span className="typo-h1 font-semibold text-neutral-900 dark:text-neutral-100">{docs.length}</span>
             <Badge variant="outline" className="rounded-full border-neutral-300 dark:border-neutral-600 text-xs dark:text-neutral-100">v{docs.reduce((a,b)=>a+b.version,0)}</Badge>
           </div>
         </div>

@@ -29,7 +29,7 @@ interface TypographyProps {
 }
 
 const variantClasses: Record<TypographyVariant, string> = {
-  h1: "text-2xl font-semibold",
+  h1: "typo-h1 font-semibold",
   h2: "text-xl font-semibold",
   h3: "text-lg font-semibold",
   h4: "text-base font-medium",

@@ -581,43 +581,6 @@ export default function AnalyticsDashboard() {
   );
 }
 
-// ------------------ Bits ------------------
-function KPI({
-  icon: Icon,
-  title,
-  value,
-  hint,
-  tone,
-}: {
-  icon: any;
-  title: string;
-  value: string;
-  hint?: string;
-  tone?: "amber" | "rose" | undefined;
-}) {
-  const toneCls =
-    tone === "amber"
-      ? "border-amber-200"
-      : tone === "rose"
-      ? "border-rose-200"
-      : "border-zinc-200";
-  return (
-    <Card className={`rounded-2xl ${toneCls} border shadow-sm`}>
-      <CardContent className="p-5 flex items-start justify-between">
-        <div>
-          <p className="text-sm text-zinc-500">{title}</p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight">{value}</p>
-          {hint ? <p className="mt-1 text-xs text-zinc-500">{hint}</p> : null}
-        </div>
-        {Icon ? (
-          <div className="p-3 rounded-xl border bg-white text-zinc-900">
-            <Icon fontSize="small" />
-          </div>
-        ) : null}
-      </CardContent>
-    </Card>
-  );
-}
 
 function ChartCard({
   title,

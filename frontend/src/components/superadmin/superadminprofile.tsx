@@ -136,7 +136,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
   if (loading) {
     return (
       <div className="p-8">
-        <h2 className="text-2xl font-bold tracking-tight mb-2 dark:text-muted">Loading...</h2>
+        <h2 className="typo-h1 mb-2 dark:text-muted">Loading...</h2>
       </div>
     );
   }
@@ -144,7 +144,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
   if (!superAdmin) {
     return (
       <div className="p-8">
-        <h2 className="text-2xl font-bold tracking-tight mb-2 dark:text-muted">Super Admin not found</h2>
+        <h2 className="typo-h1 mb-2 dark:text-muted">Super Admin not found</h2>
       </div>
     );
   }
@@ -155,7 +155,7 @@ function SuperAdminProfile({ superAdminId }: { superAdminId?: string }) {
     <div className="flex items-start justify-between gap-4">
       <div>
         <div className="text-[11px] uppercase tracking-[0.2em] text-muted">Super Admin</div>
-        <CardTitle className="text-2xl tracking-tight text-foreground">Profile Overview</CardTitle>
+        <CardTitle className="typo-h1 tracking-tight text-foreground">Profile Overview</CardTitle>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Button

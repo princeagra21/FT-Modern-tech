@@ -40,7 +40,7 @@
 }
 
 .typo-h1 {
-  @apply text-2xl font-semibold;
+  @apply typo-h1 font-semibold;
 }
 .typo-h2 {
   @apply text-xl font-semibold;

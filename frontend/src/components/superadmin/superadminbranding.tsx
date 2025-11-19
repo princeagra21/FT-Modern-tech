@@ -150,7 +150,7 @@ function SuperAdminBranding() {
             <div className="text-[11px] uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
               Theme Customization
             </div>
-            <CardTitle className="text-2xl tracking-tight dark:text-neutral-100">
+            <CardTitle className="typo-h1 tracking-tight dark:text-neutral-100">
               Branding & Colors
             </CardTitle>
             <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
