@@ -99,7 +99,7 @@ export function DEV_runCSVTests() {
   export const FileKindIcon = ({ kind }: { kind: FileKind }) => {
     if (kind === "pdf")
       return (
-        <DescriptionIcon className="text-neutral-900 dark:text-neutral-100" />
+        <DescriptionIcon className="" />
       );
     if (kind === "image")
       return (
@@ -107,7 +107,7 @@ export function DEV_runCSVTests() {
       );
     if (kind === "doc")
       return (
-        <DescriptionIcon className="text-neutral-700 dark:text-neutral-300" />
+        <DescriptionIcon className="text-neutral-700 " />
       );
     return (
       <DescriptionIcon className="text-neutral-500 " />

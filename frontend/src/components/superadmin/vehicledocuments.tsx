@@ -483,9 +483,9 @@ export default function VehicleDocumentsPage() {
   };
 
   const FileKindIcon = ({ kind }: { kind: FileKind }) => {
-    if (kind === "pdf") return <DescriptionIcon className="text-neutral-900 dark:text-neutral-100"/>;
+    if (kind === "pdf") return <DescriptionIcon className=""/>;
     if (kind === "image") return <div className="h-5 w-5 rounded-sm border border-neutral-400 dark:border-neutral-600"/>;
-    if (kind === "doc") return <DescriptionIcon className="text-neutral-700 dark:text-neutral-300"/>;
+    if (kind === "doc") return <DescriptionIcon className="text-neutral-700 "/>;
     return <DescriptionIcon className="text-neutral-500 "/>;
   };
 
@@ -518,7 +518,7 @@ export default function VehicleDocumentsPage() {
           hover ? "border-neutral-900 dark:border-neutral-100 bg-neutral-50 dark:bg-neutral-800" : "border-neutral-300 dark:border-neutral-600"
         )}
       >
-        <CloudUploadIcon className="h-7 w-7 text-neutral-900 dark:text-neutral-100"/>
+        <CloudUploadIcon className="h-7 w-7 "/>
         <div className="typo-p ">Drag & drop your file here</div>
         <div className="typo-subtitle">PDF, Images, DOCX — up to 50 MB</div>
         
@@ -593,7 +593,7 @@ export default function VehicleDocumentsPage() {
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="typo-p-muted">Total documents</div>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="typo-h1 font-semibold text-neutral-900 dark:text-neutral-100">{docs.length}</span>
+            <span className="typo-h1 font-semibold ">{docs.length}</span>
             <Badge variant="outline" className="rounded-full border-neutral-300 dark:border-neutral-600 text-xs dark:text-neutral-100">v{docs.reduce((a,b)=>a+b.version,0)}</Badge>
           </div>
         </div>
@@ -652,7 +652,7 @@ export default function VehicleDocumentsPage() {
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-4 sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between typo-p-muted">
             <span>Storage used</span>
-            <span className="text-neutral-900 dark:text-neutral-100 font-medium">{formatBytes(storageUsed)} / {formatBytes(storageQuota)}</span>
+            <span className=" font-medium">{formatBytes(storageUsed)} / {formatBytes(storageQuota)}</span>
           </div>
           <Progress value={storagePct} className="mt-3 h-2 bg-neutral-100 dark:bg-neutral-700" />
           <div className="mt-2 typo-subtitle">{storagePct.toFixed(1)}% used</div>
@@ -668,13 +668,13 @@ export default function VehicleDocumentsPage() {
               placeholder="Search by name, tags, or Document Type (Ctrl/Cmd+K)"
               value={query}
               onChange={(e)=>{setQuery(e.target.value); setPage(1);}}
-              className="rounded-xl border-neutral-300 dark:border-neutral-600 pr-10 text-neutral-900 dark:text-neutral-100 placeholder:text-muted dark:placeholder:text-neutral-500 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 dark:bg-neutral-800"
+              className="rounded-xl border-neutral-300 dark:border-neutral-600 pr-10  placeholder:text-muted dark:placeholder:text-neutral-500 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 dark:bg-neutral-800"
             />
-            <SearchIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-700 dark:text-neutral-300"/>
+            <SearchIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-700 "/>
           </div>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="rounded-xl border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700">
+              <Button variant="outline" className="rounded-xl border-neutral-300 dark:border-neutral-600  hover:bg-neutral-50 dark:hover:bg-neutral-700">
                 <FilterListIcon className="mr-2"/> Filters
               </Button>
             </PopoverTrigger>
@@ -687,7 +687,7 @@ export default function VehicleDocumentsPage() {
                       <button
                         key={t}
                         onClick={()=>{setFileKindFilter(t as any); setPage(1);}}
-                        className={cn("rounded-full border px-3 py-1", t===fileKindFilter ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700")}
+                        className={cn("rounded-full border px-3 py-1", t===fileKindFilter ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600  hover:bg-neutral-50 dark:hover:bg-neutral-700")}
                       >{t}</button>
                     ))}
                   </div>
@@ -699,7 +699,7 @@ export default function VehicleDocumentsPage() {
                       <button
                         key={s}
                         onClick={()=>{setStatusFilter(s as any); setPage(1);}}
-                        className={cn("rounded-full border px-3 py-1", s===statusFilter ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700")}
+                        className={cn("rounded-full border px-3 py-1", s===statusFilter ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600  hover:bg-neutral-50 dark:hover:bg-neutral-700")}
                       >{s}</button>
                     ))}
                   </div>
@@ -709,13 +709,13 @@ export default function VehicleDocumentsPage() {
                   <div className="flex flex-wrap gap-2 typo-p">
                     <button
                       onClick={()=> { setDocTypeFilter("all"); setPage(1); }}
-                      className={cn("rounded-full border px-3 py-1", docTypeFilter === "all" ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700")}
+                      className={cn("rounded-full border px-3 py-1", docTypeFilter === "all" ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600  hover:bg-neutral-50 dark:hover:bg-neutral-700")}
                     >All</button>
                     {DOC_TYPE_OPTIONS.map((opt) => (
                       <button
                         key={opt}
                         onClick={()=> { setDocTypeFilter(opt); setPage(1); }}
-                        className={cn("rounded-full border px-3 py-1", docTypeFilter === opt ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-700")}
+                        className={cn("rounded-full border px-3 py-1", docTypeFilter === opt ? "border-neutral-900 dark:border-white bg-neutral-900 dark:bg-white text-white dark:text-black" : "border-neutral-300 dark:border-neutral-600  hover:bg-neutral-50 dark:hover:bg-neutral-700")}
                       >{opt}</button>
                     ))}
                   </div>
@@ -755,8 +755,8 @@ export default function VehicleDocumentsPage() {
           >
             <span>{selectedIds.size} selected</span>
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="rounded-lg border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-white dark:hover:bg-neutral-700" onClick={exportSelectedAsCSV}><DownloadIcon className="mr-2"/> Export</Button>
-              <Button variant="outline" className="rounded-lg border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-white dark:hover:bg-neutral-700" onClick={()=> selectedIds.forEach((id)=> removeDoc(id))}><DeleteOutlineIcon className="mr-2"/> Delete</Button>
+              <Button variant="outline" className="rounded-lg border-neutral-300 dark:border-neutral-600  hover:bg-white dark:hover:bg-neutral-700" onClick={exportSelectedAsCSV}><DownloadIcon className="mr-2"/> Export</Button>
+              <Button variant="outline" className="rounded-lg border-neutral-300 dark:border-neutral-600  hover:bg-white dark:hover:bg-neutral-700" onClick={()=> selectedIds.forEach((id)=> removeDoc(id))}><DeleteOutlineIcon className="mr-2"/> Delete</Button>
             </div>
           </motion.div>
         )}
@@ -768,15 +768,15 @@ export default function VehicleDocumentsPage() {
           <Table>
           <TableHeader>
             <TableRow className="hover:bg-white dark:hover:bg-neutral-800">
-              <TableHead className="w-[80px] dark:text-neutral-300">Actions</TableHead>
+              <TableHead className="w-[80px] ">Actions</TableHead>
               <TableHead className="w-[40px]"><Checkbox checked={pageData.length>0 && pageData.every(d=> selectedIds.has(d.id))} onCheckedChange={toggleSelectAll} aria-label="Select all"/></TableHead>
-              <TableHead className="w-[28px] dark:text-neutral-300">File</TableHead>
-              <TableHead className="dark:text-neutral-300">Name</TableHead>
-              <TableHead className="dark:text-neutral-300">Document Type</TableHead>
-              <TableHead className="hidden sm:table-cell dark:text-neutral-300">Tags</TableHead>
-              <TableHead className="hidden md:table-cell dark:text-neutral-300">Uploaded</TableHead>
-              <TableHead className="hidden lg:table-cell dark:text-neutral-300">Expiry</TableHead>
-              <TableHead className="dark:text-neutral-300">Status</TableHead>
+              <TableHead className="w-[28px] ">File</TableHead>
+              <TableHead className="">Name</TableHead>
+              <TableHead className="">Document Type</TableHead>
+              <TableHead className="hidden sm:table-cell ">Tags</TableHead>
+              <TableHead className="hidden md:table-cell ">Uploaded</TableHead>
+              <TableHead className="hidden lg:table-cell ">Expiry</TableHead>
+              <TableHead className="">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -815,8 +815,8 @@ export default function VehicleDocumentsPage() {
                 <TableCell><div className="flex items-center justify-center"><FileKindIcon kind={d.fileKind}/></div></TableCell>
                 <TableCell className="max-w-[320px]">
                   <div className="flex items-center gap-2">
-                    <span className="truncate font-medium text-neutral-900 dark:text-neutral-100">{d.name}</span>
-                    <Badge variant="outline" className="rounded-full border-neutral-300 dark:border-neutral-600 text-[10px] dark:text-neutral-300">v{d.version}</Badge>
+                    <span className="truncate typo-h4">{d.name}</span>
+                    <Badge variant="outline" className="rounded-full border-neutral-300 dark:border-neutral-600 text-[10px] ">v{d.version}</Badge>
                   </div>
                   <div className="typo-subtitle">{formatBytes(d.size)}</div>
                 </TableCell>
@@ -857,7 +857,7 @@ export default function VehicleDocumentsPage() {
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-neutral-900 dark:text-neutral-100">{editingDocId ? "Edit Document" : "Add Document"}</DialogTitle>
+            <DialogTitle className="">{editingDocId ? "Edit Document" : "Add Document"}</DialogTitle>
             <DialogDescription className="text-neutral-500 ">Document Type, name, file, expiry, tags — clean and compliant.</DialogDescription>
           </DialogHeader>
 
@@ -866,7 +866,7 @@ export default function VehicleDocumentsPage() {
               <div className="space-y-2">
                 <Label className="">Document Type</Label>
                 <Select value={formDocType} onValueChange={(v)=> setFormDocType(v as DocumentItem["docType"]) }>
-                  <SelectTrigger className="rounded-xl border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 dark:bg-neutral-800 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100">
+                  <SelectTrigger className="rounded-xl border-neutral-300 dark:border-neutral-600  dark:bg-neutral-800 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent className="z-[99999] rounded-2xl border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800">
@@ -880,8 +880,8 @@ export default function VehicleDocumentsPage() {
               <div className="space-y-2">
                 <Label htmlFor="doc-name" className="">Name</Label>
                 <div className="flex items-center gap-2">
-                  <DriveFileRenameOutlineIcon className="text-neutral-700 dark:text-neutral-300"/>
-                  <Input id="doc-name" value={formName} onChange={(e)=> setFormName(e.target.value)} placeholder="e.g., Insurance Policy 2025.pdf" className="rounded-xl border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 dark:bg-neutral-800 placeholder:text-muted dark:placeholder:text-neutral-500 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100"/>
+                  <DriveFileRenameOutlineIcon className="text-neutral-700 "/>
+                  <Input id="doc-name" value={formName} onChange={(e)=> setFormName(e.target.value)} placeholder="e.g., Insurance Policy 2025.pdf" className="rounded-xl border-neutral-300 dark:border-neutral-600  dark:bg-neutral-800 placeholder:text-muted dark:placeholder:text-neutral-500 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100"/>
                 </div>
               </div>
 
@@ -889,7 +889,7 @@ export default function VehicleDocumentsPage() {
                 <Label className="">Expiry (optional)</Label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start rounded-xl border-neutral-300 dark:border-neutral-600 text-left font-normal text-neutral-900 dark:text-neutral-100 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700">
+                    <Button variant="outline" className="w-full justify-start rounded-xl border-neutral-300 dark:border-neutral-600 text-left font-normal  dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700">
                       <CalendarMonthIcon className="mr-2"/>
                       {formExpiry ? formatDate(formExpiry) : <span className="text-neutral-400 ">Select date</span>}
                     </Button>
@@ -914,13 +914,13 @@ export default function VehicleDocumentsPage() {
 
               <div className="space-y-2">
                 <Label className="">Notes (optional)</Label>
-                <Textarea value={formNotes} onChange={(e)=> setFormNotes(e.target.value)} placeholder="Any context for admins…" className="min-h-[88px] rounded-xl border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 dark:bg-neutral-800 placeholder:text-muted dark:placeholder:text-neutral-500 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100"/>
+                <Textarea value={formNotes} onChange={(e)=> setFormNotes(e.target.value)} placeholder="Any context for admins…" className="min-h-[88px] rounded-xl border-neutral-300 dark:border-neutral-600  dark:bg-neutral-800 placeholder:text-muted dark:placeholder:text-neutral-500 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100"/>
               </div>
             </div>
           </div>
 
           <DialogFooter className="mt-2">
-            <Button variant="outline" onClick={()=> { setOpenDialog(false); resetForm(); }} className="rounded-xl border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-white dark:hover:bg-neutral-700">Cancel</Button>
+            <Button variant="outline" onClick={()=> { setOpenDialog(false); resetForm(); }} className="rounded-xl border-neutral-300 dark:border-neutral-600  hover:bg-white dark:hover:bg-neutral-700">Cancel</Button>
             <Button onClick={saveDoc} >{editingDocId ? "Save changes" : "Add document"}</Button>
           </DialogFooter>
         </DialogContent>
@@ -930,12 +930,12 @@ export default function VehicleDocumentsPage() {
       <Dialog open={openViewer} onOpenChange={setOpenViewer}>
         <DialogContent className="sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-neutral-900 dark:text-neutral-100 flex items-center justify-between">
+            <DialogTitle className=" flex items-center justify-between">
               <span>{viewerDoc?.name ?? "Preview"}</span>
               {viewerDoc?.url && (
                 <Button
                   variant="outline"
-                  className="rounded-lg border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 hover:bg-white dark:hover:bg-neutral-700"
+                  className="rounded-lg border-neutral-300 dark:border-neutral-600  hover:bg-white dark:hover:bg-neutral-700"
                   onClick={() => {
                     const a = document.createElement('a');
                     a.href = viewerDoc.url!;
@@ -994,7 +994,7 @@ function TagInput({ value, onChange }: { value: string[]; onChange: (v: string[]
   return (
     <div className="flex min-h-[44px] w-full flex-wrap items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 px-3 py-2">
       {value.map((t) => (
-        <span key={t} className="inline-flex items-center gap-1 rounded-full border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-xs  dark:text-neutral-300">
+        <span key={t} className="inline-flex items-center gap-1 rounded-full border border-neutral-300 dark:border-neutral-600 px-2 py-1 text-xs  ">
           <TagIcon fontSize="small"/>
           {t}
           <button onClick={() => remove(t)} className="ml-1 rounded-full px-1 text-neutral-500  hover:bg-neutral-100 dark:hover:bg-neutral-700">×</button>

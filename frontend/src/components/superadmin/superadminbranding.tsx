@@ -167,7 +167,7 @@ function SuperAdminBranding() {
               variant="outline"
               onClick={handleReset}
               disabled={!hasChanges || isSaving}
-              className="border-neutral-300 dark:border-neutral-600 dark:text-neutral-300"
+              className="border-neutral-300 dark:border-neutral-600 "
             >
               <RestartAltIcon fontSize="small" className="mr-2" />
               Reset
@@ -225,7 +225,7 @@ function SuperAdminBranding() {
               className={
                 activeTheme === 'light'
                   ? 'bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black'
-                  : 'border-neutral-300 dark:border-neutral-600 dark:text-neutral-300'
+                  : 'border-neutral-300 dark:border-neutral-600 '
               }
             >
               <LightModeIcon fontSize="small" className="mr-2" />
@@ -238,7 +238,7 @@ function SuperAdminBranding() {
               className={
                 activeTheme === 'dark'
                   ? 'bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black'
-                  : 'border-neutral-300 dark:border-neutral-600 dark:text-neutral-300'
+                  : 'border-neutral-300 dark:border-neutral-600 '
               }
             >
               <DarkModeIcon fontSize="small" className="mr-2" />
@@ -250,7 +250,7 @@ function SuperAdminBranding() {
         <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-700 dark:bg-neutral-800">
           <div className="flex items-center gap-2 mb-4">
             <ColorLensIcon className="typo-base-muted" fontSize="small" />
-            <h3 className="typo-p600 uppercase tracking-widest text-neutral-900 dark:text-neutral-100">
+            <h3 className="typo-p600 uppercase tracking-widest ">
               Live Preview - {activeTheme === 'light' ? 'Light Mode' : 'Dark Mode'}
             </h3>
           </div>
@@ -376,7 +376,7 @@ function SuperAdminBranding() {
           <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-700 dark:bg-neutral-800">
             <div className="flex items-center gap-2 mb-4">
               <LightModeIcon className="typo-base-muted" fontSize="small" />
-              <h3 className="typo-p600 uppercase tracking-widest text-neutral-900 dark:text-neutral-100">
+              <h3 className="typo-p600 uppercase tracking-widest ">
                 Light Mode Colors
               </h3>
             </div>
@@ -455,7 +455,7 @@ function SuperAdminBranding() {
           <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-700 dark:bg-neutral-800">
             <div className="flex items-center gap-2 mb-4">
               <DarkModeIcon className="typo-base-muted" fontSize="small" />
-              <h3 className="typo-p600 uppercase tracking-widest text-neutral-900 dark:text-neutral-100">
+              <h3 className="typo-p600 uppercase tracking-widest ">
                 Dark Mode Colors
               </h3>
             </div>
@@ -591,7 +591,7 @@ function ColorInput({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <Label className="typo-h6 dark:text-neutral-300">{label}</Label>
+        <Label className="typo-h6 ">{label}</Label>
         {description && (
           <span className="text-[10px] text-neutral-500 ">{description}</span>
         )}

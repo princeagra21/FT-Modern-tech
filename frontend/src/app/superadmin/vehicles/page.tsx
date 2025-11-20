@@ -882,11 +882,11 @@ function page() {
       <div className="p-2 max-w-xs">
         {/* Header */}
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-md bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 font-medium text-[10px]">
+          <div className="w-7 h-7 rounded-md bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700  font-medium text-[10px]">
             {row.vehicleNo.slice(0, 2).toUpperCase()}
           </div>
           <div>
-            <div className="font-semibold text-[12px] text-neutral-900 dark:text-neutral-100">
+            <div className="font-semibold text-[12px] ">
               {row.vehicleNo}
             </div>
             <div className="text-[9px] text-neutral-500 ">
@@ -912,7 +912,7 @@ function page() {
                 d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
               />
             </svg>
-            <span className="text-neutral-700 dark:text-neutral-300 font-mono">
+            <span className="text-neutral-700  font-mono">
               {row.imei}
             </span>
           </div>
@@ -931,7 +931,7 @@ function page() {
                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
               />
             </svg>
-            <span className="text-neutral-700 dark:text-neutral-300 font-mono">
+            <span className="text-neutral-700  font-mono">
               {row.vin}
             </span>
           </div>
@@ -950,7 +950,7 @@ function page() {
                 d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
               />
             </svg>
-            <span className="text-neutral-700 dark:text-neutral-300">
+            <span className="text-neutral-700 ">
               {row.deviceType.name}
             </span>
           </div>
@@ -962,7 +962,7 @@ function page() {
             <span className="text-neutral-500 ">
               Engine Hours:
             </span>
-            <span className="font-medium text-neutral-900 dark:text-neutral-100">
+            <span className="typo-h4">
               {row.engineHour.toFixed(1)} hrs
             </span>
           </div>
@@ -970,7 +970,7 @@ function page() {
             <span className="text-neutral-500 ">
               Odometer:
             </span>
-            <span className="font-medium text-neutral-900 dark:text-neutral-100">
+            <span className="typo-h4">
               {row.odometer.toLocaleString()} km
             </span>
           </div>
@@ -1016,7 +1016,7 @@ function page() {
               style={{ fontSize: "11px" }}
               className="text-neutral-400 "
             />
-            <span className="text-neutral-700 dark:text-neutral-300 truncate">
+            <span className="text-neutral-700  truncate">
               {user.email}
             </span>
             {user.isEmailVerified && (
@@ -1031,7 +1031,7 @@ function page() {
               style={{ fontSize: "11px" }}
               className="text-neutral-400 "
             />
-            <span className="text-neutral-700 dark:text-neutral-300 font-mono">
+            <span className="text-neutral-700  font-mono">
               {user.mobilePrefix} {user.mobile}
             </span>
           </div>
@@ -1068,7 +1068,7 @@ function page() {
               <span
                 className={
                   value
-                    ? "capitalize text-neutral-900 dark:text-neutral-100"
+                    ? "capitalize "
                     : "text-neutral-500 "
                 }
               >
@@ -1571,13 +1571,13 @@ function page() {
           }}
         >
           {/* Icon Badge */}
-          <div className="flex-shrink-0 h-8 w-8 rounded-lg flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
+          <div className="flex-shrink-0 h-8 w-8 rounded-lg flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-700 ">
             <DirectionsCarIcon style={{ fontSize: "16px" }} />
           </div>
 
           {/* Vehicle Details */}
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-[13px] text-neutral-900 dark:text-neutral-100 truncate">
+            <div className="font-medium text-[13px]  truncate">
               {row.vehicleNo}
             </div>
             <div className="flex items-center gap-1 text-[10px] text-neutral-500  mt-0.5">
@@ -1623,7 +1623,7 @@ function page() {
                 style={{ fontSize: "12px" }}
                 className="text-neutral-400 "
               />
-              <span className="text-[21px] font-semibold text-neutral-900 dark:text-neutral-100 leading-none">
+              <span className="text-[21px] font-semibold  leading-none">
                 {row.speed}
               </span>
               <span className="text-[8px] text-neutral-500  uppercase tracking-wide">
@@ -1662,7 +1662,7 @@ function page() {
               src={row.primaryUser.profileUrl}
               alt={row.primaryUser.name}
             />
-            <AvatarFallback className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-medium">
+            <AvatarFallback className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700  text-[10px] font-medium">
               {row.primaryUser.name
                 .split(" ")
                 .map((n) => n[0])
@@ -1671,7 +1671,7 @@ function page() {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-[12px] text-neutral-900 dark:text-neutral-100 truncate">
+            <div className="font-medium text-[12px]  truncate">
               {row.primaryUser.name}
             </div>
             <div className="text-[10px] text-neutral-500  truncate">
@@ -1694,7 +1694,7 @@ function page() {
         <div className="flex items-center gap-1.5 min-w-[140px]">
           <Avatar className="w-7 h-7 rounded-lg border border-neutral-200 dark:border-neutral-700">
             <AvatarImage src={row.addedBy.profileUrl} alt={row.addedBy.name} />
-            <AvatarFallback className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-medium">
+            <AvatarFallback className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700  text-[10px] font-medium">
               {row.addedBy.name
                 .split(" ")
                 .map((n) => n[0])
@@ -1703,7 +1703,7 @@ function page() {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-[12px] text-neutral-900 dark:text-neutral-100 truncate">
+            <div className="font-medium text-[12px]  truncate">
               {row.addedBy.name}
             </div>
             <div className="text-[10px] text-neutral-500  truncate">
@@ -1732,7 +1732,7 @@ function page() {
                 style={{ fontSize: "12px" }}
                 className="text-neutral-400 "
               />
-              <span className="text-[12px] font-medium text-neutral-900 dark:text-neutral-100">
+              <span className="text-[12px] typo-h4">
                 {date}
               </span>
             </div>
@@ -1772,11 +1772,11 @@ function page() {
                 <span className="text-[9px] text-neutral-500 ">
                   Pri
                 </span>
-                <span className="text-[10px] font-mono text-neutral-900 dark:text-neutral-100">
+                <span className="text-[10px] font-mono ">
                   {row.primaryExpiry}
                 </span>
               </div>
-              <span className="text-[10px] text-neutral-700 dark:text-neutral-300">
+              <span className="text-[10px] text-neutral-700 ">
                 {getStatusIcon(primary)}
               </span>
             </div>
@@ -1787,11 +1787,11 @@ function page() {
                 <span className="text-[9px] text-neutral-500 ">
                   Sec
                 </span>
-                <span className="text-[10px] font-mono text-neutral-900 dark:text-neutral-100">
+                <span className="text-[10px] font-mono ">
                   {row.secondaryExpiry}
                 </span>
               </div>
-              <span className="text-[10px] text-neutral-700 dark:text-neutral-300">
+              <span className="text-[10px] text-neutral-700 ">
                 {getStatusIcon(secondary)}
               </span>
             </div>
@@ -1811,7 +1811,7 @@ function page() {
         const { date, time } = formatDateTime(row.createdAt);
         return (
           <div className="min-w-[110px]">
-            <div className="text-[12px] font-medium text-neutral-900 dark:text-neutral-100">
+            <div className="text-[12px] typo-h4">
               {date}
             </div>
             <div className="text-[10px] text-neutral-500  mt-0.5">
@@ -1843,7 +1843,7 @@ function page() {
                 // Handle toggle logic here
               }}
             />
-            <span className="text-[11px] text-neutral-900 dark:text-neutral-100 font-medium">
+            <span className="text-[11px]  font-medium">
               {row.isActive ? "Active" : "Inactive"}
             </span>
           </div>

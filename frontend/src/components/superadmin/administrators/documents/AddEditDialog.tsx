@@ -145,7 +145,7 @@ const AddEditDialog = ({
             : "border-neutral-300 dark:border-neutral-600"
         )}
       >
-        <CloudUploadIcon className="h-7 w-7 text-neutral-900 dark:text-neutral-100" />
+        <CloudUploadIcon className="h-7 w-7 " />
         <div className="typo-p ">
           Drag & drop your file here
         </div>

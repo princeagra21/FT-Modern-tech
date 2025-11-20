@@ -530,7 +530,7 @@ export function MultiDateTimeRangePicker({
                       "flex w-full items-center justify-between rounded px-2.5 py-1.5 text-left typo-p transition-colors",
                       selectedPreset === p.key
                         ? "bg-neutral-900 text-white dark:bg-white dark:text-black"
-                        : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                        : "text-neutral-700 hover:bg-neutral-100  dark:hover:bg-neutral-800"
                     )}
                   >
                     <span>{p.label}</span>

@@ -169,7 +169,7 @@ export default function AdminDocumentsPage() {
           {row.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-neutral-300 px-2 py-0.5 text-xs text-neutral-700 dark:border-neutral-600 dark:text-neutral-300"
+              className="rounded-full border border-neutral-300 px-2 py-0.5 text-xs text-neutral-700 dark:border-neutral-600 "
             >
               {tag}
             </span>

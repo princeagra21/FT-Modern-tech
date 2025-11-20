@@ -142,11 +142,11 @@ export default function DriversPage() {
       content: (row) => (
         <div onClick={() => router.push(`/admin/drivers/${row.id}`)} className="group">
           <div className="flex gap-2 cursor-pointer py-1 rounded-md hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 flex-shrink-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-neutral-700  flex-shrink-0">
               <PersonIcon style={{ fontSize: "16px" }} />
             </div>
             <div className="min-w-0">
-              <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
+              <div className="typo-h4 truncate">
                 {row.name}
               </div>
               <div className="typo-subtitle">

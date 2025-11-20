@@ -462,7 +462,7 @@ function AdminVehiclesList() {
       content: (row) => (
         <div className="flex items-center gap-3 min-w-[240px]">
           {/* Icon Badge */}
-          <div className="flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center bw-bg-secondary bw-text-secondary-fg dark:bg-neutral-700 dark:text-neutral-300">
+          <div className="flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center bw-bg-secondary bw-text-secondary-fg dark:bg-neutral-700 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -498,7 +498,7 @@ function AdminVehiclesList() {
                 {row.VehicleType}
               </span>
               <span className="bw-text-muted ">•</span>
-              <span className="font-medium bw-text-primary dark:text-neutral-300">
+              <span className="font-medium bw-text-primary ">
                 {row.status}
               </span>
             </div>
@@ -556,7 +556,7 @@ function AdminVehiclesList() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="px-2 py-0.5 rounded-md bw-bg-secondary bw-text-primary dark:bg-neutral-700 dark:text-neutral-300 typo-h6">
+            <div className="px-2 py-0.5 rounded-md bw-bg-secondary bw-text-primary dark:bg-neutral-700  typo-h6">
               {row.DeviceType}
             </div>
           </div>
@@ -637,7 +637,7 @@ function AdminVehiclesList() {
                 <span className="typo-h6 bw-text-muted ">
                   Primary
                 </span>
-                <span className="typo-p bw-text-primary dark:text-neutral-300">
+                <span className="typo-p bw-text-primary ">
                   {getStatusIcon(primary)}
                 </span>
               </div>
@@ -659,7 +659,7 @@ function AdminVehiclesList() {
                 <span className="typo-h6 bw-text-muted ">
                   Secondary
                 </span>
-                <span className="typo-p bw-text-primary dark:text-neutral-300">
+                <span className="typo-p bw-text-primary ">
                   {getStatusIcon(secondary)}
                 </span>
               </div>
@@ -929,7 +929,7 @@ function KpiCard({
           {title}
         </div>
       </div>
-      <div className="mb-1 typo-h1 font-semibold text-neutral-900 dark:text-neutral-100">
+      <div className="mb-1 typo-h1 font-semibold ">
         {typeof value === "number" ? value.toLocaleString() : value}
       </div>
       {hint && (
@@ -943,7 +943,7 @@ function KpiCard({
             "mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs",
             isUp
               ? "bg-neutral-900 dark:bg-white text-white dark:text-black"
-              : "bg-neutral-200 dark:bg-neutral-700  dark:text-neutral-300"
+              : "bg-neutral-200 dark:bg-neutral-700  "
           )}
         >
           {isUp ? "▲" : "▼"} {Math.abs(delta!).toFixed(1)}%

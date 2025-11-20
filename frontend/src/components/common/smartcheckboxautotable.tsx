@@ -1242,7 +1242,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                     style={{ x: magnet.ry, y: magnet.rx }}
                     transition={springPress}
                     variant="outline"
-                    className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
+                    className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 "
                   >
                     <FilterIcon fontSize="small" /> Filter
                   </MotionButton>
@@ -1261,7 +1261,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                         style={{ x: magnet.ry, y: magnet.rx }}
                         transition={springPress}
                         variant="outline"
-                        className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
+                        className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 "
                       >
                         <FilterIcon fontSize="small" /> Filter
                       </MotionButton>
@@ -1587,7 +1587,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                     onClick={handleRefresh}
                     disabled={isRefreshing}
                     variant="outline"
-                    className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-600 disabled:opacity-60"
+                    className="h-10 gap-2 rounded-xl border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-600 disabled:opacity-60"
                   >
                     <RefreshIcon
                       fontSize="small"
@@ -1607,7 +1607,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                       updatePageSize(Number(value));
                     }}
                   >
-                    <SelectTrigger className="h-10 w-20 rounded-xl border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 px-3 typo-p500">
+                    <SelectTrigger className="h-10 w-20 rounded-xl border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700  px-3 typo-p500">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
@@ -1960,7 +1960,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                                         </TooltipTrigger>
                                         <TooltipContent
                                           side="top"
-                                          className={`max-w-xs rounded-xl border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xl ${Z_TIP}`}
+                                          className={`max-w-xs rounded-xl border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800  shadow-xl ${Z_TIP}`}
                                         >
                                           {tooltipNode}
                                         </TooltipContent>
@@ -1988,11 +1988,11 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div className="typo-p-muted  text-center lg:text-left lg:flex-1">
                   Showing{" "}
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                  <span className="typo-h4">
                     {pageRows.length}
                   </span>{" "}
                   of{" "}
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                  <span className="typo-h4">
                     {sorted.length}
                   </span>{" "}
                   results
@@ -2005,14 +2005,14 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
 
                 <div className="flex items-center justify-center gap-1 flex-wrap">
                   <button
-                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200 disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200 disabled:opacity-50"
                     onClick={() => setPage(1)}
                     disabled={page === 1}
                   >
                     First
                   </button>
                   <button
-                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
                   >
@@ -2031,7 +2031,7 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                             className={`min-w-[36px] h-9 px-2 typo-p500 rounded-lg transition-colors ${
                               i === page
                                 ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 shadow-sm"
-                                : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                : "text-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-700"
                             }`}
                             onClick={() => setPage(i)}
                           >
@@ -2044,14 +2044,14 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
                   </div>
 
                   <button
-                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
                   >
                     Next
                   </button>
                   <button
-                    className="px-3 py-2 typo-p12n font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
+                    className="px-3 py-2 typo-p12n font-medium text-neutral-700  hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
                     onClick={() => setPage(totalPages)}
                     disabled={page === totalPages}
                   >
@@ -2061,11 +2061,11 @@ export function SmartCheckboxAutoTable<T extends Record<string, any>>(
 
                 <div className="typo-p-muted  text-center lg:text-right lg:flex-1">
                   Page{" "}
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                  <span className="typo-h4">
                     {page}
                   </span>{" "}
                   of{" "}
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                  <span className="typo-h4">
                     {totalPages}
                   </span>
                 </div>
